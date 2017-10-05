@@ -247,13 +247,12 @@ When you are done with arranging your shit, you simply comment out the grid:
 
 \section{Change Languages}
 
-\url{https://en.wikibooks.org/wiki/LaTeX/Internationalization#Babel}
+It is important to tell \LaTeX{} if a different language is used, because of language specific hyphenation, ligature, and characters (change from “...” to „...“, etc.). You can find more information here: \url{https://en.wikibooks.org/wiki/LaTeX/Internationalization#Babel}.
 
+E.g. to change to German language use: \verb|\begin{otherlanguage}{ngerman}|, to tell Babel to change to German, like the following paragraph:
 
 \begin{otherlanguage}{ngerman}
-Dr. Heinrich Faust ist ein angesehener Wissenschaftler und Akademiker, der trotz seiner wissenschaftlichen Studien und einer guten Bildung seinen Wissensdurst nicht stillen kann. Eines Nachts sitzt er in seinem Studierzimmer und grübelt über den Sinn des Lebens nach, findet jedoch keine Antworten. Daraufhin wendet er sich der Geisterwelt zu. Er beschwört einen Erdgeist, versucht sich den Geistern gleich zu stellen, was ihm jedoch nicht gelingt. Von Ohnmacht getrieben will er sich das Leben nehmen.
-
-Sein Selbstmordversuch wird jedoch von Glockenläuten zum Ostertag und seinen Kindheitserinnerungen gestört. Am nächsten Tag begibt er sich mit seinem Assistenten Wagner auf einen Spaziergang, um ein wenig Ablenkung zu bekommen. Er kehrt in Begleitung eines schwarzen Pudels zurück. Der Pudel entpuppt sich als der Teufel Mephistopheles, mit dem Faust einen Pakt eingeht. Mephistopheles erklärt sich bereit, Faust zu dienen und ihm alle seine Wünsche zu erfüllen. Im Gegenzug verspricht Faust dem Teufel seine Seele, wenn dieser es schafft ihm Lebensglück zu bescheren.
+Dr. Heinrich Faust ist ein angesehener Wissenschaftler und Akademiker, der trotz seiner wissenschaftlichen Studien und einer guten Bildung seinen Wissensdurst nicht stillen kann. Eines Nachts sitzt er in seinem Studierzimmer und grübelt über den Sinn des Lebens nach, findet jedoch keine Antworten.
 \end{otherlanguage}
 
 \section{Tables}
@@ -351,6 +350,8 @@ Notice the alignment of following table:
 	\label{tab:Alignment}
 	\libertineOsF
 \end{table}
+
+\newpage
 
 \section{Code Listings}
 
