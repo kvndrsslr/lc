@@ -1,0 +1,39 @@
+\usepackage{scrhack}
+\usepackage[hyphens]{url}	% allows long URL to break
+
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor} % https://en.wikibooks.org/wiki/LaTeX/Colors
+
+\usepackage{float}			% enables H for tables: \begin{table}[H]
+
+
+\usepackage{tikz} % advanced grpahics such as figure numbering etc.
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+		\node[shape=circle,draw,inner sep=1.75pt] (char) {#1};}} % make circled numbers with \circled{1} etc
+        
+\newcommand\tab[1][1cm]{\hspace*{#1}} % allows to use \tab to create horizontal space
+
+
+\usepackage{relsize} % wird für \textscale verwendet
+\newcommand*{\tracknshrink}[1]{\textscale{0.9}{\textls*[25]{#1}}} % \tracknshrink{UNO}: verkleinert und sperrt Versalabkürzungen
+
+
+\usepackage{enumitem}	% allows you to change the left margin on e.g. \begin{enumerate}[leftmargin=2cm]
+
+\usepackage{caption}				% fixt den scrollbug bei ref-Links für captions (fig & tables)
+
+\usepackage{graphicx}			% benötigt für Grafiken
+\graphicspath{{./img/}}			% global graphics path
+
+\usepackage{booktabs}			% See myriad of alternatives: http://tex.stackexchange.com/questions/12672/which-tabular-packages-do-which-tasks-and-which-packages-conflict
+% usage: http://www.namsu.de/Extra/pakete/Booktabs.html
+\newcommand*\rot{\rotatebox{90}} % use \rot to rotate text 90° for tables e.g.
+
+\usepackage{csquotes}			% glossaries needs this
+
+
+\usepackage{xargs}                      % Use more than one optional parameter in a new commands
+\usepackage[colorinlistoftodos,prependcaption,bordercolor=yellow!75,backgroundcolor=yellow!40,linecolor=yellow!75,textsize=tiny,textwidth=1.95cm]{todonotes}
+\newcommandx{\unsure}[2][1=]{\todo[linecolor=Turquoise!30,backgroundcolor=Turquoise!20,bordercolor=Turquoise!30,#1]{#2}}
+\newcommandx{\wording}[2][1=]{\todo[linecolor=blue!30,backgroundcolor=blue!20,bordercolor=blue!30,#1]{#2}}
+\newcommandx{\info}[2][1=]{\todo[linecolor=Goldenrod!30,backgroundcolor=Goldenrod!20,bordercolor=Goldenrod!30,#1]{#2}}
+\newcommandx{\citethis}[2][1=]{\todo[linecolor=BrickRed!30,backgroundcolor=BrickRed!20,bordercolor=BrickRed!30,#1]{#2}}

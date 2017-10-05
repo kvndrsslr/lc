@@ -1,0 +1,23 @@
+\setlength{\headheight}{1.1\baselineskip} % Größe des Headers
+
+
+\usepackage[headsepline,autooneside=false,automark]{scrlayer-scrpage}	% autooneside=false set this for onesided paper
+\pagestyle{scrheadings}
+\clearscrheadfoot
+\rofoot{\bfseries\thepage}
+\automark*[section]{}
+%\addtokomafont{pageheadfoot}{\normalfont\footnotesize\sffamily}
+\lohead{\leftmark{} --- {\small \rightmark}}
+%\cohead{\rightmark}
+\rohead{\pagemark}
+
+\renewcommand*{\sectionmarkformat}{} % gets rid of section number
+
+
+
+
+
+\usepackage[hang]{footmisc}
+\usepackage{chngcntr} % make footnotes contd counting
+\counterwithout{footnote}{chapter} % make footnotes contd counting
+\setlength{\footnotemargin}{3mm}	% margin between footnote number and text

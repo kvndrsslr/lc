@@ -1,0 +1,107 @@
+\documentclass[parskip=half,11pt,listof=totoc]{scrreprt}
+
+% ███▓▒░░.___INPUT ALL SETTINGS___.░░▒▓███
+\input{settings/encoding}
+\input{settings/fonts}
+\input{settings/pageadjustments}
+\input{settings/functions}
+\input{settings/bib}
+\input{settings/headerfooter}
+\input{settings/maths}
+\input{settings/codelistings}
+\input{settings/microtype}
+\input{settings/labels}
+%\input{settings/overlays}
+\input{settings/lastload}
+\input{content/_Abbreviations}
+
+
+\begin{document}
+	
+% ---------------------------------------------------------------------------
+% ------------------------------ TEXT PRÄAMBEL ------------------------------
+% ---------------------------------------------------------------------------
+
+% ███▓▒░░.____ TITLEPAGE ____.░░▒▓███
+\hypersetup{pageanchor=false}			% prevents double counting page numbers
+\pagenumbering{gobble}					% no page numbers
+\include{content/01-Titlepage}			% title page
+
+% ███▓▒░░.____ ABSTRACT ____.░░▒▓███
+\include{content/02-Abstract}
+
+% ███▓▒░░.____ Table of Contents ____.░░▒▓███
+\hypersetup{pageanchor=true}			% start counting
+\pagenumbering{Roman}					% roman page numbers
+\include{content/03-TOC}
+
+% ███▓▒░░.____ List of Figures ____.░░▒▓███
+\include{content/04-LOF}
+
+% ███▓▒░░.____ List of Tables ____.░░▒▓███
+\include{content/05-LOT}
+
+% ███▓▒░░.____ List of Source Code ____.░░▒▓███
+% Siehe https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
+% http://www.macwrench.de/wiki/Kurztipp_-_Quellcodelistings_in_LaTeX
+\include{content/06-LOC}
+
+% ███▓▒░░.____ List of Abbreviations ____.░░▒▓███
+\include{content/07-LOA}
+
+
+
+% This turn indentation off for paragraphs followin chapter, section, ... This should be at this place, otherwise it will fuck up the layout of TOC, LOF, and other lists coming before.
+\makeatletter
+\let\@afterindenttrue\@afterindentfalse
+\makeatother
+
+% ---------------------------------------------------------------------------
+% --------------------------------- CONTENT ---------------------------------
+% ---------------------------------------------------------------------------
+
+% Chapter 1
+\pagenumbering{arabic}	% arabische Seitenzahlen
+\include{content/10-Chapter}
+
+% Chapter 2
+\include{content/20-Chapter}
+
+% Chapter 3
+\include{content/30-Chapter}
+
+% Chapter 4
+\include{content/40-Chapter}
+
+% Chapter 5
+\include{content/50-Chapter}
+
+% Chapter 6
+\include{content/60-Chapter}
+
+% ----------------------------------------------------------------------------
+% ------------------------------ DESIGN ELEMENTS -----------------------------
+% ----------------------------------------------------------------------------
+
+% COMMENT THIS OUT WHEN YOU ARE DONE
+\include{content/XX-DesignElements}
+
+% ----------------------------------------------------------------------------
+% --------------------------------- APPENDIX ---------------------------------
+% ----------------------------------------------------------------------------
+
+
+\pagenumbering{Alph}	% letter page numbers
+% Anhang
+\include{content/90-Appendix}
+
+% Literaturverzeichnis
+\include{content/91-Bib}
+
+% Statement of authorship
+\include{content/92-SOA}
+
+
+
+
+\end{document}
