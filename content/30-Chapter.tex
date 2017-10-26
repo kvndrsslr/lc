@@ -8,6 +8,9 @@ This includes the core processes, such as \href{ssec:Model_VoteDelegation}{vote 
 % Kevin
 \section{Wie wurden Politikfelder/geografische Tags bestimmt}
 \label{sec:Model_Contexts}
+\section{geografische Tags bestimmt}
+\label{sec:Model_Contexts}
+
 
 \section{User Roles -- how many, what they can do and why}
 \label{sec:UserRoles}
@@ -27,12 +30,22 @@ The petitioner is the role a user can take on when starting the political proces
 Access to these activities is limited to the petitioner in order to guarantee consistency of the petition, and to incentivize discussion about aspects relevant to users not in the role of the petitioner. Not allowing other users to edit the petition also prevents malicious or strategic editing as well as a discussion about text changes through change requests. By having to seek approval for modification, a discourse about the aspects important to the petition modification requester is strengthened.
 Moreover, does the petition editing restriction encourage alternative petitions, strengthening the discourse through (hopefully) constructive alternatives.
 
+The alternative petition author is a user that creates an alternative petition to a petition within the same petition group (for the mechanics of alternative petitions see \ref{sec:Model_Propositions}). For this petition the alternative petition author counts as \href{sssec:Roles_Petitioner}{petition author}, and has the same rights as them for the same reasons.
+% * <johanning@informatik.uni-leipzig.de> 2017-10-25T10:20:35.026Z:
+% 
+% > The alternative petition author is a user that creates an alternative petition to a petition within the same petition group (for the mechanics of alternative petitions see \ref{sec:Model_Propositions}). For this petition the alternative petition author counts as \href{sssec:Roles_Petitioner}{petition author}, and has the same rights as them for the same reasons.
+% 
+% Alternative Petition in die Rolle einarbeiten und Antragsgruppendifferenzierung beschreiben (als Binnenrollendifferentiation)
+% 
+% ^.
+
+% * <johanning@informatik.uni-leipzig.de> 2017-10-25T14:45:35.026Z:
+% Mention that a prop author is also a prop follower
+
 \subsection{Petition modification requester}
 The petition modification requester is a \href{sssec:Roles_DiscussionParticipant}{discussion participant} that raises a constructive petition text edit request. 
 As noted in \ref{sec:Model_Propositions}, they request the addition, deletion or textual editing of a passage of petition text, with (potential) new wording. \todo{can they withdraw / edit their modification? Or just 'withdraw their support' for the editing petition?}
 
-\subsection{Alternative petition author}
-The alternative petition author is a user that creates an alternative petition to a petition within the same petition group (for the mechanics of alternative petitions see \ref{sec:Model_Propositions}). For this petition the alternative petition author counts as \href{sssec:Roles_Petitioner}{petition author}, and has the same rights as them for the same reasons.
 
 \subsection{Moderator}
 \label{ssec:Roles_Moderator}
@@ -76,6 +89,27 @@ In an anonymized large-scale digital liquid democracy, malicious users could mas
 We aim to reduce this threat through the following measures: (1) phased proposition life cycles, (2) adaptive sorting algorithms based on bayesian filtering and (3) moderation.
 
 \subsection{Proposition initiation}
+
+\section{Notifications}
+\label{sec:Notifications}
+Since information overflow is a problem with the scalability of the platform, and many roles mentioned above are characterized by the information they receive, information filtering / selective information is crucial. A good way to handle the information distribution within the platform is through notifications. Notifications are information about the creation of new information relevant to the user, generally due to their role within the political process.
+
+Notifications can be realized as messages sent to all 'interested' stakeholder within a process. Declaring interested within the system can be modeled through assume a certain role. However, notifications also can depend on user-determined settings within the profile, which can filter out certain notifications. Since this mechanism is described with the users, the following describes the possible notifications a user can receive.
+
+Notifications exist for:
+\begin{itemize}
+\item Vote delegation of other users 
+\item For Proposition Followers: when propositions change (text or phase) or relevant discussion entries take place, or when alternative propositions are created
+\item For Proposition Followers: When propositions are voted upon / results on the voting are known
+\item For a proposition Author: When a proposition change request is created
+\item For a proposition Author: When a moderator changes the context
+\item For moderators: When a report (inappropriate context or discussion entry)
+\item For discussion participants: When someone responds to the respective entries
+\item For Context followers: When a proposition in the context of interest is created
+\item For Context followers: When the context taxonomy changes regarding followed interests
+\item For vote accumulators: When a delegated vote is withdrawn
+\item For vote delegators: When a vote was used in a proposition 
+\end{itemize}
 
 \section{Researchers Access}
 \label{sec:Model_ResearchersAccess}
