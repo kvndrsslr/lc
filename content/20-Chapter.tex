@@ -15,10 +15,61 @@ Subsequently to a discussion on the background of the respective concept, we wil
 Steven is doing that shit. Grundidee CS. Wieso ist die Project Idee geil usw.
 \subsection{Issues and Open Questions in Citizen Science}
 \label{ssec:Issues_CS}
-\section{LD}
-\label{sec:Theory_LD}
-\subsection{Background / Context Liquid Democracy}
+
+
+\section{Liquid Democracy}
+\label{sec:Liquid_Democracy}
+
+As there are many forms of political government, it is democracy that spread around the globe over the last hundred years (see \autoref{fig:democracy-trend}). \textit{“As of the end of 2016, 97 out of 167 countries (58\,\%) [\ldots] were democracies [\ldots]”} \parencite{Desilver2017}. According to the observations in \autoref{fig:democracy-trend}) it could be argued that democracy is a very successful and thus modern system, since democracy has no major competitor. Nevertheless, it is not within the scope of this project to asses these systems. Yet, democracy entails various advantages compared to other political systems. For one it entitles its citizens to participate to some extent towards the political process. Additionally, it allows its people to shape the system’s frame. Consequently, democracy comes in many forms. In this project we focus on liquid democracy, a form of democracy that is also known as delegative democracy.
+
+
+\begin{figure}[H]
+
+	\centering \begin{tikzpicture}
+	\node[anchor=south west,inner sep=0] (image) at (0,0,0) {\includegraphics[width=8cm]{democracy-trend.png}};
+	\begin{scope}[x={(image.south east)},y={(image.north west)}]
+% 	% next four lines will help you to locate the point needed by forming a grid. comment these four lines in the final picture.↓
+% 		\draw[help lines,xstep=.1,ystep=.1] (0,0) grid (1,1);
+% 		\draw[help lines,xstep=.05,ystep=.05] (0,0) grid (1,1);
+% 		\foreach \x in {0,1,...,9} { \node [anchor=north] at (\x/10,0) {0.\x}; }
+% 		\foreach \y in {0,1,...,9} { \node [anchor=east] at (0,\y/10) {0.\y};}
+% 	% upto here↑
+    
+	\libertineLF
+	\draw (-0.05,0.0) node {\small{0\,\%}};
+    \draw (-0.06,0.2) node {\small{20\,\%}};
+    \draw (-0.06,0.4) node {\small{40\,\%}};
+    \draw (-0.06,0.6) node {\small{60\,\%}};
+    \draw (-0.06,0.8) node {\small{80\,\%}};
+    \draw (-0.07,1.0) node {\small{100\,\%}};
+   	\libertineOsF
+    \draw (0.0,-0.06) node {1816};
+    \draw (0.17,-0.06) node {1850};
+    \draw (0.425,-0.06) node {1900};
+    \draw (0.67,-0.06) node {1950};
+    \draw (0.93,-0.06) node {2000};
+    
+	\draw[-latex] (0.99,0.25) -- +(0.5cm,0cm)node[anchor=west] {\scriptsize{Democracy}};
+    \draw[-latex] (0.99,0.6) -- +(0.5cm,0cm)node[anchor=west] {\scriptsize{Open Anocracy}};
+    \draw[-latex] (0.99,0.695) -- +(0.5cm,0cm)node[anchor=west] {\scriptsize{Closed Anocracy}};
+    \draw[-latex] (0.99,0.85) -- +(0.5cm,0cm)node[anchor=west] {\scriptsize{Autocracy}};
+    \draw[-latex] (0.99,0.96) -- +(0.5cm,-0.28cm)node[anchor=west] {\scriptsize{Colony}};
+    \draw[-latex] (0.99,0.98) -- +(0.5cm,0cm)node[anchor=west] {\scriptsize{Transition/No data}};
+
+	
+	\end{scope}
+	\end{tikzpicture}
+	\caption[World population by political regime they live in]{World population by political regime they live in \parencite[see][]{Roser2018}.}
+	\label{fig:democracy-trend}
+
+\end{figure}
+
+
+\subsection{Background}
 \label{ssec:Background_LD}
+
+\acrfull{LD} 
+
 \subsection{Issues and Open Questions in Liquid Democracy}
 \label{ssec:Issues_LD}
 \section{An Integrative Perspective for Citizen Science in Liquid Democracy}
