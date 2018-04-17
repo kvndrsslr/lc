@@ -2,17 +2,151 @@
 \label{ch:ProjectRequirements}
 
 
-This section will describe the process of developing a prototype for a Citizen Science-accessible Liquid Democracy game, based on the \href{sec:Approach}{discussion of the approach} to fulfill the objective of this project, and due to the \href{sec:DiscussionRW}{realization} that no suitable software exists to based the prototype on, this section will document the software development process we took to develop said prototype.
+This section will describe the process of developing a prototype for a Citizen Science-focused Liquid Democracy game, based on the \href{sec:Approach}{discussion of the approach} to fulfill the objective of this project, and due to the \href{sec:DiscussionRW}{fact} that no suitable software exists to base the prototype on, this section will document the software development process we took to develop said prototype.
 
-Based on mentioned \href{sec:Criteria}{criteria} and an \href{sec:AnalysisProcesses}{analysis of the processes} for a system for Liquid Democracy, we will \href{sec:SoftwareRequirements}{derive software requirements} the prototype needs to fulfill, before describing the \href{sec:Implementation}{process of implementing} said prototype. Since we base our prototype in a modular architecture around microservices, we will focus predominantly on the \href{ssec:Architecture}{architecture} or the prototype, as well as the implemented \href{ssec:Microservices}{micro services} and the (functional) \href{ssec:Modules}{modules} integrating the respective processes. 
+Based on mentioned \href{sec:Criteria}{criteria} and an \href{sec:AnalysisProcesses}{analysis of the processes} for a system for Liquid Democracy, we will \href{sec:SoftwareRequirements}{derive software requirements} the prototype needs to fulfill, before describing the \href{sec:Implementation}{process of implementing} said prototype. Since we base our prototype on a modular architecture around microservices, we will focus predominantly on the \href{ssec:Architecture}{architecture} of the prototype, as well as the implemented \href{ssec:Microservices}{micro services} and the (functional) \href{ssec:Modules}{modules} integrating the respective processes. 
 
-\section{Our Requirements}
+\section{Requirements for the Prototype}
 \label{sec:SoftwareRequirements}
 \section{Prototype Implementation}
 \label{sec:Implementation}
+
+As highlighted in the discussion above, we aimed for a software design that allowed for flexibility, incorporating multiple contexts and a decentralized application context / paradigm. Because of this we chose an approach centered around microservices and (as far as possible) independent modules. Since we want it to be available for many different contexts, we focus on the mechanisms and provide an architecture where the users are independent from the servers offering the services as well as the frontend. For the same reason we also don't offer a frontend solution going beyond a testing environment for the implemented mechanisms, and leave the implementation of fullgrown UIs to designers of applications of the software.
+
 \subsection{Architecture}
 \label{ssec:Architecture}
+As mentioned in the introduction of this section, the system architecture of Liquid Citizen is highly decentralized and modular. Different components are realized self-sufficiently, with their own APIs, in their own docker containers, and are developed in their respective \href{https://github.com/Liquid-Citizen}{github repositories}. Since the different components operate on distinct ports, they can be run on the same machine; However, to be true to the decentralized standard of the system, they can run on different machines just as well. Thus their development as well as their production is entirely encapsulated within itself.
+
+Since the components however form a service ecosystem where the different components need to interact / exchange data with one another, care needs to be taken to integrate the components well with one another, which violates their independence, but is needed for functionality. These aspects will be discussed in the following, in the \hyperref[ssec:Microservices]{description of the microservices}. The respective components, as modules of the software, are sketched \hyperref[ssec:Modules]{afterwards}.
+
+% We need layers to draw the block diagram
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+
+% Define a few styles and constants
+\tikzstyle{insideBlock}=[draw, fill=white!20, text width=5em, 
+    text centered, minimum height=2.5em]
+\tikzstyle{layer} = [insideBlock, text width=6em, fill=white!20, 
+    minimum height=20em, rounded corners]
+\def\blockdist{2.3}
+\def\edgedist{2.5}
+
+\begin{tikzpicture}
+    
+    % Note the use of \path instead of \node at ... below. 
+    \draw node (c1) [insideBlock] {Client (user)};
+%     \path (clientLayerBlock.-150)+(-\blockdist,0) node (c2) [insideBlock] {Client (user)};
+%     \path (clientLayerBlock.430)+(-\blockdist,0) node (cn) [insideBlock] {Client / user};
+	\path node [below=1em of c1] (c2) [insideBlock] {Client (user)};
+	\path node [below=3em of c2] (cn) [insideBlock] {Client (user)};
+    \path (c2) -- node (dotdot) {\vdots} (cn);
+    \draw node [layer, right=5em of dotdot] (serviceLayer) {Service layer};
+    % Unfortunately we cant use the convenient \path (fromnode) -- (tonode) 
+    % syntax here. This is because TikZ draws the path from the node centers
+    % and clip the path at the node boundaries. We want horizontal lines, but
+    % the sensor and naveq blocks aren't aligned horizontally. Instead we use
+    % the line intersection syntax |- to calculate the correct coordinate
+    \path [draw, ->] (c1) -- node [above] {}
+        (serviceLayer.west |- c1) ;
+    % We could simply have written (gyros) .. (naveq.140). However, it's
+    % best to avoid hard coding coordinates
+    \path [draw, ->] (c2) -- node [above] {}
+        (serviceLayer.west |- c2);
+    \path [draw, ->] (cn) -- node [above] {}
+        (serviceLayer.west |- cn);
+    \node (clientLayerLabel) [below=1em of cn,align=center] {Client layer \\ (users)};
+    
+    % Now it's time to draw the colored IMU and INS rectangles.
+    % To draw them behind the blocks we use pgf layers. This way we  
+    % can use the above block coordinates to place the backgrounds   
+    \begin{pgfonlayer}{background}
+        % Compute a few helper coordinates
+        \path (c1.west |- serviceLayer.north)+(-0.7,0.5) node (a) {};
+        \path (c1.north west)+(-0.3,0.3) node (a) {};
+        \path (clientLayerLabel.south -| c1.east)+(+0.4,-0.4) node (b) {};
+        \path[fill=white!10,rounded corners, draw=black!50, dashed]
+            (a) rectangle (b);
+    \end{pgfonlayer}
+\end{tikzpicture}
+
 \subsection{Microservices}
 \label{ssec:Microservices}
+
+\subsubsection{Vote Authentication Service}
+The vote authentication server administrates the vote tokens, enabling users to vote on propositions. It keeps a list of all vote-tokens issued, with an association pf the delegation tokens used to request them for each proposition in a voting phase. It further offers the functionality to calculate the value of a vote token (after a voting phase has finished).
+
+\subsubsection{Delegation Service}
+The delegation service serves two goals dependent goals. For one, it is responsible for storing the vote delegations (per proposition / context) and for managing delegation tokens. These services can't modeled independently since the value of a delegation token depends on the state of the delegation graph / table (and whether delegation tokens were issued to the respective delegators), which justifies why they are encapsulated in the same service.
+% * <johanning@informatik.uni-leipzig.de> 2018-02-12T16:55:52.982Z:
+% 
+% > These services can't modeled independently since the value of a delegation token depends on the state of the delegation graph / table
+% This can be done through an (internal) API; However would we want to expose such sensitive data to an API (even if it needs authentication of the delegation token service)?
+% 
+% 
+% ^.
+The services are designed as follows:
+
+\paragraph*{Vote Delegation} \mbox{} \\
+Vote delegation is the transfer of voting rights on a proposition or a context from a delegator to a delegate. For votes delegated for a context, voting rights are delegated for all subcontexts and proposition falling under it. If vote delegations are represented as a (delegation) graph, conceptually this means inserting an edge from the delegator to the delegate; This could just as well be represented as adding an association of the delegated proposition and context with the delegate.
+% * <johanning@informatik.uni-leipzig.de> 2018-02-13T10:17:51.591Z:
+% 
+% >  If vote delegations are represented as a (delegation) graph, conceptually this means inserting an edge from the delegator to the delegate; This could just as well be represented as adding an association of the delegated proposition and context with the delegate.
+% 
+% too much implementation details for design?
+% 
+% ^.
+Voting right delegation for propositions and subcontexts takes precedence over delegation for contexts. Thus if a delegator $A$ delegates their voting rights to a delegate $D$ for a context $C$ , and withdraws it (or re-delegates it to $D'$) for a subcontext $C'$ or a proposition $P$ , for voting on $P$ or a proposition falling under $C'$ , the vote of $A$ (or $D'$ ) counts (and the vote of $D$ is disregarded).
+
+The functionality described above means that the vote delegation has to provide an interface which allows to add, as well as remove a vote delegation, either for a proposition or a context. It further needs to provide functionality to determine if / to whom voting right was delegated for a given proposition. This will be determined by checking if voting right for the proposition was explicitly transfered, and if not, it will 'move up the supercontext chain' until a delegated context was found, which will count as the vote delegation. Since a (sub-) context  can not have multiple supercontexts, this is always unambiguous.
+
+\paragraph*{Delegation Token Handling} \mbox{} \\
+
+
 \subsection{Modules}
+% * <johanning@informatik.uni-leipzig.de> 2018-02-12T15:35:03.065Z:
+% 
+% > Microservices}
+% > \label{ssec:Microservices}
+% > \subsubsection{vote authentication server}
+% > The vote authentication server administrates the vote tokens, enabling users to vote on propositions. It keeps a list of all vote-tokens issued, 
+% > \subsection{Modules}
+% 
+% How do we define microservices, how modules? What are the differences (conceptually and in our case)?
+% 
+% ^ <johanning@informatik.uni-leipzig.de> 2018-02-12T16:44:24.561Z:
+% 
+% A websearch on modules vs. microservices mostly resulted in a discussion of modular approach in monolith application (as in easier type conversions, easier to develop within an existing organization etc.) vs microservices (as services that can employ different technology stacks and can be deployed changed easier (which also was contended). It is pretty clear where we stand, but I think that we meant something else with modules (namely in more functional terms); I'm just not so sure anymore how we meant it / how it makes sense. Maybe scrap the modules part and write the microservice part from a higher level perspective and then be more concrete (i.e. document the individual microservice) in the implementation part?
+%
+% ^.
 \label{ssec:Modules}
+This subsection will give a brief overview of the different modules within the service ecosystem. The different modules themselves are described in their respective sections later in this chapter; This subsection will give a course overview of the different modules.
+
+\paragraph{Voting Module} \mbox{} \\
+The \textbf{voting module} implements the process of vote casting on propositions in the voting phase. Through this, users that didn't delegate their vote for the respective proposition or a respective context, can cast their vote using a (vote-specific) vote token.
+In this it interacts with the proposition, the authentication, the delegation and the user module. It is described in detail in \ref{sec:Implementation_Voting}.
+
+\section{Implementation of the Voting Mechanism}
+\label{sec:Implementation_Voting}
+
+
+\subsection{Vote Authentication Service}
+The API of the VAS offers the following HTTP-request handling:
+
+\paragraph*{POST: registerForVote(propositionID, delegationToken, callback)}
+
+\paragraph*{GET: countVotePower(voteToken)} \mbox{} \\
+Counts the vote power of a voteToken by retrieving the respective delegationToken associated with it, and calling countDelegatedVotes.
+Returns respective errors, as well as when voteToken doesn't exist
+
+\section{Implementation of the Delegation Mechanism}
+
+\subsection{Vote Delegation Server}
+
+\paragraph*{POST: registerProposition(propositionID, userID)} \mbox{} \\
+
+Creates an entry in the proposition delegation data base, and returns the respective delegationToken. Retrieves followed users that don't have an entry in the proposition delegation data base yet, and removes this userID from delegators of an existing entry, if exists.
+
+\paragraph*{GET: countDelegatedVotes(delegationToken)}
+
+Method that counts how many votes are connected to a delegation for the respective proposition.
