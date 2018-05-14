@@ -3,7 +3,15 @@
 
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor} % https://en.wikibooks.org/wiki/LaTeX/Colors
 
-\usepackage{float}			% enables H for tables: \begin{table}[H]
+\usepackage{float}		% enables H for tab/figs: \begin{table}[H]
+% if you don't have a blank line after \end{xxx}[H] there will be no indentation:
+\makeatletter
+
+\renewcommand\float@endH{\@endfloatbox\vskip\intextsep
+  \if@flstyle\setbox\@currbox\float@makebox\columnwidth\fi
+  \box\@currbox\vskip\intextsep\relax\@doendpe}
+
+\makeatother
 
 
 \usepackage{tikz} % advanced grpahics such as figure numbering etc.

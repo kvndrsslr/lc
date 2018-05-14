@@ -25,6 +25,7 @@ A well-known external and source for document categorization is the Wikipedia ta
 
 Almost the complete opposite was true for the for the taxonomy of Stack Overflow Politics. While the Wikipedia articles were almost purely about a scientific view on Politics, the branch of the well-known question and answer site Stack Overflow almost only consist of current topics discussed by the community. The created tags are therefore more useful for characterizing political topics. But as the issues discussed are tagged by the user posting the question, it often occurs that there are two tags describing the same field. So, taking the Stack taxonomy would have cost us a lot of time cleaning the data. 
 
+
 Going on searching for a more organized alternative we considered the taxonomy that classify the topics discussed by the Bundestag. For every new legislation period the parliament is putting together committees for different topics. Even if the number and names of these committees have slightly changed over time, the content is more or less consisting. On the official Website of the Bundestag we found a tabula sorting all protocols of the committees' meetings. The altogether 43 topics describe a bride rage of political topics. From family to energy the categories are clear structured, exhaustive and disjunct. Therefore they cover two of our tree requirements. 
 
 \section{User Roles}
@@ -129,16 +130,44 @@ Administrators have a unique standing in the roles of the platform, in that they
 
 \section{Life Cycle of Propositions}
 \label{sec:Model_Propositions}
-A democracies most important concept in the process of transforming political positions and individual opinions into laws is the crafting of propositions which are, once finalized, subject to voting.
 
-Traditionally, in a parliamentarian democracy, the right to initiate and vote on propositions is exclusive for members of the parliament.
-However, in a liquid democracy, by definition every participant has the right to vote on propositions, and participate in their constitutive phase. Consequently, every participant should also have the unrestrained right to create propositions.
+\begin{figure}[t]
+\centering
+\includegraphics[height=0.6\paperheight]{../img/lifecycle_flow_v0.pdf}
+\caption{Flow chart of the proposition life cycle}
+\label{fig:proplife}
+\end{figure}
 
-In an anonymized large-scale digital liquid democracy, malicious users could mass-create so called spam propositions in order to bury other propositions and prevent users from voting on them.
-We aim to reduce this threat through the following measures: (1) phased proposition life cycles, (2) adaptive sorting algorithms based on bayesian filtering and (3) moderation.
+A democracies most important process in order to transform political positions and individual opinions into laws is the iteratively joint crafting of propositions which are, once finalized, subject to voting.
 
-\subsection{Proposition initiation}
+This process, starting with the initiation of a proposition and ending with the final vote cast, will consequently be dubbed the proposition life cycle.
+We split the proposition life cycle into three different phases: (1) initiation, (2) discussion and (3) voting.
+It intuitively makes sense to separate a propositions constitutive phase from its voting phase in order to guarantee that the intention of a casted vote stays consistent.
+We also subdivide the constitution phase into initiation phase and discussion phase in order to cope with high amounts of individual propositions by allowing only the most appealing propositions to be discussed, thereby channeling the communities efforts and creating an efficient democratic environment.
+
+In the following, we will successively illustrate each phase by describing its pre- and postconditions as well as its artifacts, actors and their interactions.
+
+\subsection{Initiation phase}
 \label{ssec:Lifecycle_Initiation}
+
+The initiation phase begins when a new proposition is created by an user, which thereby becomes its proposition author (see \ref{ssec:Roles_Petitioner}).
+To create a proposition, the proposition author needs to specify the following mandatory information: a title, a main text, one primary context, any number of secondary contexts and any number of voting options.
+When a new proposition is created, it gets assigned to a new unique proposition group and we call it that proposition groups \emph{root proposition}.
+Other users can then create so called alternative propositions which share the same proposition group, title and primary context as the root proposition.
+Creators of alternative propositions are called alternative proposition authors.
+Proposition authors, as well as alternative proposition authors can always edit their respective propositions text, options and secondary contexts.
+Followers of a proposition groups primary context that are interested in getting it into the discussion phase can attest their support.
+Once a proposition group gains enough support (x\% of the primary context follower population) all propositions in it are moved into the discussion phase.
+
+As the primary context 
+	
+\todo[inline]{Move this to theory?}
+Traditionally, in a parliamentarian democracy, the right to initiate and vote on propositions is exclusive for members of the parliament.
+However, in a liquid democracy, by definition every participant has the right to vote on propositions, and participate in their constitutive phase.
+Consequently, every participant should also have the unrestrained right to create propositions.
+
+In an anonymized large-scale digital liquid democracy, this right could be abused by malicious users to mass-create so called spam propositions in order to bury other propositions and prevent users from voting on them.
+We aim to reduce this threat through the following measures: (1) phased proposition life cycles, (2) adaptive sorting algorithms based on bayesian filtering and (3) moderation.
 
 \subsection{Discussion phase}
 \label{ssec:Lifecycle_Discussion}
@@ -149,34 +178,48 @@ We aim to reduce this threat through the following measures: (1) phased proposit
 \section{Voting mechanism}
 \label{sec:Voting_Mechanism}
 \todo[inline]{move implementation-specific details to \ref{sec:Implementation_Voting} and keep this description conceptual}
-In order for the voting mechanism to fulfill the criteria developed in \ref{sec:Criteria}, the voting mechanism has to be secret, verifiable and decentralized. Ideally, it shouldn't be possible for any actor in the system to gather any information about the voting behavior of a voter, while at the same time being comprehensible that votes got counted correctly. While not being ideal, the mechanisms in the following allows votes to be casted secretly, while vote counting can be done by any actor in order to prevent vote manipulation. It requires two trusted, independent authorities, which can (without collaboration) not ascertain the voting behavior of an individual.
+In order for the voting mechanism to fulfill the criteria developed in \ref{sec:Criteria}, the voting mechanism has to be secret, verifiable and decentralized. Ideally, it shouldn't be possible for any actor in the system to gather any information about the voting behavior of a voter, while at the same time being verifiable for any actor that votes got counted correctly. 
 
-For a given user and a proposition, the voting mechanism works as follows:
+In line with the principles of security-by-design, in the following we will describe a design for vote casting and counting mechanism that allows manipulation-resistant secret vote casting, which largely preserves privacy. While not being ideal, due to our lack of expertise in zero-knowledge-proof designed systems, the mechanisms described in the following fulfills these criteria well enough for a prototype. It requires two trusted, independent authorities, which can (without collaboration) not manipulate vote counting for a specific outcome, and only one of them can link the persona (i.e. userID) with a vote.
+
+For a given user and a proposition, the vote casting mechanism works as follows:
 \begin{enumerate}
 \item The user wanting to vote registers at the 
 vote delegation service (VDS), with its userID, and the propositionID of the proposition she wants to vote on, encrypted by the public key of the VDS. If the users public key is registered with the VDS, the propositionID can be signed with the private key of the user, so that the VDS can make sure  the user is who he claims and that a potential attacker can't gain information about what proposition a user wants to vote on.
-\item The VDS checks whether the user is already registered for this proposition, does the necessary book keeping and returns the created delegationToken encrypted with the public key of the user.
-\item The user then registers at the vote authentication server, with the delegationToken, a transaction-specific secret and the propositionID encrypted by the public key of the vote authentication service (VAS). To increase security, the delegation token could be encrypted with a proposition-specific secret key that the VDS, VAS and all authorized users possess.
-\item The VAS checks if the user is already registered to vote on the given proposition, creates a voteToken, associates the delegationToken and the transaction-specific secret (the proof of ownership: POO) with it and returns the voteToken to the user. The voteToken should be encrypted by the POO so that an observer can't derive the vote token (although a vote cast with being encrypted by the POO would not be counted as valid).
-\item The user casts its vote by broadcasting the voteToken and the respective choice, encrypted by the POO to the world. 
-\item When the voting period is over, the result of the election can be checked by a request to the VAS with a given voteToken, via a countVotePower request to the VAS API. For ascertaining the vote choice, the POO has to be decrypted by the VAS using the voteToken used to cast the vote.
+\item The VDS checks whether the user is already registered for this proposition, does the necessary book keeping and returns the created delegationToken encrypted with the public key of the user, as well as a token to prove the ownership of the delegationToken (the VDSpoo).
+\item The user then registers at the vote authentication server, with the delegationToken, a transaction-specific secret and the propositionID encrypted by the public key of the vote authentication service (VAS). If the users public key is registered with the VDS, the propositionID can be signed with the private key of the user, so that the VDS can make sure  the user is who he claims and that a potential attacker can't gain information about what proposition a user wants to vote on.
+\item The VAS checks if the delegationToken is already registered to vote on the given proposition, creates a voteToken and a token to prove its ownership (VASpoo), associates the delegationToken, the voteToken and the VASpoo with one another and returns the voteToken and the VASpoo to the user. The response can be encrypted with the public key of the user to increase security.
+\item The user then requests an optionToken from the proposition service for a given choice they want to vote on. This can be encrypted with the users public key, a one-time-secret or both to make sure only the user / vote caster can use it.
+\item In order to vote on a proposition, the user then prepares the option they want to vote on by encrypting the optionToken with the VASpoo (creating the first-level option, coined FLO), and subsequently encrypts this FLO with the VDSpoo associated with this voting process (creating the second-level optioned, coined SLO).
+\item In order to prove the vote was casted on time, the user then lets the proposition service sign this vote with the current time stamp.
+\item The user then casts their vote by broadcasting the signed vote to all public channels of interest.
+\end{enumerate}
+
+The casted votes can now be counted by any actor as follows:
+\begin{enumerate}
+\item The VAS is queried with the vote as the SLO and the vote token (together with the propositionID to derive the proposition the vote is about)
+\item The vote token is dereferenced to the respective delegationToken, and together with the SLO (and the propositionID) queried against the VDS
+\item The VDS dereferences the delegationToken against the anonToken, and reads out the number of delegated votes in the delegation graph that did not request a delegationToken for the respective proposition, i.e. determines the vote value.
+\item The VDS then creates a token (voteValueToken and links the vote value with this token and the SLO from the request, decrypts the SLO to the FLO (on the basis of the VDSpoo associated with the delegationToken) and returns a pair of the FLO and the voteValueToken to the VAS
+\item The VAS then decrypts the SLO to the respective optionToken using the VASpoo of the respective voteToken, and returns the optionToken and the voteToken to the requesting actor
+\item The requesting actor can now, based on the optionToken and the valueToken both determine the option the vote represents and the value of the vote using the valueToken (the later based on the SLO). Through this every vote can be evaluated and the total outcome of the election be checked by every interested party (as long as the VDS is not corrupted
 \end{enumerate}
 
 \paragraph*{Remarks}
-\begin{itemize}
-\item This protocol assumes that (only) the vote authentication server and the delegation server can be trusted (and of course > 1/3 of the users).
-\item The only information known publicly about the vote is the (encrypted) vote and the voteToken associated with it. By construction only authorized users can cast votes (since it is assumed that non-authorized users can't derive a vote token).  Learning which user cast the vote needs the delegationToken and the data base table associated with the proposition within the VDS.
-\item The vote authentification server knows what delegationToken each voteToken is associated, as well as which voteTokens have been issued. It thus knows how much voting power is behind each vote casted, but since it lacks the mapping from the delegationToken to the userID, it can't know how a given user voted
-\item The vote delegation server knows which userID is associated with each delegationToken, as well as how much voting power she has. Since however it lacks the mapping from the voteToken to the delegationToken, it can't learn which user voted which way.
-\item How much an attacker knows depends on the point of attack. When an attacker manages to retrieve a voteToken (or a delegationToken he uses to register), he can impersonate / cast the vote for another user. Otherwise he learns at most what the VAS and the VDS know
-\item In order to be cast twice, a voteToken must be used twice or the VAS issued several voteTokens for a delegationToken (for the case of two delegationTokens see below). The first case can be easily checked by everyone verifying the vote count from the public ledger of casted votes (voteTokens), whereas the second case involves a cheating VAS. This would be the most probable case of double voting; However, it was noted above, that the protocol assumes that the VAS can be trusted
-\item Votes could also be counted twice by reusing delegationTokens (potentially creating valid, different tokens), by issuing multiple delegationTokens for a user, or (most realistically), by a voter voting himself after the delegated vote was casted already. The first two cases involve a cheating VAS or VDS, whereas the latter is slightly more problematic, and can be achieved by a correct implementation within the VDS, since when a delegated vote (or a vote to delegate) enters the VDS, its data base should be updated to reflect this, and the count comes after the vote casting.
-\item Since the casted votes are kept in a public ledger, everyone can (with a trustable VAS and VDS) count the votes. Thus, while individual vote counters can fake the results, everyone can easily recount them
-\item Votes can only be lost when they are not in the public ledger (not cast), or are lost within the VDS / VAS
-\item Since the identity of the voters is not known to only part of the system, the votes can only be bought in the sense of direct contact with the users
-\item Due to the use of the POO, changing the option / timing is 'not possible' . This could also be achieved through signatures.
-\item Since for every vote / proposition, a new, unrelated voteToken is issued, it can't be used to profile a user.
-\end{itemize}
+% \begin{itemize}
+% \item This protocol assumes that (only) the vote authentication server and the delegation server can be trusted (and of course > 1/3 of the users).
+% \item The only information known publicly about the vote is the (encrypted) vote and the voteToken associated with it. By construction only authorized users can cast votes (since it is assumed that non-authorized users can't derive a vote token).  Learning which user cast the vote needs the delegationToken and the data base table associated with the proposition within the VDS.
+% \item The vote authentification server knows what delegationToken each voteToken is associated, as well as which voteTokens have been issued. It thus knows how much voting power is behind each vote casted, but since it lacks the mapping from the delegationToken to the userID, it can't know how a given user voted
+% \item The vote delegation server knows which userID is associated with each delegationToken, as well as how much voting power she has. Since however it lacks the mapping from the voteToken to the delegationToken, it can't learn which user voted which way.
+% \item How much an attacker knows depends on the point of attack. When an attacker manages to retrieve a voteToken (or a delegationToken he uses to register), he can impersonate / cast the vote for another user. Otherwise he learns at most what the VAS and the VDS know
+% \item In order to be cast twice, a voteToken must be used twice or the VAS issued several voteTokens for a delegationToken (for the case of two delegationTokens see below). The first case can be easily checked by everyone verifying the vote count from the public ledger of casted votes (voteTokens), whereas the second case involves a cheating VAS. This would be the most probable case of double voting; However, it was noted above, that the protocol assumes that the VAS can be trusted
+% \item Votes could also be counted twice by reusing delegationTokens (potentially creating valid, different tokens), by issuing multiple delegationTokens for a user, or (most realistically), by a voter voting himself after the delegated vote was casted already. The first two cases involve a cheating VAS or VDS, whereas the latter is slightly more problematic, and can be achieved by a correct implementation within the VDS, since when a delegated vote (or a vote to delegate) enters the VDS, its data base should be updated to reflect this, and the count comes after the vote casting.
+% \item Since the casted votes are kept in a public ledger, everyone can (with a trustable VAS and VDS) count the votes. Thus, while individual vote counters can fake the results, everyone can easily recount them
+% \item Votes can only be lost when they are not in the public ledger (not cast), or are lost within the VDS / VAS
+% \item Since the identity of the voters is not known to only part of the system, the votes can only be bought in the sense of direct contact with the users
+% \item Due to the use of the POO, changing the option / timing is 'not possible' . This could also be achieved through signatures.
+% \item Since for every vote / proposition, a new, unrelated voteToken is issued, it can't be used to profile a user.
+% \end{itemize}
 
 
 \section{Notifications}
