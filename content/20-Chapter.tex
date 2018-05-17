@@ -4,7 +4,7 @@
 In this section we will discuss the theoretical background the project of this report is based on. As noted in \href{ssec:Objective}{the introduction}, the project aims at developing a proof-of-concept implementation of a Citizen Science accessible Liquid Democracy game. As such, it needs to be grounded in a thorough understanding of both the concept of \href{ssec:Theory_CS}{Citizen Science} and \href{ssec:Theory_LD}{Liquid Democracy}. Additionally it needs to identify and address the problems and issues raised in relation to these concepts. 
 
 In order to address these issues, a discussion of their context is indispensable. In recognition of this, the structure of this section is as follows:
-After introducing the basic terms and the context they stem from (in \ref{ssec:Background_CS} and \ref{ssec:Background_LD} respectively), issues and open questions are addressed for both concepts separately (in \ref{ssec:Issues_CS} and \ref{ssec:Issues_LD} respectively). 
+After introducing the basic terms and the context they stem from (in \ref{ssec:Background_CS} and \ref{ssec:LD-Foundations} respectively), issues and open questions are addressed for both concepts separately (in \ref{ssec:Issues_CS} and \ref{ssec:Issues_LD} respectively). 
 
 Subsequently to a discussion on the background of the respective concept, we will \href{ssec:Integration_CSLD}{discuss synergies and challenges} of integrating these perspectives. Based on this integrative perspective and the aspects discussed at the beginning of this section, we will \href{ssec:Criteria}{derive a number of criteria} a Liquid Democracy game grounded in Citizen Science needs to exhibit, in order to \href{sec:Approach}{develop} a theory-grounded approach to the project's objective.
 % Clara
@@ -63,13 +63,60 @@ Even though are many forms of political government, it is democracy that spread 
 	\label{fig:democracy-trend}
 
 \end{figure}
-Nevertheless, it is neither within the scope of this project to asses democratic features, nor other systems of rule. Democracy, however, entails various advantages compared to other political systems. For one, it allows its citizens to participate in political processes (i.e., suffrage, the right to vote), and therefore to influence the political pathway (ranging from conservative to liberal). Additionally, democracy allows its people to shape the system to the extent of the boundaries of a democracy, that is, by its definition: rule of the people. Due to this adaptive nature a wide range of types\footnote{The English Wikipedia article \textit{Types of democracy} provides a well-structured summary on that topic: \url{https://en.wikipedia.org/wiki/Types_of_democracy}.} have evolved over time. In this project we focus on liquid democracy, a variant of democracy that is also known as delegative democracy.
+Nevertheless, it is neither within the scope of this project to asses democratic characteristics, nor other systems of rule. Democracy, however, entails various advantages compared to other political systems. For one, it allows its citizens to participate in political processes (i.e., suffrage, the right to vote), and therefore to influence the political pathway (ranging from conservative to liberal). Additionally, democracy allows its people to shape the system within the natural boundary, that is, by its literal transcription: rule of the people (Greek: \textgreek{δημοκρατία}, dēmokratía). Due to this adaptive nature a wide range of types\footnote{The English Wikipedia article \textit{Types of democracy} provides a well-structured summary on that topic: \url{https://en.wikipedia.org/wiki/Types_of_democracy}.} have evolved over time. In this project we focus on liquid democracy, a variant of democracy that is also known as delegative democracy.
 
 
-\subsection{Background}
-\label{ssec:Background_LD}
+\subsection{Foundations}
+\label{ssec:LD-Foundations}
 
-\acrfull{LD} 
+\acrfull{LD} describes a political system of delegate a vote. Not the same as proxy voting...
+
+from a principal to a proxy. 
+
+Imagine the following scenario; A survey 
+
+% TODO Noun-Project creditieren
+\begin{figure}[H]
+	\centering \begin{tikzpicture}
+	\node[anchor=south west,inner sep=0] (image) at (0,0,0) {\includegraphics[width=\linewidth]{Liquid-Democracy-Delegated-Voting.pdf}};
+	\begin{scope}[x={(image.south east)},y={(image.north west)}]
+% 	% next four lines will help you to locate the point needed by forming a grid. comment these four lines in the final picture.↓
+% 		\draw[help lines,xstep=.1,ystep=.1] (0,0) grid (1,1);
+% 		\draw[help lines,xstep=.05,ystep=.05] (0,0) grid (1,1);
+% 		\foreach \x in {0,1,...,9} { \node [anchor=north] at (\x/10,0) {0.\x}; }
+% 		\foreach \y in {0,1,...,9} { \node [anchor=east] at (0,\y/10) {0.\y};}
+% 	% upto here↑
+    
+    \draw (0.045,1.03) node {\textsf{\textbf{Citizen}}};
+    \draw (0.250,1.03) node {\textsf{\textbf{Proxy 1}}};
+    \draw (0.415,1.03) node {\textsf{\textbf{Proxy n}}};
+    \draw (0.580,1.03) node {\textsf{\textbf{Option}}};
+    \draw (0.800,1.03) node {\textsf{\textbf{Voting results}}};
+    
+    \draw[line width=0.1mm] (0,0.992) -- (0.98,0.992);
+    
+    \draw (0.068,0.730) node {\textcolor{gray}{\(1\)}};
+    \draw (0.068,0.571) node {\textcolor{gray}{\(1\)}};
+    \draw (0.068,0.353) node {\textcolor{gray}{\(1\)}};
+    \draw (0.068,0.193) node {\textcolor{gray}{\(1\)}};
+    \draw (0.068,0.002) node {\textcolor{gray}{\(1\)}};
+    
+    \draw (0.280,0.618) node {\textcolor{gray}{\(3\)}};
+    \draw (0.450,0.618) node {\textcolor{gray}{\(4\)}};
+    \draw (0.450,0.232) node {\textcolor{gray}{\(3\)}};
+    
+    \draw (0.58,0.74) node {\textsf{\textcolor{white}{\textbf{A}}}};
+    \draw (0.58,0.35) node {\textsf{\textcolor{white}{\textbf{B}}}};
+    \draw (0.58,0.10) node {\textsf{\textcolor{white}{\textbf{C}}}};
+	
+	\end{scope}
+	\end{tikzpicture}
+    \caption[Illustration of liquid democracy]{Illustration of liquid democracy. }
+	\label{fig:Liquid-Democracy-Delegated-Voting}
+\end{figure}
+Note, 
+
+
 
 \subsection{Issues and Open Questions in Liquid Democracy}
 \label{ssec:Issues_LD}
