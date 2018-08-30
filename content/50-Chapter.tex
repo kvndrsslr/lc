@@ -4,7 +4,7 @@
 
 This section will describe the process of developing a prototype for a Citizen Science-focused Liquid Democracy game, based on the \href{sec:Approach}{discussion of the approach} to fulfill the objective of this project, and due to the \href{sec:DiscussionRW}{fact} that no suitable software exists to base the prototype on, this section will document the software development process we took to develop said prototype.
 
-Based on mentioned \href{sec:Criteria}{criteria} and an \href{sec:AnalysisProcesses}{analysis of the processes} for a system for Liquid Democracy, we will \href{sec:SoftwareRequirements}{derive software requirements} the prototype needs to fulfill, before describing the \href{sec:Implementation}{process of implementing} said prototype. Since we base our prototype on a modular architecture around microservices, we will focus predominantly on the \href{ssec:Architecture}{architecture} of the prototype, as well as the implemented \href{ssec:Microservices}{micro services} and the (functional) \href{ssec:Modules}{modules} integrating the respective processes. 
+Based on mentioned \href{sec:Criteria}{criteria} and an \href{sec:AnalysisProcesses}{analysis of the processes} for a system for Liquid Democracy, we will \href{sec:SoftwareRequirements}{derive software requirements} the prototype needs to fulfill, before describing the \href{sec:Implementation}{process of implementing} said prototype. Since we base our prototype on a modular architecture around microservices, we will focus predominantly on the \href{ssec:Architecture}{architecture} of the prototype, as well as the implemented \href{ssec:Microservices}{micro services} and the (functional) \href{ssec:Modules}{modules} integrating the respective processes. The last part of this chapter \href{ssec:VotingProtocol}{describes the public interaction protocol} that should be implemented by clients in order to post their vote or delegation intents to the public space.
 
 \section{Requirements for the Prototype}
 \label{sec:SoftwareRequirements}
@@ -119,107 +119,122 @@ The functionality described above means that the vote delegation has to provide 
 % A websearch on modules vs. microservices mostly resulted in a discussion of modular approach in monolith application (as in easier type conversions, easier to develop within an existing organization etc.) vs microservices (as services that can employ different technology stacks and can be deployed changed easier (which also was contended). It is pretty clear where we stand, but I think that we meant something else with modules (namely in more functional terms); I'm just not so sure anymore how we meant it / how it makes sense. Maybe scrap the modules part and write the microservice part from a higher level perspective and then be more concrete (i.e. document the individual microservice) in the implementation part?
 %
 % ^.
+% * <kvndrsslr@gmail.com> 2018-07-24T13:38:27.037Z:
+% 
+% I am in favour of
+% *  dropping the modules section 
+% * high level description of microservices in microservices, detailed in seperate sections
+% * new subsection after microservices: public interaction protocol. Here we should introduce the need of a formal protocol when posting to the public space. maybe go into detail in seperate section
+% * new subsection after public interaction protocol: vote tallying  protocol. Here we describe the process / algorithm that clients need to implement in order to tally votes.
+% * new subsection after vote tallying  protocol: application demo.  Here we should comment on how we implemented the application demo, which is a module that emulates user action, interacts with the microservices and uses the public interaction protocol to post to the public space. 
+% 
+% ^.
+
 \label{ssec:Modules}
 This subsection will give a brief overview of the different modules within the service ecosystem. The different modules themselves are described in their respective sections later in this chapter; This subsection will give a course overview of the different modules.
 
-\paragraph{Voting Module} \mbox{} \\
-The \textbf{voting module} implements the process of vote casting on propositions in the voting phase. Through this, users that didn't delegate their vote for the respective proposition or a respective context, can cast their vote using a (vote-specific) vote token.
-In this it interacts with the proposition, the authentication, the delegation and the user module. It is described in detail in \ref{sec:Implementation_Voting}.
+% \paragraph{Voting Module} \mbox{} \\
+% The \textbf{voting module} implements the process of vote casting on propositions in the voting phase. Through this, users that didn't delegate their vote for the respective proposition or a respective context, can cast their vote using a (vote-specific) vote token.
+% In this it interacts with the proposition, the authentication, the delegation and the user module. It is described in detail in \ref{sec:Implementation_Voting}.
 
-\section{Implementation of the Voting Mechanism}
-\label{sec:Implementation_Voting}
-
-
-\subsection{Vote Authentication Service}
-The API of the VAS offers the following HTTP-request handling:
-
-\paragraph*{POST: registerForVote(propositionID, delegationToken, OTS)}
-Registers the given delegationToken to participate in the vote for a given proposition.
-Will create a voteToken and a VASpoo (VAS proof-of-ownership), and an entry in the respective table (associated with propID) with an association of the voteToken, the VASpoo and the delegationToken.
-Returns a pair (VT, VASpoo), encrypted by the one-time-secret provided in the API call.
-
-\paragraph*{POST: evaluateVote(voteToken, SLO, propID)} \mbox{} \\
-Prepares a vote for a given proposition for vote counting by determining the optionToken and votePowerToken, so the calling entity can determine the semantics of the vote within the vote counting.
-Returns a pair (O, vpt) of the optionToken and the votePowerToken, that can be evaluated through the propositionService and the VDS in order to evaluate the vote.
-It will call the evaluateVote operation of the VAS with the respective delegationToken, second-layer-optionToken (SLO) and propID, deriving the first-layer-optionToken (FLO) and the vtp. It then derives the option from the FLO by decrypting it with the corresponding VASpoo.
-
-Returns respective errors, as well as when voteToken doesn't exist
-
-\paragraph*{Data base structure VAS} \mbox{} \\
-The VAS stores the data associated with the voteTokens for the respective propositions. It features a table for each proposition with the following columns:
- - voteToken: String
- - delegationToken: String
- - VASpoo: String
-
-\section{Implementation of the Delegation Mechanism}
-
-\subsection{Vote Delegation Server}
-
-\paragraph*{POST: createDelegationToken(propositionID, userID, OTS)} \mbox{} \\
-
-Creates an entry in the proposition table corresponding to the propositionID, associating the userID, delegationToken and a VDSpoo (VDS delegation token proof-of-ownership) and returns the respective pair.
-
-\paragraph*{POST: evaluateDelegationToken(propositionID, delegationToken, SLO)} \mbox{} \\
-
-Operation that prepares the evaluation of a delegation token for the respective proposition. Will create a token based on the SLO in order to determine the value of the vote (votes delegated to the user with this DT). Also decrypts the SLO to the corresponding FLO based on the VDSpoo associated with the delegationToken.
-Returns the pair (FLO, vpt) with the optionToken encrypted by the VASpoo (as the SLO decrypted by the VDSpoo) and the votePowerToken used to evaluate the voting power of the delegationToken.
-
-The value of the vote (vpt) is determined by deriving the number of users delegating the voting power to the user associated with the delegationToken for the given proposition (either directly as a delegation for the proposition, or of a context / supercontext of the proposition, if no other exists) at the time of vote closing, as long as they didn't possess a valid delegationToken for this proposition. 
-
-\paragraph*{POST: revokeDelegationToken(propID, delegationToken, pooUserToken} \mbox{} \\
-Revokes the delegationToken provided, making it invalid for the vote on the given proposition, so that the delegation by the user is counted. Requires the parameters of the proposition ID the DT was issue for, the DT to revoke, and a token created by encrypting the anonToken of the requesting user with the VDSpoo of the respective token.
-The validity of the request is determined by decrypting the pooUserToken with the VDSpoo associated with the delegationToken and checking whether its the anonToken associated with the DT provided in the request.
-
-\paragraph*{POST: delegateProposition(propID, delegatingUser, delegate} \mbox{} \\
-Delegates the voting power on a given proposition from the delegatingUser to the delegate. Basically inserts an edge of the type / label of the propositionID into the delegation graph (at the current time of the VDS). Revokes earlier delegations for this proposition if necessary.
-
-\paragraph*{POST: delegateContext(context, delegatingUser, delegate} \mbox{} \\
-Delegates the voting power on a given context from the delegatingUser to the delegate. Basically inserts an edge of the type / label of the context into the delegation graph (at the current time of the VDS). Revokes earlier delegations for this context if necessary. 
-Will be revoked if all subcontexts are already delegated to other users.
-
-\paragraph*{GET: deriveLogicalGraph(graphOperation} \mbox{} \\
-Performs a graphOperation (read-only) on the delegation graph as long as this operation is not forbidden.
-graphOperation needs to be a string representing a valid operation for the underlying graph database.
-
-\paragraph*{POST: determineVotePower(vpt, SLO} \mbox{} \\
-Operation to determine whether a votePowerToken issued is valid, and if so how much voting power is associated with it (given the state of the delegationGraph at the expiration of the voting phase of the proposition, given the second-layer-option SLO. Is used to determine whether data was manipulated within the vote evaluation process by the VAS, and how much it is worth. Will check whether the vpt is associated with the SLO (i.e. the pair is valid), and if so return the respective value.
-
-\paragraph*{Data base structure VDS} \mbox{} \\
-The VDS stores the data associated with the delegationTokens for the respective propositions. It features a table for each proposition with the following columns:
- - userID: String
- - delegationToken: String
- - VDSpoo: String
-
-\subsection{Proposition Server}
-
-\paragraph*{POST: createProposition()} \mbox{} \\
-Creates a new proposition according to the parameters transmitted, as well as the proposition group alternative propositions to the newly created proposition will belong to.
-
-Transmitted parameters conflicting with the proposition configuration of the proposition service will be ignored.
-
-\paragraph*{POST: createAlternativeProposition(propositionGroupID)} \mbox{} \\
-Creates a new alternative proposition belonging to the propositionGroupID of the referred proposition.
-
-Transmitted parameters conflicting with the proposition configuration of the proposition service will be ignored.
-
-\paragraph*{POST: createPropositionToken(propositionID,plainTextOption)} \mbox{} \\
-Creates a propositionToken for the respective proposition, associated with the respective plainTextOption (as long as the proposition and the option exists). The propositionToken can be used to derive the plainTextOption associated with it, and is introduced so the plainTextOption can't be manipulated by other actors in the vote evaluation process.
-
-\paragraph*{POST: derivePlainTextOption(propositionToken)} \mbox{} \\
-Returns the plain text option associated with the proposition token.
+% \section{Implementation of the Voting Mechanism}
+% \label{sec:Implementation_Voting}
 
 
-\paragraph*{GET: getPropositionInformation(propositionID, foobar)} \mbox{} \\
-Will return relevant information about the proposition in question.
+% \subsection{Vote Authentication Service}
+% The API of the VAS offers the following HTTP-request handling:
 
-\paragraph*{GET: getPropositionVoteClosingTime(propositionID)} \mbox{} \\
-Returns the vote closing time of the proposition (when the voting period ended).
+% \paragraph*{POST: registerForVote(propositionID, delegationToken, OTS)}
+% Registers the given delegationToken to participate in the vote for a given proposition.
+% Will create a voteToken and a VASpoo (VAS proof-of-ownership), and an entry in the respective table (associated with propID) with an association of the voteToken, the VASpoo and the delegationToken.
+% Returns a pair (VT, VASpoo), encrypted by the one-time-secret provided in the API call.
 
-\paragraph*{GET: getPropositionVoteOpeningTime(propositionID)} \mbox{} \\
-Returns the vote opening time of the proposition (when the voting period started).
+% \paragraph*{POST: evaluateVote(voteToken, SLO, propID)} \mbox{} \\
+% Prepares a vote for a given proposition for vote counting by determining the optionToken and votePowerToken, so the calling entity can determine the semantics of the vote within the vote counting.
+% Returns a pair (O, vpt) of the optionToken and the votePowerToken, that can be evaluated through the propositionService and the VDS in order to evaluate the vote.
+% It will call the evaluateVote operation of the VAS with the respective delegationToken, second-layer-optionToken (SLO) and propID, deriving the first-layer-optionToken (FLO) and the vtp. It then derives the option from the FLO by decrypting it with the corresponding VASpoo.
 
-\paragraph*{POST: signVote(vote)} \mbox{} \\
-Signs a vote with the current time stamp to prove that the vote was casted on time. 
+% Returns respective errors, as well as when voteToken doesn't exist
 
-\paragraph*{Data base structure proposition service} \mbox{} \\
-The proposition service stores the data for the propositions as well as the proposition tokens used for vote casting. For this it features two tables, one with the proposition data (to be specified) and one with a mapping of the optionTokens and the respective plainTextOptions.
+% \paragraph*{Data base structure VAS} \mbox{} \\
+% The VAS stores the data associated with the voteTokens for the respective propositions. It features a table for each proposition with the following columns:
+%  - voteToken: String
+%  - delegationToken: String
+%  - VASpoo: String
+
+% \section{Implementation of the Delegation Mechanism}
+
+% \subsection{Vote Delegation Server}
+
+% \paragraph*{POST: createDelegationToken(propositionID, userID, OTS)} \mbox{} \\
+
+% Creates an entry in the proposition table corresponding to the propositionID, associating the userID, delegationToken and a VDSpoo (VDS delegation token proof-of-ownership) and returns the respective pair.
+
+% \paragraph*{POST: evaluateDelegationToken(propositionID, delegationToken, SLO)} \mbox{} \\
+
+% Operation that prepares the evaluation of a delegation token for the respective proposition. Will create a token based on the SLO in order to determine the value of the vote (votes delegated to the user with this DT). Also decrypts the SLO to the corresponding FLO based on the VDSpoo associated with the delegationToken.
+% Returns the pair (FLO, vpt) with the optionToken encrypted by the VASpoo (as the SLO decrypted by the VDSpoo) and the votePowerToken used to evaluate the voting power of the delegationToken.
+
+% The value of the vote (vpt) is determined by deriving the number of users delegating the voting power to the user associated with the delegationToken for the given proposition (either directly as a delegation for the proposition, or of a context / supercontext of the proposition, if no other exists) at the time of vote closing, as long as they didn't possess a valid delegationToken for this proposition. 
+
+% \paragraph*{POST: revokeDelegationToken(propID, delegationToken, pooUserToken} \mbox{} \\
+% Revokes the delegationToken provided, making it invalid for the vote on the given proposition, so that the delegation by the user is counted. Requires the parameters of the proposition ID the DT was issue for, the DT to revoke, and a token created by encrypting the anonToken of the requesting user with the VDSpoo of the respective token.
+% The validity of the request is determined by decrypting the pooUserToken with the VDSpoo associated with the delegationToken and checking whether its the anonToken associated with the DT provided in the request.
+
+% \paragraph*{POST: delegateProposition(propID, delegatingUser, delegate} \mbox{} \\
+% Delegates the voting power on a given proposition from the delegatingUser to the delegate. Basically inserts an edge of the type / label of the propositionID into the delegation graph (at the current time of the VDS). Revokes earlier delegations for this proposition if necessary.
+
+% \paragraph*{POST: delegateContext(context, delegatingUser, delegate} \mbox{} \\
+% Delegates the voting power on a given context from the delegatingUser to the delegate. Basically inserts an edge of the type / label of the context into the delegation graph (at the current time of the VDS). Revokes earlier delegations for this context if necessary. 
+% Will be revoked if all subcontexts are already delegated to other users.
+
+% \paragraph*{GET: deriveLogicalGraph(graphOperation} \mbox{} \\
+% Performs a graphOperation (read-only) on the delegation graph as long as this operation is not forbidden.
+% graphOperation needs to be a string representing a valid operation for the underlying graph database.
+
+% \paragraph*{POST: determineVotePower(vpt, SLO} \mbox{} \\
+% Operation to determine whether a votePowerToken issued is valid, and if so how much voting power is associated with it (given the state of the delegationGraph at the expiration of the voting phase of the proposition, given the second-layer-option SLO. Is used to determine whether data was manipulated within the vote evaluation process by the VAS, and how much it is worth. Will check whether the vpt is associated with the SLO (i.e. the pair is valid), and if so return the respective value.
+
+% \paragraph*{Data base structure VDS} \mbox{} \\
+% The VDS stores the data associated with the delegationTokens for the respective propositions. It features a table for each proposition with the following columns:
+%  - userID: String
+%  - delegationToken: String
+%  - VDSpoo: String
+
+% \subsection{Proposition Server}
+
+% \paragraph*{POST: createProposition()} \mbox{} \\
+% Creates a new proposition according to the parameters transmitted, as well as the proposition group alternative propositions to the newly created proposition will belong to.
+
+% Transmitted parameters conflicting with the proposition configuration of the proposition service will be ignored.
+
+% \paragraph*{POST: createAlternativeProposition(propositionGroupID)} \mbox{} \\
+% Creates a new alternative proposition belonging to the propositionGroupID of the referred proposition.
+
+% Transmitted parameters conflicting with the proposition configuration of the proposition service will be ignored.
+
+% \paragraph*{POST: createPropositionToken(propositionID,plainTextOption)} \mbox{} \\
+% Creates a propositionToken for the respective proposition, associated with the respective plainTextOption (as long as the proposition and the option exists). The propositionToken can be used to derive the plainTextOption associated with it, and is introduced so the plainTextOption can't be manipulated by other actors in the vote evaluation process.
+
+% \paragraph*{POST: derivePlainTextOption(propositionToken)} \mbox{} \\
+% Returns the plain text option associated with the proposition token.
+
+
+% \paragraph*{GET: getPropositionInformation(propositionID, foobar)} \mbox{} \\
+% Will return relevant information about the proposition in question.
+
+% \paragraph*{GET: getPropositionVoteClosingTime(propositionID)} \mbox{} \\
+% Returns the vote closing time of the proposition (when the voting period ended).
+
+% \paragraph*{GET: getPropositionVoteOpeningTime(propositionID)} \mbox{} \\
+% Returns the vote opening time of the proposition (when the voting period started).
+
+% \paragraph*{POST: signVote(vote)} \mbox{} \\
+% Signs a vote with the current time stamp to prove that the vote was casted on time. 
+
+% \paragraph*{Data base structure proposition service} \mbox{} \\
+% The proposition service stores the data for the propositions as well as the proposition tokens used for vote casting. For this it features two tables, one with the proposition data (to be specified) and one with a mapping of the optionTokens and the respective plainTextOptions.
+
+
+\subsection{Public Interaction Protocol}
+\label{ssec:VotingProtocol}

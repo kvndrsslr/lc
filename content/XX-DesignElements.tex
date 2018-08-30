@@ -134,6 +134,14 @@ Some citing commands---such as  \verb|\parencite[prefix][suffix]{KEY}|---come wi
 
 If you use only one bracket the suffix variant gets used: \textcite[97]{StaplesBieman1999} discuss in their publication \textellipsis
 
+\subsection{Citing literature, directly}
+
+For direct citations that are more then two lines, it is a good practice to indent the full quotation within the environment \verb|\begin{displayquote}| and \verb|\end{displayquote}|, resulting in:
+
+\begin{displayquote}
+\textit{"A [\textellipsis] polygon can be connected [\textellipsis] by using the same index as both first and last values. This is especially valuable if you are reusing Color and Coordinate nodes to provide IndexedLineSet outlines of IndexedFaceSet geometry." \parencite[162]{Desilver2017}}
+\end{displayquote}
+
 \subsection{Referencing Section, Figures, Tables, etc.}
 
 You can reference to everything which has a label or a caption. If you set a label or a caption, it’s a good practice to use prefixes: Figures: fig: -- Tables: tab: -- Source code: lst: -- Chapters: ch: -- Sections: sec: -- Subsections: ssec: and so on.

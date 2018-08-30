@@ -4,7 +4,7 @@
 In this section we will discuss the theoretical background the project of this report is based on. As noted in \href{ssec:Objective}{the introduction}, the project aims at developing a proof-of-concept implementation of a Citizen Science accessible Liquid Democracy game. As such, it needs to be grounded in a thorough understanding of both the concept of \href{ssec:Theory_CS}{Citizen Science} and \href{ssec:Theory_LD}{Liquid Democracy}. Additionally it needs to identify and address the problems and issues raised in relation to these concepts. 
 
 In order to address these issues, a discussion of their context is indispensable. In recognition of this, the structure of this section is as follows:
-After introducing the basic terms and the context they stem from (in \ref{ssec:Background_CS} and \ref{ssec:LD-Foundations} respectively), issues and open questions are addressed for both concepts separately (in \ref{ssec:Issues_CS} and \ref{ssec:Issues_LD} respectively). 
+After introducing the basic terms and the context they stem from (in \ref{ssec:Background_CS} and \ref{ssec:Liquid_Democracy} respectively), issues and open questions are addressed for both concepts separately (in \ref{ssec:Issues_CS} and \ref{ssec:Issues_LD} respectively). 
 
 Subsequently to a discussion on the background of the respective concept, we will \href{ssec:Integration_CSLD}{discuss synergies and challenges} of integrating these perspectives. Based on this integrative perspective and the aspects discussed at the beginning of this section, we will \href{ssec:Criteria}{derive a number of criteria} a Liquid Democracy game grounded in Citizen Science needs to exhibit, in order to \href{sec:Approach}{develop} a theory-grounded approach to the project's objective.
 % Clara
@@ -18,10 +18,10 @@ Steven is doing that shit. Grundidee CS. Wieso ist die Project Idee geil usw.
 
 \newpage
 
-\section{Liquid Democracy}
-\label{sec:Liquid_Democracy}
+\section{Democracy}
+\label{sec:Democracy}
 
-Even though are many forms of political government, it is democracy that spread around the globe over the last hundred years (see \autoref{fig:democracy-trend}). \textit{“As of the end of 2016, 97 out of 167 countries (58\,\%) [\ldots] were democracies [\ldots]”} \parencite{Desilver2017}. According to the observations in \autoref{fig:democracy-trend} it can be argued that democracy is a successful and thus modern structure, since there are no competing political system showing a similar thriving trend as democracy does.
+Even though there are many forms of political government, it is democracy that spread around the globe over the last hundred years (see \autoref{fig:democracy-trend}). \textit{“As of the end of 2016, 97 out of 167 countries (58\,\%) [\ldots] were democracies [\ldots]”} \parencite{Desilver2017}. According to the observations in \autoref{fig:democracy-trend} it can be argued that democracy is a successful and thus modern structure, since there are no competing political system showing a similar thriving trend as democracy does.
 
 \begin{figure}[H]
 
@@ -63,16 +63,28 @@ Even though are many forms of political government, it is democracy that spread 
 	\label{fig:democracy-trend}
 
 \end{figure}
-Nevertheless, it is neither within the scope of this project to asses democratic characteristics, nor other systems of rule. Democracy, however, entails various advantages compared to other political systems. For one, it allows its citizens to participate in political processes (i.e., suffrage, the right to vote), and therefore to influence the political pathway (ranging from conservative to liberal). Additionally, democracy allows its people to shape the system within the natural boundary, that is, by its literal transcription: rule of the people (Greek: \textgreek{δημοκρατία}, dēmokratía). Due to this adaptive nature a wide range of types\footnote{The English Wikipedia article \textit{Types of democracy} provides a well-structured summary on that topic: \url{https://en.wikipedia.org/wiki/Types_of_democracy}.} have evolved over time. In this project we focus on liquid democracy, a variant of democracy that is also known as delegative democracy.
+Nevertheless, it is neither within the scope of this project to asses democratic characteristics, nor other systems of rule. Democracy, however, entails various advantages compared to other political systems. First and foremost---by its literal translation\footnote{\textit{Rule of the people}, from Ancient Greek: \textgreek{δημοκρατία} (dēmokratía): democracy, whereby \textgreek{δῆμος} (dêmos) means \textit{the people}, and \textgreek{Κράτος} (Krátos) means \textit{power/strength}.}---democracy empowers its citizens to participate in political processes, and therefore to influence the political pathway. For example, one fundamental element is suffrage, that is, the right to vote. Additionally, democracy allows its people to shape the system’s frame, therefore, a wide range of democracy types\footnote{The English Wikipedia article \textit{Types of democracy} provides a well-structured summary on that topic: \url{https://en.wikipedia.org/wiki/Types_of_democracy}.} have evolved over time. In this project we focus on liquid democracy, a variant of democracy that is also known as delegative democracy.
 
 
-\subsection{Foundations}
-\label{ssec:LD-Foundations}
+\subsection{Liquid Democracy}
+\label{ssec:Liquid_Democracy}
 
-\acrfull{LD} describes a political system of delegate a vote. Not the same as proxy voting...
+\acrfull{LD} is a type of democracy lying in between two major democracy forms: direct democracy and indirect (or representative) democracy. This \textit{liquid} intersection allows citizens to either delegate their vote to a proxy (representative) or to vote directly for a certain state of affairs (e.g., a proposition).
+
+It is important to point out that the voting form \textit{proxy voting} shares some attributes of Liquid Democracy, yet, there is a fundamental difference: In contrast to the classic proxy voting paradigm (Miller 1969), the key innovation underlying liquid democracy is that proxies — who were selected by voters to vote on their behalf — may delegate their own vote to a proxy, and, in doing so, further delegate all the votes entrusted to them. Put another way (to justify the liquid metaphor), votes may freely flow through the directed delegation graph until they reach a sink \parencite{Kahng2018}
+
+In delegated voting, the proxy is transitive and the transfer recursive. Put simply, the vote may be further delegated to the proxy's proxy, and so on. This is also called transitive proxy or delegate cascade.[93] An early proposal of delegate voting was that of Lewis Carroll in 1884.[94][95]
+
+
+
+In delegated voting, the proxy is transitive and the transfer recursive. Put simply, the vote may be further delegated to the proxy's proxy, and so on. This is also called transitive proxy or delegate cascade. 
+% aus https://en.wikipedia.org/wiki/Proxy_voting#Delegated_voting
+
+describes a political system that allows its citizens of delegate a vote. Not the same as proxy voting...
 
 from a principal to a proxy. 
 
+To better illustrate ....
 Imagine the following scenario; A survey 
 
 % TODO Noun-Project creditieren
@@ -111,11 +123,17 @@ Imagine the following scenario; A survey
 	
 	\end{scope}
 	\end{tikzpicture}
-    \caption[Illustration of liquid democracy]{Illustration of liquid democracy. }
+    \caption[Illustration of liquid democracy]{Illustration of liquid democracy, where everyone has a vote, depicted by the gray figures. People can delegate the voice to another citizen making them a proxy/delegate increasing their voting power. A proxy can delegate his voting power to another proxy. Ultimately, people may also vote with their voice directly (red).}
 	\label{fig:Liquid-Democracy-Delegated-Voting}
 \end{figure}
 Note, 
 
+Traditionally, in a parliamentarian democracy, the right to initiate and vote on propositions is exclusive for members of the parliament.
+However, in a liquid democracy, by definition every participant has the right to vote on propositions, and participate in their constitutive phase.
+Consequently, every participant should also have the unrestrained right to create propositions.
+
+In an anonymized large-scale digital liquid democracy, this right could be abused by malicious users to mass-create so called spam propositions in order to bury other propositions and prevent users from voting on them.
+We aim to reduce this threat through the following measures: (1) phased proposition life cycles, (2) adaptive sorting algorithms based on bayesian filtering and (3) moderation.
 
 
 \subsection{Issues and Open Questions in Liquid Democracy}

@@ -34,7 +34,7 @@ Going on searching for a more organized alternative we considered the taxonomy t
 This section will describe the roles that user on the platform can take on.
 It is important to note that this is done from a perspective of what roles different stakeholders take in the relevant processes, and that it takes on the perspective of the business processes.
 
-This is not meant to imply that only some users can take on these roles or that these roles are technically different, and is not meant to restrict access to processes. We believe, as derived in \ref{sec:Liquid_Democracy} and \ref{sec:Theory_CS} that both from a Citizen Science as well as from a Liquid Democracy perspective participation in a democracy should be only as restricted as necessary, and as open as possible. While we do think that discursive structures need to be established within discussions, the possibilities for participation should not be restricted.
+This is not meant to imply that only some users can take on these roles or that these roles are technically different, and is not meant to restrict access to processes. We believe, as derived in \ref{sec:Democracy} and \ref{sec:Theory_CS} that both from a Citizen Science as well as from a Liquid Democracy perspective participation in a democracy should be only as restricted as necessary, and as open as possible. While we do think that discursive structures need to be established within discussions, the possibilities for participation should not be restricted.
 
 In the following we will describe the roles the political subject can take within the structures of discourse in the platform we are developing, and we will justify why we think that access to these discursive activities should be limited to users taking on this role in the given context.
 
@@ -161,13 +161,8 @@ Once a proposition group gains enough support (x\% of the primary context follow
 
 As the primary context 
 	
-\todo[inline]{Move this to theory?}
-Traditionally, in a parliamentarian democracy, the right to initiate and vote on propositions is exclusive for members of the parliament.
-However, in a liquid democracy, by definition every participant has the right to vote on propositions, and participate in their constitutive phase.
-Consequently, every participant should also have the unrestrained right to create propositions.
 
-In an anonymized large-scale digital liquid democracy, this right could be abused by malicious users to mass-create so called spam propositions in order to bury other propositions and prevent users from voting on them.
-We aim to reduce this threat through the following measures: (1) phased proposition life cycles, (2) adaptive sorting algorithms based on bayesian filtering and (3) moderation.
+
 
 \subsection{Discussion phase}
 \label{ssec:Lifecycle_Discussion}
@@ -177,32 +172,50 @@ We aim to reduce this threat through the following measures: (1) phased proposit
 
 \section{Voting mechanism}
 \label{sec:Voting_Mechanism}
-\todo[inline]{move implementation-specific details to \ref{sec:Implementation_Voting} and keep this description conceptual}
+% \todo[inline]{move implementation-specific details to \ref{sec:Implementation_Voting} and keep this description conceptual}
 In order for the voting mechanism to fulfill the criteria developed in \ref{sec:Criteria}, the voting mechanism has to be secret, verifiable and decentralized. Ideally, it shouldn't be possible for any actor in the system to gather any information about the voting behavior of a voter, while at the same time being verifiable for any actor that votes got counted correctly. 
 
-In line with the principles of security-by-design, in the following we will describe a design for vote casting and counting mechanism that allows manipulation-resistant secret vote casting, which largely preserves privacy. While not being ideal, due to our lack of expertise in zero-knowledge-proof designed systems, the mechanisms described in the following fulfills these criteria well enough for a prototype. It requires two trusted, independent authorities, which can (without collaboration) not manipulate vote counting for a specific outcome, and only one of them can link the persona (i.e. userID) with a vote.
+In line with the principles of security-by-design, in the following we will describe a design for vote casting and counting mechanism that allows manipulation-resistant secret vote casting, which largely preserves privacy.
+While not being ideal, due to our lack of expertise in zero-knowledge-proof designed systems, the mechanisms described in the following fulfills these criteria well enough for a prototype.
+The main feature of our system design is that both votes and delegations are casted publicly, i.e. it is distributed over the Internet in a way that (1) everyone can access them and (b) no non-critical number of malicious users is able to take down votes.
+That means that votes may be casted using a distributed ledger, a publicly managed collection of mirrored vote servers or any other system that abides by these criteria.
+Given there is a way to obtain the power of a vote and to verify the vote is valid, casting votes in a public space gives everyone the ability to count and verify votes.
+To this end, our system requires one central trusted authority, the voting registry (VR).
+The argument for introducing a centralized service into the system is that in any democratic environment some authority has to decide who is part of that environment and therefore has the right to vote.
+The VR contributes to the verifiability of the process by blind signing vote authorization keys.
+Note that by using a blind signature scheme secrecy is preserved while being able to prove that (a) a given vote has been counted and (b) the vote was actually issued by someone who owns the right to vote.
+Surely, one could imagine a system where the right to vote is granted based on consensus, especially in rather small democratic environments.
+However, as we are not familiar with the field, we are not aware if it can be mathematically proven that such a system can work at any scale and have thus decided to not follow this idea.
 
 For a given user and a proposition, the vote casting mechanism works as follows:
 \begin{enumerate}
-\item The user wanting to vote registers at the 
-vote delegation service (VDS), with its userID, and the propositionID of the proposition she wants to vote on, encrypted by the public key of the VDS. If the users public key is registered with the VDS, the propositionID can be signed with the private key of the user, so that the VDS can make sure  the user is who he claims and that a potential attacker can't gain information about what proposition a user wants to vote on.
-\item The VDS checks whether the user is already registered for this proposition, does the necessary book keeping and returns the created delegationToken encrypted with the public key of the user, as well as a token to prove the ownership of the delegationToken (the VDSpoo).
-\item The user then registers at the vote authentication server, with the delegationToken, a transaction-specific secret and the propositionID encrypted by the public key of the vote authentication service (VAS). If the users public key is registered with the VDS, the propositionID can be signed with the private key of the user, so that the VDS can make sure  the user is who he claims and that a potential attacker can't gain information about what proposition a user wants to vote on.
-\item The VAS checks if the delegationToken is already registered to vote on the given proposition, creates a voteToken and a token to prove its ownership (VASpoo), associates the delegationToken, the voteToken and the VASpoo with one another and returns the voteToken and the VASpoo to the user. The response can be encrypted with the public key of the user to increase security.
-\item The user then requests an optionToken from the proposition service for a given choice they want to vote on. This can be encrypted with the users public key, a one-time-secret or both to make sure only the user / vote caster can use it.
-\item In order to vote on a proposition, the user then prepares the option they want to vote on by encrypting the optionToken with the VASpoo (creating the first-level option, coined FLO), and subsequently encrypts this FLO with the VDSpoo associated with this voting process (creating the second-level optioned, coined SLO).
-\item In order to prove the vote was casted on time, the user then lets the proposition service sign this vote with the current time stamp.
-\item The user then casts their vote by broadcasting the signed vote to all public channels of interest.
-\end{enumerate}
+\item The user creates a fresh RSA key pair.
+The length of the key should be as large as possible to protect against attacks for the foreseeable future.
+\item The user authenticates at the vote registry.
+\item If the user is authorized to vote, the vote registry blind signs the public key the user has generated in the first step.
+\item The user can now announce vote or delegate intents to the public.
+To this end, the user assembles the appropriate message and signs it with his private key he generated in the first step.
+Then, he adds his public key from the first step and the unblinded signature from the third step to the message.
+The whole message is then posted to a public space that abides by the criteria outlined earlier.
+% \item The user wanting to vote registers at the 
+% vote delegation service (VDS), with its userID, and the propositionID of the proposition she wants to vote on, encrypted by the public key of the VDS. If the users public key is registered with the VDS, the propositionID can be signed with the private key of the user, so that the VDS can make sure  the user is who he claims and that a potential attacker can't gain information about what proposition a user wants to vote on.
+% \item The VDS checks whether the user is already registered for this proposition, does the necessary book keeping and returns the created delegationToken encrypted with the public key of the user, as well as a token to prove the ownership of the delegationToken (the VDSpoo).
+% \item The user then registers at the vote authentication server, with the delegationToken, a transaction-specific secret and the propositionID encrypted by the public key of the vote authentication service (VAS). If the users public key is registered with the VDS, the propositionID can be signed with the private key of the user, so that the VDS can make sure  the user is who he claims and that a potential attacker can't gain information about what proposition a user wants to vote on.
+% \item The VAS checks if the delegationToken is already registered to vote on the given proposition, creates a voteToken and a token to prove its ownership (VASpoo), associates the delegationToken, the voteToken and the VASpoo with one another and returns the voteToken and the VASpoo to the user. The response can be encrypted with the public key of the user to increase security.
+% \item The user then requests an optionToken from the proposition service for a given choice they want to vote on. This can be encrypted with the users public key, a one-time-secret or both to make sure only the user / vote caster can use it.
+% \item In order to vote on a proposition, the user then prepares the option they want to vote on by encrypting the optionToken with the VASpoo (creating the first-level option, coined FLO), and subsequently encrypts this FLO with the VDSpoo associated with this voting process (creating the second-level optioned, coined SLO).
+% \item In order to prove the vote was casted on time, the user then lets the proposition service sign this vote with the current time stamp.
+% \item The user then casts their vote by broadcasting the signed vote to all public channels of interest.
+% \end{enumerate}
 
-The casted votes can now be counted by any actor as follows:
-\begin{enumerate}
-\item The VAS is queried with the vote as the SLO and the vote token (together with the propositionID to derive the proposition the vote is about)
-\item The vote token is dereferenced to the respective delegationToken, and together with the SLO (and the propositionID) queried against the VDS
-\item The VDS dereferences the delegationToken against the anonToken, and reads out the number of delegated votes in the delegation graph that did not request a delegationToken for the respective proposition, i.e. determines the vote value.
-\item The VDS then creates a token (voteValueToken and links the vote value with this token and the SLO from the request, decrypts the SLO to the FLO (on the basis of the VDSpoo associated with the delegationToken) and returns a pair of the FLO and the voteValueToken to the VAS
-\item The VAS then decrypts the SLO to the respective optionToken using the VASpoo of the respective voteToken, and returns the optionToken and the voteToken to the requesting actor
-\item The requesting actor can now, based on the optionToken and the valueToken both determine the option the vote represents and the value of the vote using the valueToken (the later based on the SLO). Through this every vote can be evaluated and the total outcome of the election be checked by every interested party (as long as the VDS is not corrupted
+% The casted votes can now be counted by any actor as follows:
+% \begin{enumerate}
+% \item The VAS is queried with the vote as the SLO and the vote token (together with the propositionID to derive the proposition the vote is about)
+% \item The vote token is dereferenced to the respective delegationToken, and together with the SLO (and the propositionID) queried against the VDS
+% \item The VDS dereferences the delegationToken against the anonToken, and reads out the number of delegated votes in the delegation graph that did not request a delegationToken for the respective proposition, i.e. determines the vote value.
+% \item The VDS then creates a token (voteValueToken and links the vote value with this token and the SLO from the request, decrypts the SLO to the FLO (on the basis of the VDSpoo associated with the delegationToken) and returns a pair of the FLO and the voteValueToken to the VAS
+% \item The VAS then decrypts the SLO to the respective optionToken using the VASpoo of the respective voteToken, and returns the optionToken and the voteToken to the requesting actor
+% \item The requesting actor can now, based on the optionToken and the valueToken both determine the option the vote represents and the value of the vote using the valueToken (the later based on the SLO). Through this every vote can be evaluated and the total outcome of the election be checked by every interested party (as long as the VDS is not corrupted
 \end{enumerate}
 
 \paragraph*{Remarks}
