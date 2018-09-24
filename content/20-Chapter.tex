@@ -21,7 +21,7 @@ Steven is doing that shit. Grundidee CS. Wieso ist die Project Idee geil usw.
 \section{Democracy}
 \label{sec:Democracy}
 
-Even though there are many forms of political government, it is democracy that spread around the globe over the last hundred years (see \autoref{fig:democracy-trend}). \textit{“As of the end of 2016, 97 out of 167 countries (58\,\%) [\ldots] were democracies [\ldots]”} \parencite{Desilver2017}. According to the observations in \autoref{fig:democracy-trend} it can be argued that democracy is a successful and thus modern structure, since there are no competing political system showing a similar thriving trend as democracy does.
+Even though there are many forms of political government, it is democracy that spread around the globe over the last hundred years (see \autoref{fig:democracy-trend}). \textit{“As of the end of 2016, 97 out of 167 countries (58\,\%) [\ldots] were democracies [\ldots]”} \parencite{Desilver2017}. According to the observations in \autoref{fig:democracy-trend} it can be argued that democracy is a successful and thus modern structure, since there is no competing political system showing a similar thriving trend as democracy does.
 
 \begin{figure}[H]
 
@@ -63,15 +63,26 @@ Even though there are many forms of political government, it is democracy that s
 	\label{fig:democracy-trend}
 
 \end{figure}
-Nevertheless, it is neither within the scope of this project to asses democratic characteristics, nor other systems of rule. Democracy, however, entails various advantages compared to other political systems. First and foremost---by its literal translation\footnote{\textit{Rule of the people}, from Ancient Greek: \textgreek{δημοκρατία} (dēmokratía): democracy, whereby \textgreek{δῆμος} (dêmos) means \textit{the people}, and \textgreek{Κράτος} (Krátos) means \textit{power/strength}.}---democracy empowers its citizens to participate in political processes, and therefore to influence the political pathway. For example, one fundamental element is suffrage, that is, the right to vote. Additionally, democracy allows its people to shape the system’s frame, therefore, a wide range of democracy types\footnote{The English Wikipedia article \textit{Types of democracy} provides a well-structured summary on that topic: \url{https://en.wikipedia.org/wiki/Types_of_democracy}.} have evolved over time. In this project we focus on liquid democracy, a variant of democracy that is also known as delegative democracy.
+Nevertheless, it is neither within the scope of this project to asses democratic characteristics, nor other systems of rule. Democracy, however, entails various advantages compared to other political systems. First and foremost---by its literal translation\footnote{\textit{Rule of the people}, from Ancient Greek: \textgreek{Δημοκρατία} (Dēmokratía): democracy, whereby \textgreek{Δῆμος} (Dêmos) means \textit{the people}, and \textgreek{Κράτος} (Krátos) means \textit{power/strength}.}---democracy empowers its citizens to participate in political processes, and therefore to influence the political pathway. For example, one fundamental element is suffrage, that is, the right to vote. Additionally, democracy allows its people to shape the system’s frame. Thus, a wide range of democracy types\footnote{The English Wikipedia article \textit{Types of democracy} provides a well-structured overview on that topic: \url{https://en.wikipedia.org/wiki/Types_of_democracy}.} have evolved over time. In this project we focus on \textit{liquid democracy}, a variant of democracy that is also known as \textit{delegative democracy}.
 
 
 \subsection{Liquid Democracy}
 \label{ssec:Liquid_Democracy}
 
-\acrfull{LD} is a type of democracy lying in between two major democracy forms: direct democracy and indirect (or representative) democracy. This \textit{liquid} intersection allows citizens to either delegate their vote to a proxy (representative) or to vote directly for a certain state of affairs (e.g., a proposition).
+\acrfull{LD} is a type of democracy lying in between two major democracy forms: direct democracy and indirect (or representative) democracy. This \textit{liquid} intersection allows citizens to either delegate their vote to a proxy (i.e., a representative) or to vote directly for a certain state of affairs (e.g., for a proposition).
 
-It is important to point out that the voting form \textit{proxy voting} shares some attributes of Liquid Democracy, yet, there is a fundamental difference: In contrast to the classic proxy voting paradigm (Miller 1969), the key innovation underlying liquid democracy is that proxies — who were selected by voters to vote on their behalf — may delegate their own vote to a proxy, and, in doing so, further delegate all the votes entrusted to them. Put another way (to justify the liquid metaphor), votes may freely flow through the directed delegation graph until they reach a sink \parencite{Kahng2018}
+It is important to point out that the voting form \textit{proxy voting} shares some attributes of liquid democracy. There is, however, a fundamental difference: in \acrshort{LD} the proxy may further delegate his/her voices to another proxy. Mathematically, it shares the definition of a tra
+
+
+
+In contrast to the classic proxy voting paradigm (Miller 1969), the key innovation underlying liquid democracy is that proxies — who were selected by voters to vote on their behalf — may delegate their own vote to a proxy, and, in doing so, further delegate all the votes entrusted to them. Put another way (to justify the liquid metaphor), votes may freely flow through the directed delegation graph until they reach a sink \parencite{Kahng2018}
+
+or a more programmatic characterization
+\begin{displayquote}
+there is a fundamental difference: In contrast to the classic proxy voting paradigm (Miller 1969), the key innovation underlying liquid democracy is that proxies — who were selected by voters to vote on their behalf — may delegate their own vote to a proxy, and, in doing so, further delegate all the votes entrusted to them. Put another way (to justify the liquid metaphor), votes may freely flow through the directed delegation graph until they reach a sink \parencite{Kahng2018}
+\end{displayquote}
+
+
 
 In delegated voting, the proxy is transitive and the transfer recursive. Put simply, the vote may be further delegated to the proxy's proxy, and so on. This is also called transitive proxy or delegate cascade.[93] An early proposal of delegate voting was that of Lewis Carroll in 1884.[94][95]
 

@@ -133,7 +133,7 @@ Administrators have a unique standing in the roles of the platform, in that they
 
 \begin{figure}[t]
 \centering
-\includegraphics[height=0.6\paperheight]{../img/lifecycle_flow_v0.pdf}
+\includegraphics[height=0.6\paperheight]{img/lifecycle_flow_v0.pdf}
 \caption{Flow chart of the proposition life cycle}
 \label{fig:proplife}
 \end{figure}
@@ -143,7 +143,7 @@ A democracies most important process in order to transform political positions a
 This process, starting with the initiation of a proposition and ending with the final vote cast, will consequently be dubbed the proposition life cycle.
 We split the proposition life cycle into three different phases: (1) initiation, (2) discussion and (3) voting.
 It intuitively makes sense to separate a propositions constitutive phase from its voting phase in order to guarantee that the intention of a casted vote stays consistent.
-We also subdivide the constitution phase into initiation phase and discussion phase in order to cope with high amounts of individual propositions by allowing only the most appealing propositions to be discussed, thereby channeling the communities efforts and creating an efficient democratic environment.
+We also subdivide the constitution phase into initiation phase and discussion phase in order to cope with high amounts of individual propositions by allowing only the most appealing propositions to be discussed, thereby channeling the communities efforts and creating an efficient political environment.
 
 In the following, we will successively illustrate each phase by describing its pre- and postconditions as well as its artifacts, actors and their interactions.
 
@@ -157,18 +157,34 @@ Other users can then create so called alternative propositions which share the s
 Creators of alternative propositions are called alternative proposition authors.
 Proposition authors, as well as alternative proposition authors can always edit their respective propositions text, options and secondary contexts.
 Followers of a proposition groups primary context that are interested in getting it into the discussion phase can attest their support.
-Once a proposition group gains enough support (x\% of the primary context follower population) all propositions in it are moved into the discussion phase.
+Once a proposition group gains enough support (x\% of the primary context follower population), all propositions in it are moved into the discussion phase.
 
-As the primary context 
-	
-
-
+%As the primary context 
 
 \subsection{Discussion phase}
 \label{ssec:Lifecycle_Discussion}
 
+When moving into the discussion phase, more interactions between the supporters and the proposition authors are enabled while all interactions from the initiation phase are maintained.
+Users may now issue proposition modification requests to the texts.
+These are preferably small changes to the proposition text that can be seen publicly and may be up- or downvoted upon by other users.
+Moreover, users can express support for the proposition under the condition that a given modificiation request gets accepted or rejected.
+We decided for this admittedly complicated design as the semantics of simple like / dislike systems are very vague.
+To this end we introduced more options in order to give proposition authors the ability to distinguish critical edits, i.e., those with great impact on the success of their proposition, from rather insignificant ones.
+As another means of community involvement in the proposition constitution, users can discuss a proposition.
+In discussion entries, special links can be used to reference other entities of the platform.
+Referencable entities are either other discussion entries, (passages of) propositions or (passages of) modification requests.
+Other than in the intiation phase, support is not aggregated per proposal group.
+Once a single proposition gains enough support (x\% of the primary context follower population), it is moved into the voting phase.
+
 \subsection{Voting phase}
 \label{ssec:Lifecycle_Voting}
+
+The voting phase is very different from the two previous phases, as entering it means all abilities to edit the proposition are revoked.
+Discussions are still enabled as we do not want to restrict freedom of expression.
+With the beginning of the voting phase legitimated users are able to either delegate their vote or place it on their own.
+The voting phase ends after a set amount of days that can be specified by the platform admins.
+All Vote and delegation intents that are voiced after the voting phase ends are not considered valid.
+A detailed description of the voting mechanism is given in the following section.
 
 \section{Voting mechanism}
 \label{sec:Voting_Mechanism}
@@ -180,10 +196,11 @@ While not being ideal, due to our lack of expertise in zero-knowledge-proof desi
 The main feature of our system design is that both votes and delegations are casted publicly, i.e. it is distributed over the Internet in a way that (1) everyone can access them and (b) no non-critical number of malicious users is able to take down votes.
 That means that votes may be casted using a distributed ledger, a publicly managed collection of mirrored vote servers or any other system that abides by these criteria.
 Given there is a way to obtain the power of a vote and to verify the vote is valid, casting votes in a public space gives everyone the ability to count and verify votes.
-To this end, our system requires one central trusted authority, the voting registry (VR).
+To this end our system requires one central trusted authority: the voting registry (VR), which  contributes to the verifiability of the process by providing means of identifying a given vote as valid.
+This is done using a cryptographic method known as blind signature.
 The argument for introducing a centralized service into the system is that in any democratic environment some authority has to decide who is part of that environment and therefore has the right to vote.
-The VR contributes to the verifiability of the process by blind signing vote authorization keys.
-Note that by using a blind signature scheme secrecy is preserved while being able to prove that (a) a given vote has been counted and (b) the vote was actually issued by someone who owns the right to vote.
+Note that by using a blind signature scheme secrecy is preserved because the central authority has no ability to link a given vote to an identity.
+The vote has been \emph{blindly} singed, i.e. no information about what was signed has been retained. 
 Surely, one could imagine a system where the right to vote is granted based on consensus, especially in rather small democratic environments.
 However, as we are not familiar with the field, we are not aware if it can be mathematically proven that such a system can work at any scale and have thus decided to not follow this idea.
 
@@ -197,42 +214,45 @@ The length of the key should be as large as possible to protect against attacks 
 To this end, the user assembles the appropriate message and signs it with his private key he generated in the first step.
 Then, he adds his public key from the first step and the unblinded signature from the third step to the message.
 The whole message is then posted to a public space that abides by the criteria outlined earlier.
-% \item The user wanting to vote registers at the 
-% vote delegation service (VDS), with its userID, and the propositionID of the proposition she wants to vote on, encrypted by the public key of the VDS. If the users public key is registered with the VDS, the propositionID can be signed with the private key of the user, so that the VDS can make sure  the user is who he claims and that a potential attacker can't gain information about what proposition a user wants to vote on.
-% \item The VDS checks whether the user is already registered for this proposition, does the necessary book keeping and returns the created delegationToken encrypted with the public key of the user, as well as a token to prove the ownership of the delegationToken (the VDSpoo).
-% \item The user then registers at the vote authentication server, with the delegationToken, a transaction-specific secret and the propositionID encrypted by the public key of the vote authentication service (VAS). If the users public key is registered with the VDS, the propositionID can be signed with the private key of the user, so that the VDS can make sure  the user is who he claims and that a potential attacker can't gain information about what proposition a user wants to vote on.
-% \item The VAS checks if the delegationToken is already registered to vote on the given proposition, creates a voteToken and a token to prove its ownership (VASpoo), associates the delegationToken, the voteToken and the VASpoo with one another and returns the voteToken and the VASpoo to the user. The response can be encrypted with the public key of the user to increase security.
-% \item The user then requests an optionToken from the proposition service for a given choice they want to vote on. This can be encrypted with the users public key, a one-time-secret or both to make sure only the user / vote caster can use it.
-% \item In order to vote on a proposition, the user then prepares the option they want to vote on by encrypting the optionToken with the VASpoo (creating the first-level option, coined FLO), and subsequently encrypts this FLO with the VDSpoo associated with this voting process (creating the second-level optioned, coined SLO).
-% \item In order to prove the vote was casted on time, the user then lets the proposition service sign this vote with the current time stamp.
-% \item The user then casts their vote by broadcasting the signed vote to all public channels of interest.
-% \end{enumerate}
-
-% The casted votes can now be counted by any actor as follows:
-% \begin{enumerate}
-% \item The VAS is queried with the vote as the SLO and the vote token (together with the propositionID to derive the proposition the vote is about)
-% \item The vote token is dereferenced to the respective delegationToken, and together with the SLO (and the propositionID) queried against the VDS
-% \item The VDS dereferences the delegationToken against the anonToken, and reads out the number of delegated votes in the delegation graph that did not request a delegationToken for the respective proposition, i.e. determines the vote value.
-% \item The VDS then creates a token (voteValueToken and links the vote value with this token and the SLO from the request, decrypts the SLO to the FLO (on the basis of the VDSpoo associated with the delegationToken) and returns a pair of the FLO and the voteValueToken to the VAS
-% \item The VAS then decrypts the SLO to the respective optionToken using the VASpoo of the respective voteToken, and returns the optionToken and the voteToken to the requesting actor
-% \item The requesting actor can now, based on the optionToken and the valueToken both determine the option the vote represents and the value of the vote using the valueToken (the later based on the SLO). Through this every vote can be evaluated and the total outcome of the election be checked by every interested party (as long as the VDS is not corrupted
 \end{enumerate}
 
 \paragraph*{Remarks}
 % \begin{itemize}
-% \item This protocol assumes that (only) the vote authentication server and the delegation server can be trusted (and of course > 1/3 of the users).
-% \item The only information known publicly about the vote is the (encrypted) vote and the voteToken associated with it. By construction only authorized users can cast votes (since it is assumed that non-authorized users can't derive a vote token).  Learning which user cast the vote needs the delegationToken and the data base table associated with the proposition within the VDS.
-% \item The vote authentification server knows what delegationToken each voteToken is associated, as well as which voteTokens have been issued. It thus knows how much voting power is behind each vote casted, but since it lacks the mapping from the delegationToken to the userID, it can't know how a given user voted
-% \item The vote delegation server knows which userID is associated with each delegationToken, as well as how much voting power she has. Since however it lacks the mapping from the voteToken to the delegationToken, it can't learn which user voted which way.
-% \item How much an attacker knows depends on the point of attack. When an attacker manages to retrieve a voteToken (or a delegationToken he uses to register), he can impersonate / cast the vote for another user. Otherwise he learns at most what the VAS and the VDS know
-% \item In order to be cast twice, a voteToken must be used twice or the VAS issued several voteTokens for a delegationToken (for the case of two delegationTokens see below). The first case can be easily checked by everyone verifying the vote count from the public ledger of casted votes (voteTokens), whereas the second case involves a cheating VAS. This would be the most probable case of double voting; However, it was noted above, that the protocol assumes that the VAS can be trusted
-% \item Votes could also be counted twice by reusing delegationTokens (potentially creating valid, different tokens), by issuing multiple delegationTokens for a user, or (most realistically), by a voter voting himself after the delegated vote was casted already. The first two cases involve a cheating VAS or VDS, whereas the latter is slightly more problematic, and can be achieved by a correct implementation within the VDS, since when a delegated vote (or a vote to delegate) enters the VDS, its data base should be updated to reflect this, and the count comes after the vote casting.
-% \item Since the casted votes are kept in a public ledger, everyone can (with a trustable VAS and VDS) count the votes. Thus, while individual vote counters can fake the results, everyone can easily recount them
-% \item Votes can only be lost when they are not in the public ledger (not cast), or are lost within the VDS / VAS
-% \item Since the identity of the voters is not known to only part of the system, the votes can only be bought in the sense of direct contact with the users
-% \item Due to the use of the POO, changing the option / timing is 'not possible' . This could also be achieved through signatures.
-% \item Since for every vote / proposition, a new, unrelated voteToken is issued, it can't be used to profile a user.
+% \item 
 % \end{itemize}
+
+
+\section{Vote Delegation}
+\label{sec:Model_VoteDelegation}
+Vote delegation is the process of transferring voting rights for a proposition or a context (or a number of them) to a delegate.
+Technically this means that the vote of the delegate is counted several times (once for the delegate as voting right holder and once for each delegation towards him).
+From a social perspective this means a transfer of trust from the delegator to the delegate in an area of trust, whether this may be established from expertise, sympathy or other reasons.
+As such, the delegation mechanism encompasses attracting support publicly (what would be campaigning for a vote as a candidate in the representative system), friendship, different trust-based mechanisms and much more; These social phenomenon however are not technically relevant for showing the principles of liquid democracy and will be external to the platform to develop.
+Our application will focus entirely on the delegation mechanisms lying on the basis of this.
+The vote delegation can be visualized via a delegation graph, a directed graph with the users as nodes and the delegations as edges.
+One could either have a distinct delegation graph for every proposition, for every context, or have one delegation graph with an edge for every delegation (i.e. a labeled multigraph). \todo[inline]{This is more implementation than model and should probably be descruibed in ch.\ref{ch:ProjectRequirements}}
+As with Liquid Feedback, this model avoids circular graphs by breaking the loop with the vote of one of the delegators (implicitly revoking the delegation for the respective proposition; see \href{http://principles.liquidfeedback.org/}{the Liquid Feedback book}).
+
+Delegation mechanisms can be used for all stages of the \href{sec:Model_Propositions}{proposition lifecycle}, i.e. for proposition group initiation support, support in the discussion phase and the voting phase.
+The decentralized model of publicly stating delegate intents which was already introduced in section~\ref{sec:Voting_Mechanism} can be used throughout all these stages, effectively giving citizen scientists the ability to harvest data about the evolution of the delegation graph from proposition creation to the close of votings.
+
+
+
+%\section{Feedback von Stimmendelegation}
+% * <johanning@informatik.uni-leipzig.de> 2018-02-12T12:49:41.623Z:
+% 
+% > \section{Feedback von Stimmendelegation}
+% > \label{sec:Model_VoteFeedback}
+% > Feedback on the delegation of votes is mediated through notifications. 
+% > As mentioned in \ref{sec:Notifications}, delegators are notified when their votes are used in a 'relevant' way by the delegate. Relevancy is managed through user profile settings. 
+% 
+% What was this supposed to be about (unless I was the one putting it in)?
+% 
+% ^.
+%\label{sec:Model_VoteFeedback}
+%Feedback on the delegation of votes is mediated through notifications. 
+%As mentioned in \ref{sec:Notifications}, delegators are notified when their votes are used in a 'relevant' way by the delegate. Relevancy is managed through user profile settings. 
+
 
 
 \section{Notifications}
@@ -241,19 +261,19 @@ Since information overflow is a problem with the scalability of the platform, an
 
 Notifications can be realized as messages sent to all 'interested' stakeholders within a process. Declaring interest within the system can be modeled through assume a certain role. However, notifications also can depend on user-determined settings within the profile, which can filter out certain notifications. Since this mechanism is described with the users, the following describes the possible notifications a user can receive.
 
-Notifications exist for:
+Notifications exist for:\todo{exist sounds like this is discussing the implementation already. better wording to distinguish this as a design?}
 \begin{itemize}
 \item Vote delegation of other users 
 \item For Proposition Followers: when propositions change (text or phase) or relevant discussion entries take place, or when alternative propositions are created
 \item For Proposition Followers: When propositions are voted upon / results on the voting are known
-\item For a proposition Author: When a proposition change request is created
-\item For a proposition Author: When a moderator changes the context
-\item For moderators: When a report (inappropriate context or discussion entry) is filed
-\item For discussion participants: When someone responds to the respective entries
-\item For Context followers: When a proposition in the context of interest is created
-\item For Context followers: When the context taxonomy changes regarding followed interests
-\item For delegates: When a delegated vote is withdrawn
-\item For vote delegators: When a vote was used in a proposition 
+\item For a Proposition Author: When a proposition change request is created
+\item For a Proposition Author: When a moderator changes the context
+\item For Moderators: When a report (inappropriate context or discussion entry) is filed
+\item For Discussion Participants: When someone responds to the respective entries
+\item For Context Followers: When a proposition in the context of interest is created
+\item For Context Followers: When the context taxonomy changes regarding followed interests
+\item For Delegates: When a delegated vote is withdrawn
+\item For Vote Delegators: When a vote was used in a proposition 
 \end{itemize}
 
 \section{Researchers Access}
@@ -273,31 +293,6 @@ Since this project takes a Citizen Science approach to Liquid Democracy, researc
 More important than the availability of the data might be the accessibility of the data. For this it is decisive that APIs for accessing information relevant to researchers are included in the design of the platform. Since in CS, technical proficiency (or its development) can't be expected, one of the requirements of the design of the APIs is that 'relevant' information is readily available for non-professionals, be it through accessible (and thoroughly documented) APIs or frontends that present relevant information.
 
 While this can't be implemented to its fullest within the scope of this project, this aspect needs considerable consideration in the development of the platform (i.e. in ch. \ref{ch:ProjectRequirements}).
-
-\section{Vote Delegation}
-\label{sec:Model_VoteDelegation}
-Vote delegation is the process of transferring voting rights for a proposition or a context (or a number of them) to a delegate. Technically this means that the vote of the delegate is counted several times (once for the delegate as voting right holder and once for each delegation within the context of the proposition, unless the delegator has voted herself). From a social perspective this means a transfer of trust from the delegator to the delegate in an area of trust, whether this may be established from expertise, sympathy or other reasons. 
-
-The vote delegation can be visualized via a delegation graph, a directed graph with the users as nodes and the delegations as edges. One could either have a distinct delegation graph for every proposition and context, or have one delegation graph with an edge for every delegation (i.e. a labeled multigraph) (\todo[inline]{This is more implementation than model and should probably be descruibed in ch.\ref{ch:ProjectRequirements}}). As with Liquid Feedback, this model avoids circular graphs by breaking the loop with the vote of one of the delegators (implicitly revoking the delegation for the respective proposition; see \href{http://principles.liquidfeedback.org/}{the Liquid Feedback book}).
-
-Delegation mechanisms can be used for all stages of the \href{sec:Model_Propositions}{proposition lifecycle}, i.e. for proposition group initiation support, support in the discussion phase and the voting phase. 
-
-The delegation mechanism encompasses attracting support publicly (what would be campaigning for a vote as a candidate in the representative system), friendship, different trust-based mechanisms and much more; These social phenomenon however are not technically relevant for showing the principles of liquid democracy (in a game-like) format and will be external to the platform to develop. Our application will focus entirely on the delegation mechanisms lying on the basis of this.
-
-\section{Feedback von Stimmendelegation}
-% * <johanning@informatik.uni-leipzig.de> 2018-02-12T12:49:41.623Z:
-% 
-% > \section{Feedback von Stimmendelegation}
-% > \label{sec:Model_VoteFeedback}
-% > Feedback on the delegation of votes is mediated through notifications. 
-% > As mentioned in \ref{sec:Notifications}, delegators are notified when their votes are used in a 'relevant' way by the delegate. Relevancy is managed through user profile settings. 
-% 
-% What was this supposed to be about (unless I was the one putting it in)?
-% 
-% ^.
-\label{sec:Model_VoteFeedback}
-Feedback on the delegation of votes is mediated through notifications. 
-As mentioned in \ref{sec:Notifications}, delegators are notified when their votes are used in a 'relevant' way by the delegate. Relevancy is managed through user profile settings. 
 
 %Steven
 \section{Visualization of the Processes}
