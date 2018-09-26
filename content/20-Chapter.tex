@@ -71,27 +71,31 @@ Nevertheless, it is neither within the scope of this project to asses democratic
 
 \acrfull{LD} is a type of democracy lying in between two major democracy forms: direct democracy and indirect (or representative) democracy. This \textit{liquid} intersection allows citizens to either delegate their vote to a proxy (i.e., a representative) or to vote directly for a certain state of affairs (e.g., for a proposition).
 
-It is important to point out that the voting form \textit{proxy voting} shares some attributes of liquid democracy. There is, however, a fundamental difference: in \acrshort{LD} the proxy may further delegate his/her voices to another proxy. Mathematically, it shares the definition of a tra
+It is important to point out that the voting form \textit{proxy voting} shares some similarities of liquid democracy. There is, however, a fundamental difference: in \acrshort{LD} a proxy may further delegate his/her voices to another proxy, which is not the case in proxy voting.
 
+Thus, a proxy in the concept of liquid democracy can be---mathematically---described as a transitive (recursive) vertex within a directed graph. \citeauthor{Kahng2018} states:
 
-
-In contrast to the classic proxy voting paradigm (Miller 1969), the key innovation underlying liquid democracy is that proxies — who were selected by voters to vote on their behalf — may delegate their own vote to a proxy, and, in doing so, further delegate all the votes entrusted to them. Put another way (to justify the liquid metaphor), votes may freely flow through the directed delegation graph until they reach a sink \parencite{Kahng2018}
-
-or a more programmatic characterization
 \begin{displayquote}
-there is a fundamental difference: In contrast to the classic proxy voting paradigm (Miller 1969), the key innovation underlying liquid democracy is that proxies — who were selected by voters to vote on their behalf — may delegate their own vote to a proxy, and, in doing so, further delegate all the votes entrusted to them. Put another way (to justify the liquid metaphor), votes may freely flow through the directed delegation graph until they reach a sink \parencite{Kahng2018}
+“In contrast to the classic proxy voting paradigm \parencite{Miller1969}, the key innovation underlying liquid democracy is that proxies [\textellipsis] may delegate their own vote to a proxy, and, in doing so, further delegate all the votes entrusted to them. Put another way [\textellipsis] votes may freely flow through the directed delegation graph until they reach a sink.”\\[1mm]
+\hspace*{\fill}\textcite{Kahng2018}
 \end{displayquote}
+A delegation graph is a fundamental component of liquid democracy. subset  which is embedded within the concept of liquid democracy. \autoref{fig:Delegation-Casscade} visualizes a delegation graph/cascade. 
+
+\begin{figure}[H]
+\centering
+\includegraphics{delegation-casscade.png}
+	\caption[Delegate cascade voting]{“A snapshot of a small election in which two separate cascades have formed. Vote flow is depicted by arrows, and volume by numbers. The votes flow together until they pool at the bottom, where they are held by the leading candidates.” \parencite{Allen2008}}
+	\label{fig:Delegation-Casscade}
+\end{figure}
+Most Proxy voting mechanisms, however, 
+
+is a delegation-only. By allowing a direct voting the field 
+
+The limitation, however, of most proxy voting mechanisms is the lack direct voting possibilities. the an individual citizen may direct vote for a certain state of affairs (as seen in the delegation graph). This gap 
+
+we assume that voters can only delegate their votes to better-informed voters \parencite{Allen2008}
 
 
-
-In delegated voting, the proxy is transitive and the transfer recursive. Put simply, the vote may be further delegated to the proxy's proxy, and so on. This is also called transitive proxy or delegate cascade.[93] An early proposal of delegate voting was that of Lewis Carroll in 1884.[94][95]
-
-
-
-In delegated voting, the proxy is transitive and the transfer recursive. Put simply, the vote may be further delegated to the proxy's proxy, and so on. This is also called transitive proxy or delegate cascade. 
-% aus https://en.wikipedia.org/wiki/Proxy_voting#Delegated_voting
-
-describes a political system that allows its citizens of delegate a vote. Not the same as proxy voting...
 
 from a principal to a proxy. 
 
@@ -101,7 +105,7 @@ Imagine the following scenario; A survey
 % TODO Noun-Project creditieren
 \begin{figure}[H]
 	\centering \begin{tikzpicture}
-	\node[anchor=south west,inner sep=0] (image) at (0,0,0) {\includegraphics[width=\linewidth]{Liquid-Democracy-Delegated-Voting.pdf}};
+	\node[anchor=south west,inner sep=0] (image) at (0,0,0) {\includegraphics[width=15cm]{Liquid-Democracy-Delegated-Voting.pdf}};
 	\begin{scope}[x={(image.south east)},y={(image.north west)}]
 % 	% next four lines will help you to locate the point needed by forming a grid. comment these four lines in the final picture.↓
 % 		\draw[help lines,xstep=.1,ystep=.1] (0,0) grid (1,1);
@@ -114,7 +118,7 @@ Imagine the following scenario; A survey
     \draw (0.250,1.03) node {\textsf{\textbf{Proxy 1}}};
     \draw (0.415,1.03) node {\textsf{\textbf{Proxy n}}};
     \draw (0.580,1.03) node {\textsf{\textbf{Option}}};
-    \draw (0.800,1.03) node {\textsf{\textbf{Voting results}}};
+    \draw (0.800,1.03) node {\textsf{\textbf{Results}}};
     
     \draw[line width=0.1mm] (0,0.992) -- (0.98,0.992);
     
