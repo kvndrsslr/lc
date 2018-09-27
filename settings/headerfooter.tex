@@ -3,17 +3,26 @@
 \setlength{\headheight}{1.1\baselineskip} % Größe des Headers
 
 
-\usepackage[headsepline,autooneside=false,automark]{scrlayer-scrpage}	% autooneside=false set this for onesided paper
-\pagestyle{scrheadings}
-\clearscrheadfoot
-\rofoot{\bfseries\thepage}
-\automark*[section]{} % \automark[subsection]{section}    \automark*[section]{}
-%\addtokomafont{pageheadfoot}{\normalfont\footnotesize\sffamily}
-\lohead{\textsc{\leftmark} --- \rightmark}
-%\cohead{\rightmark}
+\usepackage[headsepline,autooneside=false]{scrlayer-scrpage}
+\automark[subsection]{section}
+\renewcommand*{\sectionmarkformat}{}
+\renewcommand*{\subsectionmarkformat}{}
+
+\newmarks\chaptermarkwithnum
+\renewcommand\chaptermark[1]{%
+  \MakeMarkcase{\marks\chaptermarkwithnum{\ifnumbered{chapter}{\chaptermarkformat}{}#1}}
+  \markboth{}{}%
+}
+
+\clearpairofpagestyles
+\ihead{%
+  \textsc{\firstmarks\chaptermarkwithnum}
+  \ifstr{\leftbotmark}{}{}{-- \leftbotmark\ifstr{{\small \rightbotmark}}{\leftbotmark}{}{ -- {\small \rightbotmark}}%
+  }%
+}
+
 \rohead{\pagemark}
 
-\renewcommand*{\sectionmarkformat}{} % gets rid of section number
 
 
 
