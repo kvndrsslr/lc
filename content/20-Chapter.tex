@@ -63,15 +63,15 @@ Even though there are many forms of political government, it is democracy that s
 	\label{fig:democracy-trend}
 
 \end{figure}
-Nevertheless, it is neither within the scope of this project to asses democratic characteristics, nor other systems of rule. Democracy, however, entails various advantages compared to other political systems. First and foremost---by its literal translation\footnote{\textit{Rule of the people}, from Ancient Greek: \textgreek{Δημοκρατία} (Dēmokratía): democracy, whereby \textgreek{Δῆμος} (Dêmos) means \textit{the people}, and \textgreek{Κράτος} (Krátos) means \textit{power/strength}.}---democracy empowers its citizens to participate in political processes, and therefore to influence the political pathway. For example, one fundamental element is suffrage, that is, the right to vote. Additionally, democracy allows its people to shape the system’s frame. Thus, a wide range of democracy types\footnote{The English Wikipedia article \textit{Types of democracy} provides a well-structured overview on that topic: \url{https://en.wikipedia.org/wiki/Types_of_democracy}.} have evolved over time. In this project we focus on \textit{liquid democracy}, a variant of democracy that is also known as \textit{delegative democracy}.
+Nevertheless, it is neither within the scope of this project to asses democratic characteristics, nor other systems of rule. Democracy, however, entails various advantages compared to other political systems. First and foremost---by its literal translation\footnote{\textit{Rule of the people}, from Ancient Greek: \textgreek{Δημοκρατία} (Dēmokratía): democracy, whereby \textgreek{Δῆμος} (Dêmos) means \textit{the people}, and \textgreek{Κράτος} (Krátos) means \textit{power/strength}.}---democracy empowers its citizens to participate in political processes, and therefore to influence the political pathway. For example, one fundamental element is suffrage, that is, the right to vote. Additionally, democracy allows its people to shape the system’s frame. Thus, a wide range of democracy types\footnote{For further reading see the Wikipedia article \textit{Types of democracy}: \url{https://en.wikipedia.org/wiki/Types_of_democracy}.} have evolved over time. In this project we focus on \textit{liquid democracy}, a variant of democracy that is also known as \textit{delegative democracy}.
 
 
-\subsection{Liquid Democracy}
+\subsection{Liquid Democracy Terminology}
 \label{ssec:Liquid_Democracy}
 
 \acrfull{LD} is a type of democracy lying in between two major democracy forms: direct democracy and indirect (or representative) democracy. This \textit{liquid} intersection allows citizens to either delegate their vote to a proxy (i.e., a representative) or to vote directly for a certain state of affairs (e.g., for a proposition).
 
-It is important to point out that the voting form \textit{proxy voting} shares some similarities of liquid democracy. There is, however, a fundamental difference: in \acrshort{LD} a proxy may further delegate his/her voices to another proxy, which is not the case in proxy voting.
+It is important to point out that the voting form \textit{proxy voting} shares some similarities of liquid democracy. There is, however, a fundamental difference: in \acrshort{LD} a proxy may further delegate his/her voices to another proxy, which is not intended for proxy voting.
 
 Thus, a proxy in the concept of liquid democracy can be---mathematically---described as a transitive (recursive) vertex within a directed graph. \citeauthor{Kahng2018} states:
 
@@ -79,33 +79,32 @@ Thus, a proxy in the concept of liquid democracy can be---mathematically---descr
 “In contrast to the classic proxy voting paradigm \parencite{Miller1969}, the key innovation underlying liquid democracy is that proxies [\textellipsis] may delegate their own vote to a proxy, and, in doing so, further delegate all the votes entrusted to them. Put another way [\textellipsis] votes may freely flow through the directed delegation graph until they reach a sink.”\\[1mm]
 \hspace*{\fill}\textcite{Kahng2018}
 \end{displayquote}
-A delegation graph is a fundamental component of liquid democracy. subset  which is embedded within the concept of liquid democracy. \autoref{fig:Delegation-Casscade} visualizes a delegation graph/cascade. 
+A delegation graph is a fundamental component of liquid democracy. \autoref{fig:Delegation-Cascade} visualizes such a delegation graph/cascade. 
 
 \begin{figure}[H]
 \centering
-\includegraphics{delegation-casscade.png}
+\includegraphics{delegation-cascade.png}
 	\caption[Delegate cascade voting]{“A snapshot of a small election in which two separate cascades have formed. Vote flow is depicted by arrows, and volume by numbers. The votes flow together until they pool at the bottom, where they are held by the leading candidates.” \parencite{Allen2008}}
-	\label{fig:Delegation-Casscade}
+	\label{fig:Delegation-Cascade}
 \end{figure}
-Most Proxy voting mechanisms, however, 
+However, the option of direct voting is not intended in proxy voting and most delegation graphs. Thus, to fulfill the initial definition of \acrshort{LD}, the delegation graph must be extended to permit direct voting. This enhancement allows to further classify the terms: proxy voting, delegation graph and liquid democracy in a true subset relationship: \textit{proxy voting \(\subsetneq\) delegation graph \(\subsetneq\) liquid democracy}. Therefore, the concept of liquid democracy is a superset of proxy voting and delegation graphs. 
 
-is a delegation-only. By allowing a direct voting the field 
+\subsection{Liquid Democracy Mechanics}
+\label{ssec:Liquid_Democracy_Mechanics}
 
-The limitation, however, of most proxy voting mechanisms is the lack direct voting possibilities. the an individual citizen may direct vote for a certain state of affairs (as seen in the delegation graph). This gap 
+\autoref{fig:Liquid-Democracy-Delegated-Voting} illustrates a simplified voting process of a liquid democracy system. Initially, each citizen starts as a \textit{primary principal} holding their own voice (voting power of 1). In this position one has three options: (1) vote directly for a given state of affairs, (2) delegate your voice to a proxy, or (3) not participate at all. In case (1) we
 
-we assume that voters can only delegate their votes to better-informed voters \parencite{Allen2008}
+Being a proxy you get defacto a principal in LD
 
+Citizens may have the right to not vote at all 
 
+Since we are in the domain of a directed graph, votes are flowing in one direction from a principal to a proxy. 
 
-from a principal to a proxy. 
+As in \autoref{fig:Delegation-Cascade} ‘voting power’ is
 
-To better illustrate ....
-Imagine the following scenario; A survey 
-
-% TODO Noun-Project creditieren
 \begin{figure}[H]
 	\centering \begin{tikzpicture}
-	\node[anchor=south west,inner sep=0] (image) at (0,0,0) {\includegraphics[width=15cm]{Liquid-Democracy-Delegated-Voting.pdf}};
+	\node[anchor=south west,inner sep=0] (image) at (0,0,0) {\includegraphics[width=\linewidth]{Liquid-Democracy-Delegated-Voting.pdf}};
 	\begin{scope}[x={(image.south east)},y={(image.north west)}]
 % 	% next four lines will help you to locate the point needed by forming a grid. comment these four lines in the final picture.↓
 % 		\draw[help lines,xstep=.1,ystep=.1] (0,0) grid (1,1);
@@ -114,7 +113,7 @@ Imagine the following scenario; A survey
 % 		\foreach \y in {0,1,...,9} { \node [anchor=east] at (0,\y/10) {0.\y};}
 % 	% upto here↑
     
-    \draw (0.045,1.03) node {\textsf{\textbf{Citizen}}};
+    \draw (0.045,1.03) node {\textsf{\textbf{Principal}}};
     \draw (0.250,1.03) node {\textsf{\textbf{Proxy 1}}};
     \draw (0.415,1.03) node {\textsf{\textbf{Proxy n}}};
     \draw (0.580,1.03) node {\textsf{\textbf{Option}}};
@@ -141,7 +140,13 @@ Imagine the following scenario; A survey
     \caption[Illustration of liquid democracy]{Illustration of liquid democracy, where everyone has a vote, depicted by the gray figures. People can delegate the voice to another citizen making them a proxy/delegate increasing their voting power. A proxy can delegate his voting power to another proxy. Ultimately, people may also vote with their voice directly (red).}
 	\label{fig:Liquid-Democracy-Delegated-Voting}
 \end{figure}
-Note, 
+More abstract from a principal to a proxy, where the principal can be a proxy, too.\footnote{Icons provided by thenounproject.com under Creative Commons \includegraphics[height=\fontcharht\font`\X]{cc-icon.pdf} license:\\
+(1) \url{https://thenounproject.com/icon/1471169/}\\
+(2) \url{https://thenounproject.com/icon/751412/}\\
+(3) \url{https://thenounproject.com/icon/575955/}\\
+(4) \url{https://thenounproject.com/icon/24402/}}. 
+we assume that voters can only delegate their votes to better-informed voters \parencite{Allen2008}
+
 
 Traditionally, in a parliamentarian democracy, the right to initiate and vote on propositions is exclusive for members of the parliament.
 However, in a liquid democracy, by definition every participant has the right to vote on propositions, and participate in their constitutive phase.
