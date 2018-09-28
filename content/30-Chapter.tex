@@ -1,4 +1,4 @@
-\chapter{A Citizen Science Approach to Liquid Democracy Processes}
+\chapter[A CS Approach to LD]{A Citizen Science Approach to Liquid Democracy Processes}
 \label{ch:Approach}
 
 This section will describe a model of a Liquid Democracy grounded in Citizen Science. Based on the \href{sec:Theory}{theoretic analysis} performed, we will sketch the relevant processes and entities within the platform. 
@@ -34,7 +34,7 @@ Going on searching for a more organized alternative we considered the taxonomy t
 This section will describe the roles that user on the platform can take on.
 It is important to note that this is done from a perspective of what roles different stakeholders take in the relevant processes, and that it takes on the perspective of the business processes.
 
-This is not meant to imply that only some users can take on these roles or that these roles are technically different, and is not meant to restrict access to processes. We believe, as derived in \ref{sec:Democracy} and \ref{sec:Theory_CS} that both from a Citizen Science as well as from a Liquid Democracy perspective participation in a democracy should be only as restricted as necessary, and as open as possible. While we do think that discursive structures need to be established within discussions, the possibilities for participation should not be restricted.
+This is not meant to imply that only some users can take on these roles or that these roles are technically different, and is not meant to restrict access to processes. We believe, as derived in \ref{sec:Liquid_Democracy} and \ref{sec:Theory_CS} that both from a Citizen Science as well as from a Liquid Democracy perspective participation in a democracy should be only as restricted as necessary, and as open as possible. While we do think that discursive structures need to be established within discussions, the possibilities for participation should not be restricted.
 
 In the following we will describe the roles the political subject can take within the structures of discourse in the platform we are developing, and we will justify why we think that access to these discursive activities should be limited to users taking on this role in the given context.
 
@@ -230,7 +230,7 @@ From a social perspective this means a transfer of trust from the delegator to t
 As such, the delegation mechanism encompasses attracting support publicly (what would be campaigning for a vote as a candidate in the representative system), friendship, different trust-based mechanisms and much more; These social phenomenon however are not technically relevant for showing the principles of liquid democracy and will be external to the platform to develop.
 Our application will focus entirely on the delegation mechanisms lying on the basis of this.
 The vote delegation can be visualized via a delegation graph, a directed graph with the users as nodes and the delegations as edges.
-One could either have a distinct delegation graph for every proposition, for every context, or have one delegation graph with an edge for every delegation (i.e. a labeled multigraph). \todo[inline]{This is more implementation than model and should probably be descruibed in ch.\ref{ch:ProjectRequirements}}
+One could either have a distinct delegation graph for every proposition, for every context, or have one delegation graph with an edge for every delegation (i.e., a labeled multigraph). \todo[inline]{This is more implementation than model and should probably be descruibed in ch.\ref{ch:Our_Project}}
 As with Liquid Feedback, this model avoids circular graphs by breaking the loop with the vote of one of the delegators (implicitly revoking the delegation for the respective proposition; see \href{http://principles.liquidfeedback.org/}{the Liquid Feedback book}).
 
 Delegation mechanisms can be used for all stages of the \href{sec:Model_Propositions}{proposition lifecycle}, i.e. for proposition group initiation support, support in the discussion phase and the voting phase.
@@ -292,7 +292,7 @@ Since this project takes a Citizen Science approach to Liquid Democracy, researc
 
 More important than the availability of the data might be the accessibility of the data. For this it is decisive that APIs for accessing information relevant to researchers are included in the design of the platform. Since in CS, technical proficiency (or its development) can't be expected, one of the requirements of the design of the APIs is that 'relevant' information is readily available for non-professionals, be it through accessible (and thoroughly documented) APIs or frontends that present relevant information.
 
-While this can't be implemented to its fullest within the scope of this project, this aspect needs considerable consideration in the development of the platform (i.e. in ch. \ref{ch:ProjectRequirements}).
+While this can't be implemented to its fullest within the scope of this project, this aspect needs considerable consideration in the development of the platform (i.e., in ch. \ref{ch:Our_Project}).
 
 %Steven
 \section{Visualization of the Processes}
