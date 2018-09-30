@@ -1,0 +1,50 @@
+% We need layers to draw the block diagram
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+
+% Define a few styles and constants
+\tikzstyle{insideBlock}=[draw, fill=white!20, text width=5em, 
+    text centered, minimum height=2.5em]
+\tikzstyle{layer} = [insideBlock, text width=6em, fill=white!20, 
+    minimum height=20em, rounded corners]
+\def\blockdist{2.3}
+\def\edgedist{2.5}
+
+\begin{tikzpicture}
+    
+    % Note the use of \path instead of \node at ... below. 
+    \draw node (c1) [insideBlock] {Client (user)};
+%     \path (clientLayerBlock.-150)+(-\blockdist,0) node (c2) [insideBlock] {Client (user)};
+%     \path (clientLayerBlock.430)+(-\blockdist,0) node (cn) [insideBlock] {Client / user};
+	\path node [below=1em of c1] (c2) [insideBlock] {Client (user)};
+	\path node [below=3em of c2] (cn) [insideBlock] {Client (user)};
+    \path (c2) -- node (dotdot) {\vdots} (cn);
+    \draw node [layer, right=5em of dotdot] (serviceLayer) {Service layer};
+    % Unfortunately we cant use the convenient \path (fromnode) -- (tonode) 
+    % syntax here. This is because TikZ draws the path from the node centers
+    % and clip the path at the node boundaries. We want horizontal lines, but
+    % the sensor and naveq blocks aren't aligned horizontally. Instead we use
+    % the line intersection syntax |- to calculate the correct coordinate
+    \path [draw, ->] (c1) -- node [above] {}
+        (serviceLayer.west |- c1) ;
+    % We could simply have written (gyros) .. (naveq.140). However, it's
+    % best to avoid hard coding coordinates
+    \path [draw, ->] (c2) -- node [above] {}
+        (serviceLayer.west |- c2);
+    \path [draw, ->] (cn) -- node [above] {}
+        (serviceLayer.west |- cn);
+    \node (clientLayerLabel) [below=1em of cn,align=center] {Client layer \\ (users)};
+    
+    % Now it's time to draw the colored IMU and INS rectangles.
+    % To draw them behind the blocks we use pgf layers. This way we  
+    % can use the above block coordinates to place the backgrounds   
+    \begin{pgfonlayer}{background}
+        % Compute a few helper coordinates
+        \path (c1.west |- serviceLayer.north)+(-0.7,0.5) node (a) {};
+        \path (c1.north west)+(-0.3,0.3) node (a) {};
+        \path (clientLayerLabel.south -| c1.east)+(+0.4,-0.4) node (b) {};
+        \path[fill=white!10,rounded corners, draw=black!50, dashed]
+            (a) rectangle (b);
+    \end{pgfonlayer}
+\end{tikzpicture}
