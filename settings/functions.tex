@@ -45,3 +45,11 @@
 \newcommandx{\wording}[2][1=]{\todo[linecolor=blue!30,backgroundcolor=blue!20,bordercolor=blue!30,#1]{#2}}
 \newcommandx{\info}[2][1=]{\todo[linecolor=Goldenrod!30,backgroundcolor=Goldenrod!20,bordercolor=Goldenrod!30,#1]{#2}}
 \newcommandx{\citethis}[2][1=]{\todo[linecolor=BrickRed!30,backgroundcolor=BrickRed!20,bordercolor=BrickRed!30,#1]{#2}}
+\newcounter{userstoryc}
+\newcommand*\lect{%
+   \stepcounter{lecture}%
+   \marginpar{\fbox{Lecture \thelecture}}}
+\newcommand{\userstory}[1]{%
+   \stepcounter{userstoryc}%
+   \paragraph{Story \#\theuserstoryc}%
+   \emph{Priority:} #1\\}
