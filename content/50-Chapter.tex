@@ -1,12 +1,12 @@
 \chapter{Engineering the Liquid Citizen Platform}
 \label{ch:ProjectRequirements}
-This chapter will distil the efforts of all the previous chapters leading to the concrete design of a  Citizen Science-focused Liquid Democracy Platform from a software engineering perspective.
+This chapter will distill the efforts of all the previous chapters leading to the concrete design of a  Citizen Science-focused Liquid Democracy Platform from a software engineering perspective.
 Based on the \hyperref[ch:Approach]{discussion of the approach} to fulfill the objective of this project, and due to the \hyperref[sec:DiscussionRW]{fact} that no suitable software exists to base the project on, this section will document the initial software engineering process upon which can be built in order to realize a platform that meets the derived \hyperref[sec:Criteria]{criteria} for a Citizen Science-focused Liquid Democracy Platform.\\
 Therefore, we start by explicitly documenting the \hyperref[sec:SoftwareRequirements]{software requirements} which we derive from the previous chapters.
 We then continue by laying the foundation for a more technical view of the platform by discussing possibilities of its \hyperref[sec:ArchitecturalDesign]{architectural design} before we go into detail on the available options concerning the \hyperref[sec:ApplicationDesign]{application design} in the exemplary setting of a microservices architecture.
 The chapter is then concluded by the specification of two protocols, namely the \hyperref[sec:PublicInteractionProtocoll]{public interaction protocol} and the \hyperref[sec:VoteTallyingProtocol]{vote tallying protocol}, that revolve around vote and delegation intents posted in the public space.
 
-\todo{Wire the protocols to an argument made earlier that the platform and the delegation/voting as well as vote tallying process are best seperated for data protection reasons}
+\todo{Wire the protocols to an argument made earlier that the platform and the delegation/voting as well as vote tallying process are best separated for data protection reasons}
 \todo{Create user stories pertaining to citizen scientists interaction with the platform}
 \todo{Enhance user stories}
 
@@ -28,7 +28,7 @@ The goal of all requirements analysis processes is to identify the requirements 
 For the sake of brevity and to increase the agility of potential developers of the platform, we chose to follow the scrum methodologies approach to requirements analysis.
 In the scrum method, requirements are formulated as so called user stories.
 An user story is a statement of the form "As X I want Y." where X is a user role and Y is the detailed description of an activity the given role should be able to perform with the envisioned final software product.
-In the scrum methodology, user stories are then broken down into tasks which are assigned to constributors / developers in scrum sprints.
+In the scrum methodology, user stories are then broken down into tasks which are assigned to contributors / developers in scrum sprints.
 
 However, we are aiming for an abstract albeit accurate documentation of the Liquid Citizen platform's requirements, not for a step-by-step manual, which we could not provide anyway without the knowledge of final decisions in the compartments of architecture, languages and frameworks used.
 To this end, we will now record all requirements that can be extracted from our previous discussion in chapters~\ref{ch:Theory}~and~\ref{ch:Approach} as user stories.
@@ -74,7 +74,7 @@ As a \textit{user} I want to support a proposition group in order to propel it t
  As a \textit{user} I want to see the profile of other users in order to get an idea of the political attitudes and affiliations of other users
 
 \userstory{8}
- As a \textit{user} I want to see a list of all the propositions of the context I’m interested in in order to discover relecvant propositions
+ As a \textit{user} I want to see a list of all the propositions of the context I’m interested in in order to discover relevant propositions
 
 \userstory{8}
  As a \textit{moderator} I want to be able to resolve context problems and discussion issues.
@@ -89,7 +89,7 @@ As a \textit{user} I want to support a proposition group in order to propel it t
  As a \textit{vote delegator} I want receive a notification when my vote power was used in a propositions voting phase.
 
 \userstory{8}
- As a \textit{vote accumulator} I want to receive a notifiation when vote power delegate to me is withdrawn again.
+ As a \textit{vote accumulator} I want to receive a notification when vote power delegate to me is withdrawn again.
 
 \userstory{7}
  As \textit{proposition follower}, I want to author and submit a change request towards the contents of the followed proposition.
@@ -162,7 +162,7 @@ As a \textit{user} I want to support a proposition group in order to propel it t
  As a \textit{user} I want my data to be shielded from other third parties in order preserve my private identity.
 
 \userstory{4}
- As a \textit{discussion participant}, I want to receive notifications when somebody responds to my discussin entries.
+ As a \textit{discussion participant}, I want to receive notifications when somebody responds to my discussion entries.
 
 \userstory{3}
  As a \textit{user} I want to sign up (securely) in order to use the services of the platform that require a registered account.
@@ -185,7 +185,7 @@ As a \textit{user} I want to support a proposition group in order to propel it t
 While user stories are good tools to document expectations on product functions and to some extent also give hints pertaining to the user interface design, they are completely agnostic of a software systems architecture and the different layers and modules that have to work together within the software product in order to be able to achieve the desired functionality specified by the user story.\\
 To break down the user stories into small actionable tasks, it is therefore a hard prerequisite for any team of software engineers and developers, no matter how agile, to think about the design of a software system's architecture.
 
-It is quite clear that the Liquid Citizen platform will have to implement a client-server model, because it needs to manage at least a part of the data in a centralized fashion and has to be available to a large number of users over the internet.
+It is quite clear that the Liquid Citizen platform will have to implement a client-server model, because it needs to manage at least a part of the data in a centralized fashion and has to be available to a large number of users over the Internet.
 However, there are still a number of options available for the architecture of both client and server which we will explore in the following.
 
 \subsection{Client-side Architecture}
