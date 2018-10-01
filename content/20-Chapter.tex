@@ -12,7 +12,7 @@ Subsequently to a discussion on the background of the respective concept, we wil
 \label{sec:Theory_CS}
 \subsection{Background / Context Citizen Science}
 \label{ssec:Background_CS}
-Steven is doing that shit. Grundidee CS. Wieso ist die Project Idee geil usw.
+Grundidee CS. Wieso ist die Projectidee geil usw.
 \subsection{Issues and Open Questions in Citizen Science}
 \label{ssec:Issues_CS}
 
@@ -71,9 +71,7 @@ Nevertheless, it is neither within the scope of this project to asses democratic
 
 \acrfull{LD} is a type of democracy lying in between two major democracy forms: direct democracy and indirect (or representative) democracy. This \textit{liquid} intersection allows citizens to either delegate their vote to a proxy (i.e., a representative) or to vote directly for a certain state of affairs (e.g., for a proposition).
 
-It is important to point out that the voting form \textit{proxy voting} shares some similarities of liquid democracy. There is, however, a fundamental difference: in \acrshort{LD} a proxy may further delegate his/her voices to another proxy, which is not intended for proxy voting.
-
-Thus, a proxy in the concept of liquid democracy can be---mathematically---described as a transitive (recursive) vertex within a directed graph. \citeauthor{Kahng2018} states:
+It is important to point out that the voting form \textit{proxy voting} shares some similarities of liquid democracy. There is, however, a fundamental difference: in \acrshort{LD} a proxy may further delegate his/her voices to another proxy, which is not intended for proxy voting. Thus, a proxy in the concept of liquid democracy can be---mathematically---described as a transitive (recursive) vertex within a directed graph. \citeauthor{Kahng2018} states:
 
 \begin{displayquote}
 “In contrast to the classic proxy voting paradigm \parencite{Miller1969}, the key innovation underlying liquid democracy is that proxies [\textellipsis] may delegate their own vote to a proxy, and, in doing so, further delegate all the votes entrusted to them. Put another way [\textellipsis] votes may freely flow through the directed delegation graph until they reach a sink.”\\[1mm]
@@ -87,20 +85,16 @@ A delegation graph is a fundamental component of liquid democracy. \autoref{fig:
 	\caption[Delegate cascade voting]{“A snapshot of a small election in which two separate cascades have formed. Vote flow is depicted by arrows, and volume by numbers. The votes flow together until they pool at the bottom, where they are held by the leading candidates.” \parencite{Allen2008}}
 	\label{fig:Delegation-Cascade}
 \end{figure}
-However, the option of direct voting is not intended in proxy voting and most delegation graphs. Thus, to fulfill the initial definition of \acrshort{LD}, the delegation graph must be extended to permit direct voting. This enhancement allows to further classify the terms: proxy voting, delegation graph and liquid democracy in a true subset relationship: \textit{proxy voting \(\subsetneq\) delegation graph \(\subsetneq\) liquid democracy}. Therefore, the concept of liquid democracy is a superset of proxy voting and delegation graphs. 
+However, the option of direct voting is not intended in proxy voting and most delegation graphs. Therefore, to fulfill the initial definition of \acrshort{LD}, the delegation graph must be extended to permit direct voting. This enhancement allows to further classify the terms: proxy voting, delegation graph and liquid democracy in a true subset relationship: \textit{proxy voting \(\subsetneq\) delegation graph \(\subsetneq\) liquid democracy}. Therefore, the concept of liquid democracy is a superset of proxy voting and delegation graphs. 
 
 \subsection{Liquid Democracy Mechanics}
 \label{ssec:Liquid_Democracy_Mechanics}
 
-\autoref{fig:Liquid-Democracy-Delegated-Voting} illustrates a simplified voting process of a liquid democracy system. Initially, each citizen starts as a \textit{primary principal} holding their own voice (voting power of 1). In this position one has three options: (1) vote directly for a given state of affairs, (2) delegate your voice to a proxy, or (3) not participate at all. In case (1) we
+In liquid democracy the directed delegation graph flows from a principal to a proxy. To visualize this process in a simplified manner we will discuss some key aspects of the vote flow. Hence, \autoref{fig:Liquid-Democracy-Delegated-Voting} illustrates the main steps of a voting process within a liquid democracy system. Initially, each citizen starts as a `primary principal' holding their own voice (i.e., a voting power of 1). From there, a citizen has three options: (1) to vote \textit{directly} for a given state of affairs, (2) to \textit{delegate} his/her voice to a proxy, or (3) to not participate at all. Option (1) entitles the citizen to directly influence with his/her opinion 
 
 Being a proxy you get defacto a principal in LD
 
 Citizens may have the right to not vote at all 
-
-Since we are in the domain of a directed graph, votes are flowing in one direction from a principal to a proxy. 
-
-As in \autoref{fig:Delegation-Cascade} ‘voting power’ is
 
 \begin{figure}[H]
 	\centering \begin{tikzpicture}

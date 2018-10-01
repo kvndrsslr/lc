@@ -36,7 +36,7 @@
 %% only use Chapter and Section in running head
 \usepackage[headsepline,automark,autooneside=false]{scrlayer-scrpage}
 \clearpairofpagestyles
-\ihead{\textsc{\leftmark}\ifstr{\rightmark}{\textsc{\leftmark}}{}{ --- \rightmark}}
+\ihead{\textsc{\leftmark}\ifstr{\small{\rightmark}}{\textsc{\leftmark}}{}{ --- \small{\rightmark}}}
 
 % remove section numbers before section text 
 \renewcommand*{\sectionmarkformat}{} 
