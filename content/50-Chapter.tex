@@ -258,9 +258,21 @@ These fast growing requirements on server-side applications have led to a vast a
 
 \section{Public Interaction Protocol}
 \label{sec:PublicInteractionProtocol}
+The public interaction protocol describes the steps necessary to post a vote or delegation intent to a public space.
+This protocol needs to be implemented by a vote(-delegation) client that optimally should be external to the platform for security reasons.
+
+
 
 \section{Vote Tallying Protocol}
 \label{sec:VoteTallyingProtocol}
+The vote tallying protocoll describes the steps necessary to carry out vote tallying in the public space for some proposition after its voting phase has ended.
+It can be implemented as part of a vote(-delegation) client, as a public service and directly within the platform.
+The idea is that everyone is able to carry out the vote tallying process purely relying on public, signed data.
+The result of the vote tallying is the delegation graph of all valid voting keys.
+This graph can then be used to determine the end result of the vote based on the used voting method bound to the proposition.
+
+
+
 
 %\section{Demo Application}
 %\label{ssec:DemoApplication}
