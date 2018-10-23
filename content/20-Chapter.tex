@@ -69,15 +69,15 @@ Nevertheless, it is neither within the scope of this project to asses democratic
 \subsection{Liquid Democracy Terminology}
 \label{ssec:Liquid_Democracy}
 
-\acrfull{LD} is a type of democracy lying in between two major democracy forms: direct democracy and indirect (or representative) democracy. This \textit{liquid} intersection allows citizens to either delegate their vote to a proxy (i.e., a representative) or to vote directly for a certain state of affairs (e.g., for a proposition).
+\acrfull{LD} is a type of democracy lying in between two major democracy forms: direct democracy and indirect (or representative) democracy. This \textit{liquid} intersection allows citizens to either delegate their vote to a proxy (i.e., a representative) or to vote directly for a certain state of affairs (e.g., a proposition).
 
-It is important to point out that the voting form \textit{proxy voting} shares some similarities of liquid democracy. There is, however, a fundamental difference: in \acrshort{LD} a proxy may further delegate his/her voices to another proxy, which is not intended for proxy voting. Thus, a proxy in the concept of liquid democracy can be---mathematically---described as a transitive (recursive) vertex within a directed graph. \citeauthor{Kahng2018} states:
+It is important to point out that the voting form \textit{proxy voting} shares some similarities of liquid democracy. There is, however, a fundamental difference: in liquid democracy a proxy may further delegate his/her voices to another proxy, which is not intended for proxy voting. Therefore, a proxy or representative, in the concept of liquid democracy, can be---mathematically---interpreted as a transitive (recursive) vertex within a directed graph. \citeauthor{Kahng2018} states:
 
 \begin{displayquote}
 “In contrast to the classic proxy voting paradigm \parencite{Miller1969}, the key innovation underlying liquid democracy is that proxies [\textellipsis] may delegate their own vote to a proxy, and, in doing so, further delegate all the votes entrusted to them. Put another way [\textellipsis] votes may freely flow through the directed delegation graph until they reach a sink.”\\[1mm]
 \hspace*{\fill}\textcite{Kahng2018}
 \end{displayquote}
-A delegation graph is a fundamental component of liquid democracy. \autoref{fig:Delegation-Cascade} visualizes such a delegation graph/cascade. 
+The delegation graph is a fundamental component of liquid democracy. \autoref{fig:Delegation-Cascade} visualizes such a delegation graph/cascade. 
 
 \begin{figure}[H]
 \centering
@@ -85,16 +85,14 @@ A delegation graph is a fundamental component of liquid democracy. \autoref{fig:
 	\caption[Delegate cascade voting]{“A snapshot of a small election in which two separate cascades have formed. Vote flow is depicted by arrows, and volume by numbers. The votes flow together until they pool at the bottom, where they are held by the leading candidates.” \parencite{Allen2008}}
 	\label{fig:Delegation-Cascade}
 \end{figure}
-However, the option of direct voting is not intended in proxy voting and most delegation graphs. Therefore---and to fulfill the initial definition of \acrshort{LD}---the delegation graph must be extended to permit direct voting, which then allows to further classify the terms: proxy voting, delegation graph and liquid democracy in a true subset relationship: \textit{proxy voting \(\subsetneq\) delegation graph \(\subsetneq\) liquid democracy}. Therefore, the concept of liquid democracy is a superset of proxy voting and delegation graphs. 
+However, direct voting is neither intended in proxy voting nor in delegation graphs. Therefore---and to fulfill the initial definition of \acrshort{LD}---the delegation graph must be extended to permit direct voting, which then allows to further classify the terms: proxy voting, delegation graph and liquid democracy in a true subset relationship: \textit{proxy voting \(\subsetneq\) delegation graph \(\subsetneq\) liquid democracy}. Thus, the concept of liquid democracy acts as a superset for proxy voting and delegation graphs. 
 
 \subsection{Liquid Democracy Mechanics}
 \label{ssec:Liquid_Democracy_Mechanics}
 
-In liquid democracy the directed delegation graph flows from a \textit{principal} to a \textit{proxy}. To visualize this process in a simplified manner we will discuss some key aspects of the vote flow. Hence, \autoref{fig:Liquid-Democracy-Delegated-Voting} illustrates the main steps of a voting process within a liquid democracy system. Initially, each citizen starts as a `primary principal' holding their own voice (i.e., a voting power of 1). From there, a citizen has three options: (1) to vote \textit{directly} for a given state of affairs, (2) to \textit{delegate} his/her voice to a proxy, or (3) to not participate at all. Option (1) entitles the citizen to directly influence with his/her opinion 
+Due to this superset position we need to combine some of the characteristics of proxy voting, delegation graphs and direct voting into a new model. To visualize this concept in a simplified manner \autoref{fig:Liquid-Democracy-Delegated-Voting} illustrates the main steps of a voting process within a liquid democracy system.
 
-Being a proxy you get defacto a principal in LD
-
-Citizens may have the right to not vote at all 
+In liquid democracy, and in directed delegation graphs, the vote always flows from a \textit{principal} to a \textit{proxy}, and, initially, each citizen starts as a `primary principal' holding their own voice, as depicted in the first column of \autoref{fig:Liquid-Democracy-Delegated-Voting}). From there, the individual has two choices: (1) to vote \textit{directly} for a given state of affairs (Option A, B or C) and (2) to \textit{delegate} his/her voice to a proxy. For the sake of completeness, citizens do have to right to abstain from voting at all, however, in this work we set the focus on people seeking for participation. Choice (1) entitles citizens to directly influence a given state of affairs, as depicted in red. Self evidently, voting as a primary principal yields to the lowest voting impact of 1, which is by definition you own single voice. Choice (2) entitles citizens to delegate their vote to a proxy, which might be the case when the principal is doubtful in his/her decision-making. Taking the perspective of a proxy you can recursivly have to options again. vote directly yet with more power (see yellow) or in case to delegate---Being a proxy you get defacto a principal in LD---in case of uncertainty or in the (uncertainty is depicted by gray color). Finally, you delegation will ultimately hit its last vertex (blue) who has an opinion and will finally vote.
 
 \begin{figure}[H]
 	\centering \begin{tikzpicture}
@@ -115,15 +113,15 @@ Citizens may have the right to not vote at all
     
     \draw[line width=0.1mm] (0,0.992) -- (0.98,0.992);
     
-    \draw (0.068,0.730) node {\textcolor{gray}{\(1\)}};
-    \draw (0.068,0.571) node {\textcolor{gray}{\(1\)}};
-    \draw (0.068,0.353) node {\textcolor{gray}{\(1\)}};
-    \draw (0.068,0.193) node {\textcolor{gray}{\(1\)}};
-    \draw (0.068,0.002) node {\textcolor{gray}{\(1\)}};
+    \draw (0.068,0.730) node {\textcolor{gray}{\(\textsf{\footnotesize{1}}\)}};
+    \draw (0.068,0.571) node {\textcolor{gray}{\(\textsf{\footnotesize{1}}\)}};
+    \draw (0.068,0.353) node {\textcolor{gray}{\(\textsf{\footnotesize{1}}\)}};
+    \draw (0.068,0.193) node {\textcolor{gray}{\(\textsf{\footnotesize{1}}\)}};
+    \draw (0.068,0.002) node {\textcolor{gray}{\(\textsf{\footnotesize{1}}\)}};
     
-    \draw (0.280,0.618) node {\textcolor{gray}{\(3\)}};
-    \draw (0.450,0.618) node {\textcolor{gray}{\(4\)}};
-    \draw (0.450,0.232) node {\textcolor{gray}{\(3\)}};
+    \draw (0.280,0.618) node {\textcolor{gray}{\(\textsf{\footnotesize{3}}\)}};
+    \draw (0.450,0.618) node {\textcolor{gray}{\(\textsf{\footnotesize{4}}\)}};
+    \draw (0.450,0.232) node {\textcolor{gray}{\(\textsf{\footnotesize{3}}\)}};
     
     \draw (0.58,0.74) node {\textsf{\textcolor{white}{\textbf{A}}}};
     \draw (0.58,0.35) node {\textsf{\textcolor{white}{\textbf{B}}}};
@@ -131,14 +129,19 @@ Citizens may have the right to not vote at all
 	
 	\end{scope}
 	\end{tikzpicture}
-    \caption[Illustration of liquid democracy]{Illustration of liquid democracy, where everyone has a vote, depicted by the gray figures. People can delegate the voice to another citizen making them a proxy/delegate increasing their voting power. A proxy can delegate his voting power to another proxy. Ultimately, people may also vote with their voice directly (red).}
-	\label{fig:Liquid-Democracy-Delegated-Voting}
+    \caption[Illustration of liquid democracy]{Illustration of liquid democracy, where everyone has a vote, depicted by the gray figures. A total of 8... gray is representing uncertainness 	People can delegate the voice to another citizen making them a proxy/delegate increasing their voting power. A proxy can delegate his voting power to another proxy. Ultimately, people may also vote with their voice directly (red).\\
+    \hspace*{\fill}
+    \scriptsize{\textit{Icons provided by thenounproject.com under Creative Commons \includegraphics[height=\fontcharht\font`\X]{cc-icon.pdf} license}}\\
+    \hspace*{\fill}
+    \tiny{\textit{
+    	\url{https://thenounproject.com/icon/575955/}, 
+    	\url{https://thenounproject.com/icon/24402/},\\
+    	\hspace*{\fill}
+        \url{https://thenounproject.com/icon/751412/}, 				\url{https://thenounproject.com/icon/1471169/}
+        }}
+	\label{fig:Liquid-Democracy-Delegated-Voting}}
 \end{figure}
-More abstract from a principal to a proxy, where the principal can be a proxy, too.\footnote{Icons provided by thenounproject.com under Creative Commons \includegraphics[height=\fontcharht\font`\X]{cc-icon.pdf} license:\\
-(1) \url{https://thenounproject.com/icon/1471169/}\\
-(2) \url{https://thenounproject.com/icon/751412/}\\
-(3) \url{https://thenounproject.com/icon/575955/}\\
-(4) \url{https://thenounproject.com/icon/24402/}}. 
+More abstract from a principal to a proxy, where the principal can be a proxy, too. 
 we assume that voters can only delegate their votes to better-informed voters \parencite{Allen2008}
 
 
