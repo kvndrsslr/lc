@@ -90,13 +90,13 @@ However, direct voting is neither intended in proxy voting nor in delegation gra
 \subsection{Liquid Democracy Mechanics}
 \label{ssec:Liquid_Democracy_Mechanics}
 
-Due to this superset position we need to combine some of the characteristics of proxy voting, delegation graphs and direct voting into a new model. To visualize this concept in a simplified manner \autoref{fig:Liquid-Democracy-Delegated-Voting} illustrates the main steps of a voting process within a liquid democracy system.
+Due to its superset position liquid democracy combines characteristics from proxy voting, delegation graphs and direct voting. To visualize this concept in a simplified manner \autoref{fig:Liquid-Democracy-Delegated-Voting} illustrates the main steps of a voting process within a liquid democracy system.
 
-In liquid democracy, and in directed delegation graphs, the vote always flows from a \textit{principal} to a \textit{proxy}, and, initially, each citizen starts as a `primary principal' holding their own voice, as depicted in the first column of \autoref{fig:Liquid-Democracy-Delegated-Voting}). From there, the individual has two choices: (1) to vote \textit{directly} for a given state of affairs (Option A, B or C) and (2) to \textit{delegate} his/her voice to a proxy. For the sake of completeness, citizens do have to right to abstain from voting at all, however, in this work we set the focus on people seeking for participation. Choice (1) entitles citizens to directly influence a given state of affairs, as depicted in red. Self evidently, voting as a primary principal yields to the lowest voting impact of 1, which is by definition you own single voice. Choice (2) entitles citizens to delegate their vote to a proxy, which might be the case when the (primary) principal is doubtful in his/her decision-making (uncertainty is depicted by gray color).
+In liquid democracy, and in directed delegation graphs, the vote always flows from a \textit{principal} to a \textit{proxy}, and, initially, each citizen always starts as a  principal holding their own voice, as depicted in the first column in \autoref{fig:Liquid-Democracy-Delegated-Voting}. From there, each individual has two choices: (1) to vote \textit{directly} for a given state of affairs (Option A, B or C) or (2) to \textit{delegate} their voice to a proxy. Naturally, and for the sake of completeness, citizens have the right to abstain from voting at all, however, in this work we set the focus on people seeking for participation. Thus, choice (1) entitles citizens to \textit{directly} influence a given state of affairs, as depicted in red. Apparently, voting as a ‘initial principal’ yields to the lowest voting impact of \(1\), which is by definition your own inherent voice. Choice (2) entitles citizens to \textit{delegate} their voice to a proxy, which can be the case when the (initial) principal is doubtful in their decision-making (\textit{uncertainty} is depicted by gray color in \autoref{fig:Liquid-Democracy-Delegated-Voting}).
 
-A proxy in liquid democracy has the same two choices as the principal(s) the vote was coming from. [TO BE CONTINUED HERE] 
+If, however, an individual receives a single voice or multiple voices they automatically become a proxy. In this position they have the same two choices as the principals had before, that is, to either directly vote or to further delegate their votes. This characteristic demonstrates the recursive nature of a liquid democracy system. In the case of an uncertain proxy (column two, \autoref{fig:Liquid-Democracy-Delegated-Voting}), the proxy might further delegate their voices. Technically, by doing so, the proxy becomes a principal, yet with a higher voting impact, since the voting count gets accumulated along the graph, whereby each node has a natural weight of \(1\).
 
-Taking the perspective of a proxy you can recursivly have to options again. vote directly yet with more power (see yellow) or in case to delegate---Being a proxy you get defacto a principal in LD---in case of uncertainty or in the. Finally, you delegation will ultimately hit its last vertex (blue) who has an opinion and will finally vote.
+Ultimately, each edge will hit at some point their last node, which are---in a liquid democracy system---individuals being certain about their decision-making and have an opinion (\textit{certainty} is depicted by colors in \autoref{fig:Liquid-Democracy-Delegated-Voting}). In this step there are no further delegations.
 
 \begin{figure}[H]
 	\centering \begin{tikzpicture}
@@ -133,7 +133,7 @@ Taking the perspective of a proxy you can recursivly have to options again. vote
 	
 	\end{scope}
 	\end{tikzpicture}
-    \caption[Illustration of liquid democracy]{Illustration of liquid democracy, where everyone has a vote, depicted by the gray figures. A total of 8... gray is representing uncertainness 	People can delegate the voice to another citizen making them a proxy/delegate increasing their voting power. A proxy can delegate his voting power to another proxy. Ultimately, people may also vote with their voice directly (red).\\
+    \caption[Illustration of liquid democracy]{Illustration of a liquid democracy system. Each individual has a voice, depicted by the numbers. Citizens may either vote directly or delegate their voice. Delegation will accumulate the voice impact for a proxy. Certainty is color-coded, whereas uncertainty is gray-coded.\\
     \hspace*{\fill}
     \scriptsize{\textit{Icons provided by thenounproject.com under Creative Commons \includegraphics[height=\fontcharht\font`\X]{cc-icon.pdf} license}}\\
     \hspace*{\fill}
@@ -145,7 +145,10 @@ Taking the perspective of a proxy you can recursivly have to options again. vote
         }}
 	\label{fig:Liquid-Democracy-Delegated-Voting}}
 \end{figure}
-More abstract from a principal to a proxy, where the principal can be a proxy, too. 
+
+\subsection{Open Questions in Liquid Democracy}
+
+There is a variety of scientific articles and questions that are widely discussed in various online platforms (see REFERENCES). For this report we highlight some of them in regards
 we assume that voters can only delegate their votes to better-informed voters \parencite{Allen2008}
 
 
@@ -157,7 +160,6 @@ In an anonymized large-scale digital liquid democracy, this right could be abuse
 We aim to reduce this threat through the following measures: (1) phased proposition life cycles, (2) adaptive sorting algorithms based on bayesian filtering and (3) moderation.
 
 
-\subsection{Issues and Open Questions in Liquid Democracy}
 \label{ssec:Issues_LD}
 \section[An Integrative Perspective for CS in LD]{An Integrative Perspective for Citizen Science in Liquid Democracy}
 \label{sec:Integration_CSLD}
