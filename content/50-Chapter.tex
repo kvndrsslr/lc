@@ -4,7 +4,7 @@ This chapter will distill the efforts of all the previous chapters leading to th
 Based on the \hyperref[ch:Approach]{discussion of the approach} to fulfill the objective of this project, and due to the \hyperref[sec:DiscussionRW]{fact} that no suitable software exists to base the project on, this section will document the initial software engineering process upon which can be built in order to realize a platform that meets the derived \hyperref[sec:Criteria]{criteria} for a Citizen Science-focused Liquid Democracy Platform.\\
 Therefore, we start by explicitly documenting the \hyperref[sec:SoftwareRequirements]{software requirements} which we derive from the previous chapters.
 We then continue by laying the foundation for a more technical view of the platform by discussing possibilities of its \hyperref[sec:ArchitecturalDesign]{architectural design} before we go into detail on the available options concerning the \hyperref[sec:ApplicationDesign]{application design} in the exemplary setting of a microservices architecture.
-The chapter is then concluded by the specification of two protocols, namely the \hyperref[sec:PublicInteractionProtocol]{public interaction protocol} and the \hyperref[sec:VoteTallyingProtocol]{vote tallying protocol}, that revolve around vote and delegation intents posted in the public space.
+The chapter is then concluded by the specification of two protocols, namely the \hyperref[sec:PublicDeclarationOfIntentProtocol]{public declaration of intent protocol} and the \hyperref[sec:VoteTallyingProtocol]{vote tallying protocol}, that revolve around vote and delegation intents posted in the public space.
 
 \todo{Wire the protocols to an argument made earlier that the platform and the delegation/voting as well as vote tallying process are best separated for data protection reasons}
 \todo{Create user stories pertaining to citizen scientists interaction with the platform}
@@ -17,7 +17,7 @@ The chapter is then concluded by the specification of two protocols, namely the 
 
 %we will \hyperref[sec:SoftwareRequirements]{derive software requirements} the prototype needs to fulfill, before describing the \hyperref[sec:Implementation]{process of implementing} said prototype.
 %Since we base our prototype on a modular architecture around microservices, we will focus predominantly on the \hyperref[ssec:Architecture]{architecture} of the prototype, as well as a detailed description of the implemented \hyperref[ssec:Microservices]{micro services}.
-%Then, we define two protocols, namely the \hyperref[sec:PublicInteractionProtocoll]{public interaction protocol} and the \hyperref[sec:VoteTallyingProtocol]{vote tallying protocol}, that revolve around vote and delegation intents in the public space.
+%Then, we define two protocols, namely the \hyperref[sec:PublicDeclarationOfIntentProtocoll]{public interaction protocol} and the \hyperref[sec:VoteTallyingProtocol]{vote tallying protocol}, that revolve around vote and delegation intents in the public space.
 %Finally, we present the \hyperref[ssec:DemoApplication]{demo application} that showcases the integration of all the previously introduced parts of the platform.
 \section{Software Requirements}
 \label{sec:SoftwareRequirements}
@@ -256,11 +256,15 @@ These fast growing requirements on server-side applications have led to a vast a
 
 
 
-\section{Public Interaction Protocol}
-\label{sec:PublicInteractionProtocol}
-The public interaction protocol describes the steps necessary to post a vote or delegation intent to a public space.
+\section{Public Declaration of Intent Protocol}
+\label{sec:PublicDeclarationOfIntentProtocol}
+The public declaration of intent protocol describes the steps necessary to post a vote or delegation intent to a public space.
 This protocol needs to be implemented by a vote(-delegation) client that optimally should be external to the platform for security reasons.
-
+The protocol describes three phases:
+\begin{enumerate}
+  \item Public Declaration of Intent Key (PIK) Generation
+  \item Assembling the declaration of intent message
+\end{enumerate}
 
 
 \section{Vote Tallying Protocol}
