@@ -4,19 +4,69 @@
 In this section we will discuss the theoretical background the project of this report is based on. As noted in \hyperref[sec:Objective]{the introduction}, the project aims at developing a proof-of-concept implementation of a Citizen Science accessible Liquid Democracy game. As such, it needs to be grounded in a thorough understanding of both the concept of \hyperref[sec:Theory_CS]{Citizen Science} and \hyperref[sec:Liquid_Democracy]{Liquid Democracy}. Additionally it needs to identify and address the problems and issues raised in relation to these concepts. 
 
 In order to address these issues, a discussion of their context is indispensable. In recognition of this, the structure of this section is as follows:
-After introducing the basic terms and the context they stem from (in \ref{ssec:Background_CS} and \ref{ssec:Liquid_Democracy} respectively), issues and open questions are addressed for both concepts separately (in \ref{ssec:Issues_CS} and \ref{ssec:Issues_LD} respectively). 
+After introducing the basic terms and the context they stem from (in \ref{ssec:Background_CS} and \ref{ssec:Liquid_Democracy}
+respectively), issues and open questions are addressed for both concepts separately (in \ref{sec:Issues_CS} and \ref{ssec:LD-Critical-Perspective} respectively). 
 
 Subsequently to a discussion on the background of the respective concept, we will \hyperref[sec:Integration_CSLD]{discuss synergies and challenges} of integrating these perspectives. Based on this integrative perspective and the aspects discussed at the beginning of this section, we will \hyperref[sec:Criteria]{derive a number of criteria} a Liquid Democracy game grounded in Citizen Science needs to exhibit, in order to develop a theory-grounded approach to the project's objective.
+
+% Neu: Alternative
+
+In this section, we will discuss the theoretical background the project is based on. As noted in the introduction, the project aims to develop a proof-of-concept implementation of a Citizen Science accessible Liquid Democracy game. As such, first of all, it is necessary to understand both the concept of Citizen Science and Liquid Democracy. Both terms are vast and used in many different backgrounds. Therefore, we will in the following section examine both terms separately, to then have a closer look on how the project itself combines Citizen Science and Liquid Democracy. In a first step, we will look closer at the term Citizen Science, it´s background and three theoretical perspectives on how to describe and classify a Citizien Science. Finally, we will summarize the common points of these three theories as well as open questions and difficulties a project of this nature might face.
+
+
+
 % Clara
-\section{CS}
+\section{Citizen Science}
 \label{sec:Theory_CS}
-\subsection{Background / Context Citizen Science}
+\subsection{Background of Citizen Science}
 \label{ssec:Background_CS}
-Grundidee CS. Wieso ist die Projectidee geil usw.
-\subsection{Issues and Open Questions in Citizen Science}
-\label{ssec:Issues_CS}
+Although Citizen Science in today’s academic world appears to be a rather contemporary term; the idea of Citizens being involved in the scientific process dates way back. Taking, for instance, the Christmas Bird Count. In 1900 the Ornithologist Frank Champman introduced the project involving volunteers in a yearly bird count on Christmas Day. Starting with 27 participants the number of volunteers over the years has been growing significantly. Until today scientists use the accumulated longitude data of around 53 000 active members for large scale analyses that have been crucial for findings around population, distribution of species and migration etc. With modern Technologies, the possibilities to involve Citizen in the scientific process have become more various which consequently has led to a rapidly growing amount of Citizen Science Projects. 
+
+However, with increasing popularity, the term itself has become widely and rather differently used which makes it difficult to accurately define and differentiate it. Although the basic definition of involving members of the public in scientific research projects has remained this definition leaves several questions open: Which sort of participation and to which extent the citizens are involved in a project? What defines a citizen and what does it need to qualify a citizen science project? In the past several years researchers have tried to define more systematically what a citizen science means and what a CS project can consist of. In the following, we´ll look at two  different theoretical perspectives on Citizen Science Projects. 
+
+
+
+\subsection{Types of Citizen Science Projects}
+\label{ssec:Types_CS}
+As mentioned before the number of Citizen Science Projects has expanded. Experience has shown that with thoughtful study design and under the right circumstances, citizen science can work on a massive scale, generating high-quality data that lead to reliable, valid scientific outcomes as well as unexpected insights and innovations. Therefore, more and more scientist involve Citizen Science project in their research process. Though looking at various CS Projects it quickly becomes  obvious that although they all involve some sort of citizen participation the projects themselves are quite different.  The researchers Andrea Wiggins and Kevin Crowston have therefore created a consisting typology, categorizing the projects into six different types. Examining common characteristics of 36 projects, grouping similar projects that share the same structure of participation, and some organizational as well as macro structural properties, Wiggis \& Crowston differentiate between Action-, Origination-, Conversation-, Investigation-, Virtual- and Educational Projects. Looking at the different kinds of projects they also summarize Scientific Organizational and Technology Issues common with this “mode” of Citizen Science. The following will briefly look at the different sorts of projects and summarize issues named: 
+
+\subsubsection{Action Based Projects}
+Action-oriented projects generally encourage participants to intervene in local concerns, using scientific research methods as a tool to support civic agendas. In contrast to other types of initiatives, an action orientated project materializes in form of a grassroots movement, as they are generally neither conceived nor planned by scientists. As an example, for an Action Project the text names the Sherman’s Creek Conservation Association, an organization with the goal to protect a local creek and to provide environmental education. In action-based projects, so Wiggis \& Crowston, researchers are often more consultants than collaborators. The, therefore, missing scientific method and spatial training generally prevent the collected data to become part of the scholarly knowledge base. The fact that these often are originated on a local level and is as well originated regarding local concerns cause the problem that there often lack funding and infrastructure which make it difficult for the project grow bigger than the original local level.
+
+\subsubsection{Conversation Projects}
+Conservation projects support stewardship and natural resource management goals, primarily in the area of ecology. Like Action projects, they are strongly rooted in local communes and volunteer engagement focuses on data collection activities, but in contrast to the Action projects, most conversation projects have affiliations with larger agencies.  Most projects include explicit educational goals or content. In regard to the scientific level, conversation projects often show a larger involvement of scientist and projects without strong academic affiliations are typically lead by professional researchers employed in governmental organizations. From an organizational point of view, it is interesting to observe that conversational oriented projects can be organized with top-down (researcher-initiated) as well as middle-out structures  (management-initiation). 
+
+\subsubsection{Investigation Projects}
+Investigation projects are in contrast to the conversational as well as the action based project focused on the scientific research goals which often consist of data collection. From this point of view, the Investigation Project fits the other definitions of Citizen Science Projects (Zitat .. Zitat) While education is not the foremost goal some material is often provided informing about the scientific background. Examples such as Great Sunflower and Fold Me (Galaxy Link) show that with this sort of project have to capacity to engage thousands of participants. Most Investigation projects involve or nonprofit conservation organizations as the primary organizers, and a top-down structure of organizing is a defining characteristic. Organizational Issues appear with a quickly growing number of participants as management and sustainability challenges grow accordingly.
+
+\subsubsection{Education Projects}
+As the name indicates the primary goal of education projects is education and outreach. An exemplary project here is Fossil Finders (Link). The project brings together educators, students as well as researchers developing workshops primarily for schools. Because of the created classroom atmosphere and supervised inquiry-based format, this particular project permits, on the one hand, a close involvement of the participants into the scientific process but on the other hand, it also facilitates the expansion and extension of the project activities, such as collection, identification, and description of additional fossils. Nevertheless, the emphasis on Education Projects lies in the educational aspect while scientific contribution is of secondary importance. Additionally, the relative cost of acquiring data through education projects is substantially higher. All the above often end in education projects only being considered as a Citizen Science project only by the virtue of including an academic institution or researcher as an organizer. Proceeding to the organizational issues, it is hardly surprising that all of  Wiggis \& Crowston´s sample projects are top-down organized. Involving multiple partners the examined project all have substantial funding.
+
+\subsubsection{Virtual Projects}
+In contrast to all other project types described above, Virtual Projects are completely ICT-mediated with no physical element whatsoever. The exclusively virtual based project shares its´ goal with the Investigation project as its´ main focus is the scientific research often in form of data collection. While examples of these projects are numerous, Galaxy Zoo, Whale FM and Planet hunter, just to name view, the line to projects that not further fall under the definition to Citizen Science is narrow. Depending on if Citizen Science here is defined as Citizen Participation in the project or includes in active involvement in to research project, Virtual projects often run danger to not match the definition of a citizen science project. The researcher Hackley looks closer at this problematic in his article .... In paragraph ...  we will further discuss this differation and Hackley ´s vision of the topic. Focusing on the Scientific Issues. As for Investigation projects, the primary challenge for Virtual projects is ensuring valid scientific results. This matter is complicated by the fact that is rather difficult to maintain the volunteer's´ interest. Even though motivation concerns are often addressed by game-like task design, it is often difficult to collect valid data. Many virtual projects compensate the missing quality of the data with task repletion. Nevertheless, this problematic is worth keeping in mind. Looking at the organization of Virtual projects, Wiggis \& Crowston conclude that all of their examined projects are top-down organized and exclusively run by academics. Consequently, the projects are most and foremost financed by research funding and interest what often poses a threat to the project´s sustainability.
+
+\subsection{Haklay´s Ladder of Participation}
+\label{ssec:Ladder_Participation_CS}
+
+As already noted the extent to which volunteers are involved in a Citizen Science Project plays a crucial part regarding the nature of the project. To qualify as a Citizen Science Project the non-professional scientist must play some sort of active role in the research process.  This “ active” role however can be a lot, form discovering objects in pictures like in the mentioned Galaxy Zoo project to finding, describing and identification of actual Fossils. To closer define this rather large spectrum of participation the researcher Muki Haklay introduces the \textbf{Ladder of Participation} distinguishing between 4 different levels of involvement. At the most basic level, participation is limited to the provision of data/resources and minimal cognitive engagement. Hacklay titles this level of participation \textbf{Crowdsourcing} as volunteers often barely function as better sensors. 
+
+The next level is the so-called \textbf{Distributed Intelligence}. Here the cognitive ability of the participants is crucial. Many Citizen Science Projects operate on this level. Volunteers are needed to take some basic training to collect data or carry out simple interpretation activity. On this level of engagement volunteers with time can learn more about the topic and advance beyond their initial training and be given more advanced tasks.
+
+What distinguish the next level \textbf{Participatory Science} is that the volunteers are involved not only in the data collection but in the problem definition. As shown in the above mentioned  Fossil Finder Project the participants are on the one hand engaged in the data collection but with the assistance of experts are also taking part in the analysis and interpretation of the results.  Participants can suggest research question, which than can be explored with the data collected. 
+
+The last and highest level on the ladder is the level of \textbf{Collaborative Science}. Here the participants can choose their level of engagement and can be potentially involved in analysis publication or utilization of the results. In addition to their role as experts, scientists here function as facilitators. This mode of Citizen Science, so Hacklay, even opens the possibility of citizen science without professional scientists.
+
+Summarizing Hacklay states, that one project not necessarily have to be classified in only one category. Seeing for example the volunteer computing projects. While most participants will start  at the bottom level, collecting data or carrying out basic interpretation, some volunteers  might move to the second level assisting or teaching other volunteers. According to Hacklay some participants might even move one lever up and communicate with the scientists discussing results or suggest new research directions. It can be concluded that participation in Citizen Science can take different forms, while in some projects the gap between professional scientist and participants is wide, some other facilitate collaboration, teaching volunteers so they can become more involved in the scientific process altogether.
 
 \newpage
+
+\subsection{Issues and Open Questions}
+\label{sec:Issues_CS}
+
+Both Wiggis \& Crowston and Hackley agree, that the number, as well as the diversity of Citizen Science Projects, are vast. Nevertheless, the objective to include citizens in the scientific process itself sometimes seems to be at the very core of the project and other times more of a side effect. It also appears that even though the number of Citizen Science projects is growing, the data sill is used cautiously in papers and scientific publications. (Hackley) This seems especially the case for projects in which the influence of scientist is relatively small. The authors Flanagin and Metzger state that this might be originated in the fact that many researchers still mistrust the quality of the data produced by citizens. While Holling ( 1998 ) emphasized that there are two cultures of science and that citizen science by necessity belongs to the type of science that incorporates uncertainty and highlights integrative approaches.
+
+Another question left open is what exactly defines a Citizen and what a Scientist. Through the preceding text, we deliberately have left this question open as Citizen Science itself to some extent questions the classic definition Science itself. Defining a scientist as someone being employed to carry out scientific work or research the differentiation stays rather clear. But as soon as it comes to unpaid scientists the situation is far more complex. It would mean to define scientists throughout their way of working with scientific frameworks, data collection, and interpretation as well as their overview and knowledge about the field, being able to place the newly won information in the already existing body of work. Nevertheless, pursuing this definition a well-trained and informed Citizen could then also meet these criteria. Authors like Irwin ( 1995 ), Wilson et al. ( 2005 ) and Stilgoe ( 2009 ) take this thought process one step further declaring that changing the epistemology of science could be seen as one goal of Citizen Science. They advocate that on a “extreme” level of Citizen Science the emphasis shouldn´t be on the citizen as a scientist but the scientist as a citizen. Meaning that in some cases it shouldn´t be possible to draw the line between Scientist and Citizen. However, Irwin ( 1995 ) also notes that this way of conceptualizing and practicing science is not widely accepted in the current culture of science.
+
 
 \section{Liquid Democracy}
 \label{sec:Liquid_Democracy}
@@ -94,12 +144,6 @@ Due to its superset position liquid democracy combines characteristics from prox
 
 In liquid democracy, and in directed delegation graphs, the vote always flows from a \textit{principal}\todo{explain Proxy with a reference} to a \textit{proxy}, and, initially, each citizen always starts as a  principal holding their own voice, as depicted in the first column in \autoref{fig:Liquid-Democracy-Delegated-Voting}. From there, each individual has two choices: (1) to vote \textit{directly} for a given state of affairs (Option A, B or C) or (2) to \textit{delegate} their voice to a 
 proxy. Naturally, and for the sake of completeness, citizens have the right to abstain from voting at all, however, in this work we set the focus on people seeking for participation. Thus, choice (1) entitles citizens to \textit{directly} influence a given state of affairs, as depicted in red. Apparently, voting as a ‘initial principal’ yields to the lowest voting impact of \(1\), which is by definition your own inherent voice. Choice (2) entitles citizens to \textit{delegate} their voice to a proxy, which can be the case when the (initial) principal is doubtful in their decision-making (\textit{uncertainty} is depicted by gray color in \autoref{fig:Liquid-Democracy-Delegated-Voting}).
-% * <clarakruckenberg@gmail.com> 2018-12-04T12:30:22.196Z:
-% 
-% > proxy. 
-% I would define proxy a bit further 
-% 
-% ^.
 
 If, however, an individual receives a single voice or multiple voices they automatically become a proxy. In this position they have the same two choices as the principals had before, that is, to either directly vote or to further delegate their votes. This characteristic demonstrates the recursive nature of a liquid democracy system. In the case of an uncertain proxy (column two, \autoref{fig:Liquid-Democracy-Delegated-Voting}), the proxy might further delegate their voices. Technically, by doing so, the proxy becomes a principal, yet with a higher voting impact, since the voting count gets accumulated along the graph, whereby each node has a natural weight of \(1\).
 
@@ -153,7 +197,10 @@ Ultimately, each edge will hit at some point their last node, which are---in a l
 	\label{fig:Liquid-Democracy-Delegated-Voting}}
 \end{figure}
 
-\subsection{Open Questions in Liquid Democracy}
+\subsection{Critical Perspective}
+\label{ssec:LD-Critical-Perspective}
+
+Allen nach oben und den Abuse hier rein
 
 There is a variety of scientific articles and questions that are widely discussed in various online platforms (see REFERENCES). For this report we highlight some of them in regards
 we assume that voters can only delegate their votes to better-informed voters \parencite{Allen2008}
@@ -163,13 +210,13 @@ Traditionally, in a parliamentarian democracy, the right to initiate and vote on
 However, in a liquid democracy, by definition every participant has the right to vote on propositions, and participate in their constitutive phase.
 Consequently, every participant should also have the unrestrained right to create propositions.
 
-In an anonymized large-scale digital liquid democracy, this right could be abused by malicious users to mass-create so called spam propositions in order to bury other propositions and prevent users from voting on them.
-We aim to reduce this threat through the following measures: (1) phased proposition life cycles, (2) adaptive sorting algorithms based on bayesian filtering and (3) moderation.
-
+\subsection{Digital Liquid Democracy}
 
 \label{ssec:Issues_LD}
 \section[An Integrative Perspective for CS in LD]{An Integrative Perspective for Citizen Science in Liquid Democracy}
 \label{sec:Integration_CSLD}
+
+\todo[]{Hier muss eine Verbindung von Citizen Science und Liquid Democracy und zu unserem Projekt rein.}
 
 \subsection{Data Accessibility and Anonymity}
 \label{ssec:Integration_AccessibilityAnonymity}
@@ -203,3 +250,6 @@ This approach further doesn't give an answer to transparency of vote delegation 
 %\subsection{Theorien aus Liquid Feedback}
 \section{Criteria for a CS based LD Platform}
 \label{sec:Criteria}
+
+In an anonymized large-scale digital liquid democracy, this right could be abused by malicious users to mass-create so called spam propositions in order to bury other propositions and prevent users from voting on them.
+We aim to reduce this threat through the following measures: (1) phased proposition life cycles, (2) adaptive sorting algorithms based on bayesian filtering and (3) moderation.
