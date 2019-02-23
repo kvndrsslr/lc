@@ -1,4 +1,4 @@
-\usepackage[backend=biber,style=authoryear,dashed=false,pagetracker=true,uniquelist=false,maxbibnames=10,maxcitenames=2,autocite=inline,block=space,backref=true,backrefstyle=three+,date=short]{biblatex}
+\usepackage[style=authoryear,dashed=true,uniquelist=false,maxbibnames=10,maxcitenames=2,autocite=inline,block=space,backref=true,backrefstyle=three+,date=short]{biblatex}
 \setlength{\bibitemsep}{1em}	% Abstand zwischen den Literaturangaben
 \setlength{\bibhang}{\parindent}% Einzug nach jeweils erster Zeile
 
@@ -14,7 +14,7 @@
 %	nodate = {{}o\adddot\addnbthinspace J\adddot} % <- edit this line
 %}
 
-\DeclareNameAlias{sortname}{last-first}	% todo What is this doing?
+\DeclareNameAlias{sortname}{last-first}	% avoids this: Staples, M. L. & J. M. Bieman (1999)
 %\DeclareFieldFormat{postnote}{#1}		% macht das Seitenzahlkürzel weg (S.)
 %\DeclareFieldFormat{multipostnote}{#1} 	% macht das Seitenzahlkürzel weg (S.)
 
