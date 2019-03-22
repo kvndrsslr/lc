@@ -1,320 +1,282 @@
+\chapter{Engineering the Liquid Citizen Platform}
+\label{ch:ProjectRequirements}
+This chapter will distill the efforts of all the previous chapters leading to the concrete design of a  Citizen Science-focused Liquid Democracy Platform from a software engineering perspective.
+Based on the \hyperref[ch:Approach]{discussion of the approach} to fulfill the objective of this project, and due to the \hyperref[sec:DiscussionRW]{fact} that no suitable software exists to base the project on, this section will document the initial software engineering process upon which can be built in order to realize a platform that meets the derived \hyperref[sec:Criteria]{criteria} for a Citizen Science-focused Liquid Democracy Platform.\\
+Therefore, we start by explicitly documenting the \hyperref[sec:SoftwareRequirements]{software requirements} which we derive from the previous chapters.
+We then continue by laying the foundation for a more technical view of the platform by discussing possibilities of its \hyperref[sec:ArchitecturalDesign]{architectural design} before we go into detail on the available options concerning the \hyperref[sec:ApplicationDesign]{application design} in the exemplary setting of a microservices architecture.
+The chapter is then concluded by the specification of two protocols, namely the \hyperref[sec:PublicDeclarationOfIntentProtocol]{public declaration of intent protocol} and the \hyperref[sec:VoteTallyingProtocol]{vote tallying protocol}, that revolve around vote and delegation intents posted in the public space.
 
-\chapter{A Citizen Science Approach to Liquid Democracy Processes}
-\label{ch:Approach}
+\todo{Wire the protocols to an argument made earlier that the platform and the delegation/voting as well as vote tallying process are best separated for data protection reasons}
+\todo{Create user stories pertaining to citizen scientists interaction with the platform}
+\todo{Enhance user stories}
 
-This section will describe a model of a Liquid Democracy grounded in Citizen Science. Based on the \hyperref[ch:Theory]{theoretic analysis} performed, we will sketch the relevant processes and entities within the platform. 
-
-This includes the core processes, such as \hyperref[sec:Model_VoteDelegation]{vote delegation} and \hyperref[sec:Voting_Mechanism]{voting mechanism}, the \hyperref[sec:Model_Propositions]{life cycle of propositions}, the \hyperref[sec:UserRoles]{roles} users take on within the platform, the \hyperref[sec:Model_Contexts]{geographical and political context} propositions take place in, the \hyperref[sec:Model_Visualization]{visualization}, and, most importantly, \hyperref[sec:Model_ResearchersAccess]{the accessibility of data for Citizen Scientists}. 
-
-% Clara und Kevin 
-\section{Taxonomy and Geotags - bringing order to a wide rage of political topics}
-\label{sec:Model_Contexts}
-\subsection{Taxonomy}
-Choosing a proper taxonomy is crucial for Liquid Democracy Project as it is a sort of foundation for the work to follow. Certainly, clearly defined categories are important to make order of the ongoing topics and are essential to stay on top of things. In our cases however this taxonomy is essential as it is an important part of the voting process as well. On the one hand the categories can help the user to find votes he is interested in. Even more important with categories he can also determine for which issues he wants to vote himself and which topics he wants to pass on to a person with more expertise on this field. Taking for example a vote about the deforestation of the south of Germany. This vote could fall into a category such as environment. Imagining that the user himself is not that much of specialist when it comes to the environment and wants to pass on votes according this subject to a relative who is. Here the taxonomies not only determine if he get the topic in his feed but it also could automatically be passed on to his relative. This highlights a second problem. How do we make sure that the votes are categorized properly? More about this later. First, we have to make sure to set up a fundamental category that covers a wide spectrum of the political issues existing.
-
-In general, the taxonomy should meet three elemental requirements. First and foremost, the taxonomy must be exhaustive as we want to make sure that every occurring vote is covered. Secondly the categories need to be disjunct, meaning that two categories shouldn't describe the same subject. Additionally, the categories should be able to adapt and evolve as the political landscape as well changes with time. A taxonomy that fulfill all requirements perfectly probably don't exist but we tried to find one already existing system that met our requirements as best as possible.
-% * <johanning@informatik.uni-leipzig.de> 2018-02-13T10:28:54.493Z:
-% 
-% > In general, the taxonomy should meet three elemental requirements. 
-% 
-% we need to mention at some point (when we explain subcontexts) that subcontexts can only be associated with one supercontext in order to avoid delegation conflicts (i.e. where a proposition is associated with a context which is not delegated, but its supercontexts are delegated to different delegates. Now the question arises how the vote is counted / which delegation takes precedence (similar to the diamond problem in polymorphic inheritence)
-% 
-% 
-% ^.
-
-A well-known external and source for document categorization is the Wikipedia taxonomy. The corpus of the open encyclopedia is often used to build automatic categorization approaches or to improve the performance of existing models.Seeing the pure size of the corpus and the fact that it changes constantly you don’t wonder why this is the case.  For our project however, the problem occurred that the political category described more the field of political science that general topics politics are coping with. 
-
-Almost the complete opposite was true for the for the taxonomy of Stack Overflow Politics. While the Wikipedia articles were almost purely about a scientific view on Politics, the branch of the well-known question and answer site Stack Overflow almost only consist of current topics discussed by the community. The created tags are therefore more useful for characterizing political topics. But as the issues discussed are tagged by the user posting the question, it often occurs that there are two tags describing the same field. So, taking the Stack taxonomy would have cost us a lot of time cleaning the data. 
+% narrative: discuss architectural design -> choose microservices
+% how to name the section on the actual microservices implementations?
 
 
-Going on searching for a more organized alternative we considered the taxonomy that classify the topics discussed by the Bundestag. For every new legislation period the parliament is putting together committees for different topics. Even if the number and names of these committees have slightly changed over time, the content is more or less consisting. On the official Website of the Bundestag we found a tabula sorting all protocols of the committees' meetings. The altogether 43 topics describe a bride rage of political topics. From family to energy the categories are clear structured, exhaustive and disjunct. Therefore they cover two of our tree requirements. 
 
-\subsection{Geotags}
-\todo[inline]{Write section about geotags}
+%we will \hyperref[sec:SoftwareRequirements]{derive software requirements} the prototype needs to fulfill, before describing the \hyperref[sec:Implementation]{process of implementing} said prototype.
+%Since we base our prototype on a modular architecture around microservices, we will focus predominantly on the \hyperref[ssec:Architecture]{architecture} of the prototype, as well as a detailed description of the implemented \hyperref[ssec:Microservices]{micro services}.
+%Then, we define two protocols, namely the \hyperref[sec:PublicDeclarationOfIntentProtocoll]{public interaction protocol} and the \hyperref[sec:VoteTallyingProtocol]{vote tallying protocol}, that revolve around vote and delegation intents in the public space.
+%Finally, we present the \hyperref[ssec:DemoApplication]{demo application} that showcases the integration of all the previously introduced parts of the platform.
+\section{Software Requirements}
+\label{sec:SoftwareRequirements}
 
-\section{User Roles}
-\label{sec:UserRoles}
-\todo{how many, what they can do and why}
-This section will describe the roles that user on the platform can take on.
-It is important to note that this is done from a perspective of what roles different stakeholders take in the relevant processes, and that it takes on the perspective of the business processes.
+Every software engineering process begins with a requirements analysis whose execution will differ considerably depending on which software engineering methodology is being used.
+The goal of all requirements analysis processes is to identify the requirements towards the envisioned software product from a variety of different angles, i.e. how is the software used by different user roles, how should it interface with existing software, which of these are functional requirements and which are non-functional.
 
-This is not meant to imply that only some users can take on these roles or that these roles are technically different, and is not meant to restrict access to processes. We believe, as derived in \ref{sec:Liquid_Democracy} and \ref{sec:Theory_CS} that both from a Citizen Science as well as from a Liquid Democracy perspective participation in a democracy should be only as restricted as necessary, and as open as possible. While we do think that discursive structures need to be established within discussions, the possibilities for participation should not be restricted.
+For the sake of brevity and to increase the agility of potential developers of the platform, we chose to follow the scrum methodologies approach to requirements analysis.
+In the scrum method, requirements are formulated as so called user stories.
+An user story is a statement of the form "As X I want Y." where X is a user role and Y is the detailed description of an activity the given role should be able to perform with the envisioned final software product.
+In the scrum methodology, user stories are then broken down into tasks which are assigned to contributors / developers in scrum sprints.
 
-In the following we will describe the roles the political subject can take within the structures of discourse in the platform we are developing, and we will justify why we think that access to these discursive activities should be limited to users taking on this role in the given context.
+However, we are aiming for an abstract albeit accurate documentation of the Liquid Citizen platform's requirements, not for a step-by-step manual, which we could not provide anyway without the knowledge of final decisions in the compartments of architecture, languages and frameworks used.
+To this end, we will now record all requirements that can be extracted from our previous discussion in chapters~\ref{ch:Theory}~and~\ref{ch:Approach} as user stories.
+We have assigned each story a priority score between one and ten. Stories scoring 10 are absolutely necessary for the simplest of prototypes, while those on the other end of the spectrum are not necessary for the core functionality at all and could potentially be delivered as updates even after the platform is already used in production.
 
-\subsection{Proposition follower}
-A proposition follower is a user that has expressed an interest in a given proposition. Proposition followers will receive updates on the state of a proposition, in particular on the progress of the phases of the proposition, alternative propositions based on it, changes in wording and contributions to the discussion about the proposition.
+\userstory{10}
+As a \textit{user} I want to initiate a proposition in order start the political process in a certain context of my interest, thereby becoming the \textit{petition author} of the newly initiated proposition.
 
-This does not grant them any rights any other user doesn't have, and it thus simply a conceptual role (and one that needs to be regarded in the notification system).
+\userstory{10}
+As a \textit{user} and potential \textit{vote accumulator} I want to vote on a proposition in the voting phase.
 
-\subsection{Proposition author}
-\label{ssec:Roles_Petitioner}
-The petitioner is the role a user can take on when initiating the political process by starting a \hyperref[sec:Model_Propositions]{proposition}. Since the process of propositions is already described in \ref{sec:Model_Propositions}, the following focuses on the role.
+\userstory{10}
+As a \textit{user} I want to delegate my vote to someone else, becoming a \textit{vote delegator} and making that someone a \textit{vote accumulator}.
 
-A petitioner has the right to change the text of a proposition, either by editing directly, or by moderating the change requests. Access to these activities is limited to the petitioner in order to guarantee consistency of the petition, and to incentivize discussion about aspects relevant to users not in the role of the petitioner. Not allowing other users to edit the petition also prevents malicious or strategic editing as well as discussions about text changes through change requests. By having to seek approval for modification, a discourse about the aspects important to the petition modification requester is strengthened.
-Moreover does the petition editing restriction encourage alternative petitions, strengthening the discourse through (hopefully) constructive alternatives.
+\userstory{9}
+As a \textit{user} I want to support a proposition group in order to propel it to the discussion phase, thereby becoming \textit{proposition group supporter}.
 
-Users can also create alternative petitions to existing ones, thus becoming alternative petition authors (for the mechanics of alternative petitions see \ref{sec:Model_Propositions}). These petitions are assigned to the same petition group. For this petition the alternative petition author counts as \hyperref[ssec:Roles_Petitioner]{petition author}, and has the same rights as them for the same reasons. Since an alternative petition works basically the same way as the original petition, the differentiation between a petition author and an alternative petition author is merely semantical. 
+\userstory{9}
+ As a \textit{user} I want support a proposition in a discussion phase in order to propel it to the voting phase, thereby becoming a \textit{proposition supporter}.
 
-By creating a petition (or an alternative petition), a user becomes a petition follower of this petition as well.
+\userstory{9}
+ As a \textit{user} I want to create a discussion entry on a proposition or change request, thereby becoming a \textit{discussion participant} and a \textit{proposition follower}.
 
-\subsection{Proposition modification requester}
-The proposition modification requester is a \hyperref[ssec:Roles_DiscussionParticipant]{discussion participant} that raises a constructive petition text edit request. 
-As noted in \ref{sec:Model_Propositions}, a proposition text edit request proposes the addition, deletion or textual editing of a passage of petition text, with (potential) new wording. \todo{can they withdraw / edit their modification? Or just 'withdraw their support' for the editing petition?}
+\userstory{9}
+ As a \textit{proposition author}, I want to modify the contents of my proposition.
 
-\subsection{Discussion participant}
-\label{ssec:Roles_DiscussionParticipant}
-As the name suggests, a discussion participant is a user that engages in a discussion about a proposition / a proposition group. A user becomes a discussion participant as soon as she contributes to the discussion by writing a discussion post or responding to one. \todo[inline]{decide whether this means that the user receives notifications about the discussion. Also decide whether she becomes a proposition follower through this}.
+\userstory{9}
+ As a \textit{user} I want to edit my context subscriptions in my profile, becoming a \textit{context follower} of each context subscribed to.
 
-\subsection{Moderator}
-\label{ssec:Roles_Moderator}
-A moderator is a user with a particular interest and reputation in a context (or a number of contexts). Moderator status can be issued to users that engaged in the platform over a prolonged stretch of time within a given context or a number of its subcontextes, if the user so wishes. The moderator role gives a user moderating power of the discussions falling within the context they moderate, such as deciding whether a users' behavior is inappropriate, posts should be deleted (or at least flagged as questionable) or (in conjunction with moderators of other contexts) whether a user should be (temporally or permanently) banned from the platform. 
+\userstory{9}
+ As an \textit{admin} I want to delete \textit{users}.
 
-Whether these actions can be performed by a moderator alone, or require the decision of a 'moderator council" depends on the policy of the operator / configuration of the platform. This also hold for deciding how inappropriate behavior of moderators is dealt with.
+\userstory{8}
+ As a \textit{user} I want to change my profile data (change password, mail, political affiliations such as party membership) in order to reflect my current my political profile.
+ 
+ \userstory{8}
+ As a \textit{user} I want to create an alternative proposition on an existing proposition, putting it in the original propositions proposition group and inheriting its primary context, thereby becoming \textit{alternative proposition author}.
 
-Moderators / a council of moderators further decides about changes to the taxonomy regarding the context of their responsibility. How changes in the taxonomy are managed is described \hyperref[sec:Model_Contexts]{here}.
+\userstory{8}
+ As a \textit{user} I want to see my profile data in order to get an overview of the entries of my profile
 
-\subsection{Supporter}
-\label{ssec:Roles_Supporter}
-Petition group, petition in discussion phase and conditional support for change requests
+\userstory{8}
+ As a \textit{user} I want to see the profile of other users in order to get an idea of the political attitudes and affiliations of other users
 
-A supporter is a user expresses her agreement with a 'discursive entity' in order to provide some assessment about the popularity of contributions to a discussion. These can come from a large range of sources, such as petition groups, petitions in the discussion phase, change requests or discussion posts. 
+\userstory{8}
+ As a \textit{user} I want to see a list of all the propositions of the context I’m interested in in order to discover relevant propositions
 
-Of these petition groups, (alternative) petitions in the discussion phase and change requests are crucial for the author of them assess how the political process with these could go.
+\userstory{8}
+ As a \textit{moderator} I want to be able to resolve context problems and discussion issues.
 
-In addition to helping the author to assess the political mood, support has some functional aspects as well:
-\begin{itemize}
-\item For a petition group support decides whether a petition group enters a discussion phase (see \hyperref[ssec:Lifecycle_Initiation]{proposition initiation phase})
-\item For a petition in discussion phase support for the original or an alternative proposition (in most cases) decides whether an alternative proposition will enter the voting phase (see \hyperref[ssec:Lifecycle_Discussion]{proposition discussion phase})
-\item For a change request support has no direct functional consequences; An incorporated change request however might however, depending on the configuration, translate directly into support for the changed proposition if the change request supporter (or the respective delegated votes) doesn't yet support the proposition in the discussion phase (\todo[inline]{discuss this}). The support for a change request also sends a strong signal for the proposition initiator for political support of this proposition
-\item While this is not necessarily the case (and might depend on the configuration of the system), support for a discussion entry might add to its relevance, potentially placing it on a more visible spot within he discussion threat. Depending on the operators frontend, the support for a discussion entry assists the ranking of the discussion entry (\todo[inline]{discuss}).
-\end{itemize}
+\userstory{8}
+ As an \textit{admin} I want to withdraw privileges from a \textit{moderator}, making him an ordinary \textit{user}.
+
+\userstory{8}
+ As a \textit{user} I want to receive notification when other users delegate their vote.
+
+\userstory{8}
+ As a \textit{vote delegator} I want receive a notification when my vote power was used in a propositions voting phase.
+
+\userstory{8}
+ As a \textit{vote accumulator} I want to receive a notification when vote power delegate to me is withdrawn again.
+
+\userstory{7}
+ As \textit{proposition follower}, I want to author and submit a change request towards the contents of the followed proposition.
+
+\userstory{7}
+ As a \textit{proposition author}, I want to decide about a change request in order to adapt and improve the proposition.
+
+\userstory{7}
+ As a \textit{user} I want to give feedback on a proposition change request expressing my approval or rejection of the edits contained within the change request.
+
+\userstory{7}
+ As a \textit{user} I want to up- or downvote other users discussion entries.
+\userstory{7}
+ As a \textit{user} I want to follow a proposition of interest in order to stay updated, thereby becoming a \textit{proposition follower}.
+
+\userstory{7}
+ As a \textit{moderator} I want to receive reports on inappropriately set contexts of propositions.
+
+\userstory{6}
+ As a \textit{user} I want to report an incorrectly set context of a proposition.
+
+\userstory{6}
+ As a \textit{moderator} I want to block users violating the platform rules.
+
+\userstory{6}
+ As a \textit{moderator} I want to block proposals violating the platform rules.
+
+\userstory{6}
+ As a \textit{proposition author} I want to get notifications on new change requests pertaining to my followed propositions.
+
+\userstory{6}
+ As a \textit{context follower} I want to receive notifications about new propositions in the realms of my subscribed to contexts.
+
+\userstory{6}
+ As a \textit{user} I want to set a visibility level for each part of my profile data.
+
+\userstory{5}
+ As a \textit{proposition author} I want to change and/or update secondary contexts to follow up the discussion of appropriateness of the secondary contexts.
+
+\userstory{5}
+ As a \textit{user} I want to sort the list of propositions by multiple criteria (date created, deadline, author, № of supporters, …) in order to see propositions relevant to my criteria.
+
+\userstory{5}
+ As a \textit{user} I want to report inappropriate discussion entries to the moderators of the resp. context.
+
+\userstory{5}
+ As a \textit{proposition author}, I want to stay informed about the discussion on my proposition.
+
+\userstory{5}
+ As a \textit{moderator} I want to discuss/update the context taxonomy in collaboration with other moderators.
+
+\userstory{5}
+ As \textit{proposition follower}, I want to receive notifications about updates to my followed propositions like any changes by the proposition author and added, approved or rejected change requests.
+\userstory{5}
+ As \textit{proposition follower}, I want to receive notifications about the creation of alternative propositions.
+
+\userstory{4}
+ As an \textit{admin} I want to see a dashboard of moderation activities and reports.
+
+\userstory{4}
+ As an \textit{admin} I want to override moderator’s decisions.
+
+\userstory{4}
+ As an \textit{admin} I want to block or unblock users.
+
+\userstory{4}
+ As a \textit{user} I want to see the relevant behavior of another user in order to understand their political (Verhaltensspuren) … (Simon, go for it) \unsure{was haben wir damit gemeint?}
+
+\userstory{4}
+ As a \textit{user} I want my data to be shielded from other third parties in order preserve my private identity.
+
+\userstory{4}
+ As a \textit{discussion participant}, I want to receive notifications when somebody responds to my discussion entries.
+
+\userstory{3}
+ As a \textit{user} I want to sign up (securely) in order to use the services of the platform that require a registered account.
+
+\userstory{3}
+ As a \textit{user} I want to manage my notification settings.
+
+\userstory{3}
+ As a \textit{context follower} I want to receive a notification when the context taxonomy changes/gets updates with effects on a particular context I follow in order to be able to adjust my context subscriptions.
+
+\userstory{3}
+ As a \textit{proposition follower} I want to receive notifications of proposition results.
+
+\userstory{2}
+ As an \textit{admin} I want to adjust the platform parameters.
+
+\section{Architectural Design}
+\label{sec:ArchitecturalDesign}
+
+While user stories are good tools to document expectations on product functions and to some extent also give hints pertaining to the user interface design, they are completely agnostic of a software systems architecture and the different layers and modules that have to work together within the software product in order to be able to achieve the desired functionality specified by the user story.\\
+To break down the user stories into small actionable tasks, it is therefore a hard prerequisite for any team of software engineers and developers, no matter how agile, to think about the design of a software system's architecture.
+
+It is quite clear that the Liquid Citizen platform will have to implement a client-server model, because it needs to manage at least a part of the data in a centralized fashion and has to be available to a large number of users over the Internet.
+However, there are still a number of options available for the architecture of both client and server which we will explore in the following.
+
+\subsection{Client-side Architecture}
+\label{ssec:ClientSideArchitecture}
+It is a very common pattern in contemporary software development to build a variety of thick, stateful clients that all interface with the same stateless server(s) over an API thats implemented using industry standard web technology such as REST.
+Hence, we should not refer to \textit{the} client, because there might be any suitable number of clients, e.g. single page applications rendered in the browser, server-rendered web applications, native mobile clients, native desktop clients, etc.
+
+While it can be argued that clients contribute more to the vision of a given user story than the server, there are other important techniques suited towards UX design that need to accompany user stories in order to develop a modern client, which we do not see to fall in scope of this work.
+We will therefore only concern ourselves with the server side of the platform.
+
+\subsection{Server-side Architecture}
+\label{ssec:ServerSideArchitecture}
+
+With the widespread adaption of smartphones and LTE, servers need to be able to process and respond to millions of requests from clients all over the world within milliseconds, handling hardware failure, network issues and malicious attacks amongst other stressors while maintaining a high availability of at least 3 nines.
+
+These fast growing requirements on server-side applications have led to a vast amount of efforts in the reinvention of server-side software architecture over the last ten years, mainly by big tech companies such as Netflix, Facebook, Amazon and Google.
+
+%\input{img/tikz-blockdiagramm}
+
+%As highlighted in the discussion above, we aimed for a software design that allowed for flexibility, incorporating multiple contexts and a decentralized application context / paradigm. Because of this we chose an approach centered around microservices and (as far as possible) independent modules. Since we want it to be available for many different contexts, we focus on the mechanisms and provide an architecture where the users are independent from the servers offering the services as well as the frontend. For the same reason we also don't offer a frontend solution for the implemented mechanisms, and leave the implementation of fullgrown UIs to designers of applications of the software.
 
 
-\subsection{Voting Right Holder}
-\label{ssec:Roles_VotingRightHolder}
-A voting right holder is any user that is allowed to vote on a proposition. Since utilizing ones own vote overwrites vote delegation, technically every user is a voting right holder for any proposition; Often time however, a user will not exercise their own voting right after delegating their vote. In this case the term 'voting right holder' refers to the user the vote is delegated to. 
+%As mentioned in the introduction of this section, the system architecture of Liquid Citizen is highly decentralized and modular.
+%Different components are realized self-sufficiently, with their own APIs, in their own docker containers, and are developed in their respective \href{https://github.com/Liquid-Citizen}{github repositories}.
+%Since the different components operate on distinct ports, they can be run on the same machine; However, to be true to the decentralized standard of the system, they can run on different machines just as well.
+%Thus their development as well as their production is entirely encapsulated within itself.
 
-Unsurprisingly voting right holder are users that can participate in the voting process of a proposition.
+%Since the components however form a service ecosystem where the different components need to interact / exchange data with one another, care needs to be taken to integrate the components well with one another, which violates their independence, but is needed for functionality. These aspects will be discussed in the following, in the \hyperref[ssec:Microservices]{description of the microservices}. The respective components, as modules of the software, are sketched \hyperref[ssec:Modules]{afterwards}.
 
 
-\subsection{Interessenten (anderer Begriff)}
-% * <johanning@informatik.uni-leipzig.de> 2018-02-11T23:35:47.354Z:
-% 
-% > \subsection{Interessenten (anderer Begriff)}
-% > \label{ssec:Roles_Interessenten}
-% 
-% Was war hier nochmal der Unterschied zu followern? Versteh ich nicht mehr...
-% 
-% ^.
-\label{ssec:Roles_Interessenten}
+\section{Exemplary Application Design for Microservices}
+\label{sec:ApplicationDesign}
 
-\subsection{Delegator}
-\label{ssec:Roles_Delegator}
-A delegator is a voting right holder that delegated his voting right for a single proposition or a number of propositions falling within the same context. Although a delegator can use her voting right on any propositions (and basically (temporarily) revoke the delegation) and become a voting right holder again, in the usual case it assumed that the voting right was delegated to not exercise the voting right. If the voting right was delegated for a context, it counts as delegated for all subcontexts and all propositions falling within these bounds.  
+ \subsection{Proposition Server}
 
-\subsection{Delegate}
-\label{ssec:Roles_Delegate}
-A delegate is a user (or institution) that another user delegated their voting right to. They thus carry votes with them and can basically decide how the delegator voted for propositions falling within the scope of the vote delegation. Delegates can further delegate votes delegated to them, transferring their votes and the votes delegated to them to the delegate of their choice. Through this they become a delegator with all that this entails. Observe that this can be done for subcontexts or propositions of votes delegated to them, making them both delegator and delegate for different contexts or propositions.
+ \paragraph*{POST: createProposition()} \mbox{} \\
+ Creates a new proposition according to the parameters transmitted, as well as the proposition group alternative propositions to the newly created proposition will belong to.
 
-\subsection{Alternativantragstellender}
-% * <johanning@informatik.uni-leipzig.de> 2018-02-12T11:39:55.838Z:
-%
-% > \subsection{Alternativantragstellender}
-% > \label{ssec:Roles_Alternativantragstellender}
-%
-% ^Gesondert notwendig? Bereits mit proposition author hinreichend abgedeckt?
-\label{ssec:Roles_Alternativantragstellender}
+ Transmitted parameters conflicting with the proposition configuration of the proposition service will be ignored.
 
-\subsection{Admin}
-\label{ssec:Roles_Admin}
-The admin(s) of the platform are appointed by its operator and have the most powerful position within the process. In addition to provide the technical infrastructure of the platform and to be able to change its configuration / the parametrization of the voting process, they also act as a point of appeal for users that deem the decisions of the moderators as inappropriate, and admins can overwrite the decisions of the moderators. In drastic cases, admins are also authorized to revoke the status of moderators if repeated inappropriate behavior has been reported. 
+ \paragraph*{POST: createAlternativeProposition(propositionGroupID)} \mbox{} \\
+ Creates a new alternative proposition belonging to the propositionGroupID of the referred proposition.
 
-Administrators have a unique standing in the roles of the platform, in that they are no users, and are thus left outside of the political process, ensuring their neutrality in the discourse.
+ Transmitted parameters conflicting with the proposition configuration of the proposition service will be ignored.
 
-\section{Life Cycle of Propositions}
-\label{sec:Model_Propositions}
+ \paragraph*{POST: createPropositionToken(propositionID,plainTextOption)} \mbox{} \\
+ Creates a propositionToken for the respective proposition, associated with the respective plainTextOption (as long as the proposition and the option exists). The propositionToken can be used to derive the plainTextOption associated with it, and is introduced so the plainTextOption can't be manipulated by other actors in the vote evaluation process.
 
-\begin{figure}[t]
-\centering
-\includegraphics[height=0.6\paperheight]{img/lifecycle_flow_v0.pdf}
-\caption{Flow chart of the proposition life cycle}
-\label{fig:proplife}
-\end{figure}
+ \paragraph*{POST: derivePlainTextOption(propositionToken)} \mbox{} \\
+ Returns the plain text option associated with the proposition token.
 
-A democracies most important process in order to transform political positions and individual opinions into laws is the iteratively joint crafting of propositions which are, once finalized, subject to voting.
 
-This process, starting with the initiation of a proposition and ending with the final vote cast, will consequently be dubbed the proposition life cycle.
-We split the proposition life cycle into three different phases: (1) initiation, (2) discussion and (3) voting.
-It intuitively makes sense to separate a propositions constitutive phase from its voting phase in order to guarantee that the intention of a casted vote stays consistent.
-We also subdivide the constitution phase into initiation phase and discussion phase in order to cope with high amounts of individual propositions by allowing only the most appealing propositions to be discussed, thereby channeling the communities efforts and creating an efficient political environment.
+ \paragraph*{GET: getPropositionInformation(propositionID, foobar)} \mbox{} \\
+ Will return relevant information about the proposition in question.
 
-In the following, we will successively illustrate each phase by describing its pre- and postconditions as well as its artifacts, actors and their interactions.
+ \paragraph*{GET: getPropositionVoteClosingTime(propositionID)} \mbox{} \\
+ Returns the vote closing time of the proposition (when the voting period ended).
 
-\subsection{Initiation phase}
-\label{ssec:Lifecycle_Initiation}
+ \paragraph*{GET: getPropositionVoteOpeningTime(propositionID)} \mbox{} \\
+ Returns the vote opening time of the proposition (when the voting period started).
 
-The initiation phase begins when a new proposition is created by an user, which thereby becomes its proposition author (see \ref{ssec:Roles_Petitioner}).
-To create a proposition, the proposition author needs to specify the following mandatory information: a title, a main text, one primary context, any number of secondary contexts and any number of voting options.
-When a new proposition is created, it gets assigned to a new unique proposition group and we call it that proposition groups \emph{root proposition}.
-Other users can then create so called alternative propositions which share the same proposition group, title and primary context as the root proposition.
-Creators of alternative propositions are called alternative proposition authors.
-Proposition authors, as well as alternative proposition authors can always edit their respective propositions text, options and secondary contexts.
-Followers of a proposition groups primary context that are interested in getting it into the discussion phase can attest their support.
-Once a proposition group gains enough support (x\% of the primary context follower population), all propositions in it are moved into the discussion phase.
+ \paragraph*{POST: signVote(vote)} \mbox{} \\
+ Signs a vote with the current time stamp to prove that the vote was casted on time. 
 
-%As the primary context 
+ \paragraph*{Data base structure proposition service} \mbox{} \\
+ The proposition service stores the data for the propositions as well as the proposition tokens used for vote casting. For this it features two tables, one with the proposition data (to be specified) and one with a mapping of the optionTokens and the respective plainTextOptions.
 
-\subsection{Discussion phase}
-\label{ssec:Lifecycle_Discussion}
 
-When moving into the discussion phase, more interactions between the supporters and the proposition authors are enabled while all interactions from the initiation phase are maintained.
-Users may now issue proposition modification requests to the texts.
-These are preferably small changes to the proposition text that can be seen publicly and may be up- or downvoted upon by other users.
-Moreover, users can express support for the proposition under the condition that a given modificiation request gets accepted or rejected.
-We decided for this admittedly complicated design as the semantics of simple like / dislike systems are very vague.
-To this end we introduced more options in order to give proposition authors the ability to distinguish critical edits, i.e., those with great impact on the success of their proposition, from rather insignificant ones.
-As another means of community involvement in the proposition constitution, users can discuss a proposition.
-In discussion entries, special links can be used to reference other entities of the platform.
-Referencable entities are either other discussion entries, (passages of) propositions or (passages of) modification requests.
-Other than in the intiation phase, support is not aggregated per proposal group.
-Once a single proposition gains enough support (x\% of the primary context follower population), it is moved into the voting phase.
 
-\subsection{Voting phase}
-\label{ssec:Lifecycle_Voting}
 
-The voting phase is very different from the two previous phases, as entering it means all abilities to edit the proposition are revoked.
-Discussions are still enabled as we do not want to restrict freedom of expression.
-With the beginning of the voting phase legitimated users are able to either delegate their vote or place it on their own.
-The voting phase ends after a set amount of days that can be specified by the platform admins.
-All Vote and delegation intents that are voiced after the voting phase ends are not considered valid.
-A detailed description of the voting mechanism is given in the following section.
-
-\section{Voting mechanism}
-\label{sec:Voting_Mechanism}
-% \todo[inline]{move implementation-specific details to \ref{sec:Implementation_Voting} and keep this description conceptual}
-In order for the voting mechanism to fulfill the criteria developed in \ref{sec:Criteria}, the voting mechanism has to be secret, verifiable and decentralized. Ideally, it shouldn't be possible for any actor in the system to gather any information about the voting behavior of a voter, while at the same time being verifiable for any actor that votes got counted correctly. 
-
-In line with the principles of security-by-design, in the following we will describe a design for vote casting and counting mechanism that allows manipulation-resistant secret vote casting, which largely preserves privacy.
-While not being ideal, due to our lack of expertise in zero-knowledge-proof designed systems, the mechanisms described in the following fulfills these criteria well enough for a prototype.
-The main feature of our system design is that both votes and delegations are casted publicly, i.e. it is distributed over the Internet in a way that (1) everyone can access them and (b) no non-critical number of malicious users is able to take down votes.
-That means that votes may be casted using a distributed ledger, a publicly managed collection of mirrored vote servers or any other system that abides by these criteria.
-Given there is a way to obtain the power of a vote and to verify the vote is valid, casting votes in a public space gives everyone the ability to count and verify votes.
-To this end our system requires one central trusted authority: the voting registry (VR), which  contributes to the verifiability of the process by providing means of identifying a given vote as valid.
-This is done using a cryptographic method known as blind signature.
-The argument for introducing a centralized service into the system is that in any democratic environment some authority has to decide who is part of that environment and therefore has the right to vote.
-Note that by using a blind signature scheme secrecy is preserved because the central authority has no ability to link a given vote to an identity.
-The vote has been \emph{blindly} singed, i.e. no information about what was signed has been retained. 
-Surely, one could imagine a system where the right to vote is granted based on consensus, especially in rather small democratic environments.
-However, as we are not familiar with the field, we are not aware if it can be mathematically proven that such a system can work at any scale and have thus decided to not follow this idea.
-
-For a given user and a proposition, the vote casting mechanism works as follows:
+\section{Public Declaration of Intent Protocol}
+\label{sec:PublicDeclarationOfIntentProtocol}
+The public declaration of intent protocol describes the steps necessary to post a vote or delegation intent to a public space.
+This protocol needs to be implemented by a vote(-delegation) client that optimally should be external to the platform for security reasons.
+The protocol describes three phases:
 \begin{enumerate}
-\item The user creates a fresh RSA key pair.
-The length of the key should be as large as possible to protect against attacks for the foreseeable future.
-\item The user authenticates at the vote registry.
-\item If the user is authorized to vote, the vote registry blind signs the public key the user has generated in the first step.
-\item The user can now announce vote or delegate intents to the public.
-To this end, the user assembles the appropriate message and signs it with his private key he generated in the first step.
-Then, he adds his public key from the first step and the unblinded signature from the third step to the message.
-The whole message is then posted to a public space that abides by the criteria outlined earlier.
+  \item Public Declaration of Intent Key (PIK) Generation
+  \item Assembling the declaration of intent message
 \end{enumerate}
 
-\paragraph*{Remarks}
-% \begin{itemize}
-% \item 
-% \end{itemize}
 
-
-\section{Vote Delegation}
-\label{sec:Model_VoteDelegation}
-Vote delegation is the process of transferring voting rights for a proposition or a context (or a number of them) to a delegate.
-Technically this means that the vote of the delegate is counted several times (once for the delegate as voting right holder and once for each delegation towards him).
-From a social perspective this means a transfer of trust from the delegator to the delegate in an area of trust, whether this may be established from expertise, sympathy or other reasons.
-As such, the delegation mechanism encompasses attracting support publicly (what would be campaigning for a vote as a candidate in the representative system), friendship, different trust-based mechanisms and much more; These social phenomenon however are not technically relevant for showing the principles of liquid democracy and will be external to the platform to develop.
-Our application will focus entirely on the delegation mechanisms lying on the basis of this.
-The vote delegation can be visualized via a delegation graph, a directed graph with the users as nodes and the delegations as edges.
-One could either have a distinct delegation graph for every proposition, for every context, or have one delegation graph with an edge for every delegation (i.e. a labeled multigraph). \todo[inline]{This is more implementation than model and should probably be descruibed in ch.\ref{ch:ProjectRequirements}}
-As with Liquid Feedback, this model avoids circular graphs by breaking the loop with the vote of one of the delegators (implicitly revoking the delegation for the respective proposition; see \href{http://principles.liquidfeedback.org/}{the Liquid Feedback book}).
-
-Delegation mechanisms can be used for all stages of the \hyperref[sec:Model_Propositions]{proposition lifecycle}, i.e. for proposition group initiation support, support in the discussion phase and the voting phase.
-The decentralized model of publicly stating delegate intents which was already introduced in section~\ref{sec:Voting_Mechanism} can be used throughout all these stages, effectively giving citizen scientists the ability to harvest data about the evolution of the delegation graph from proposition creation to the close of votings.
+\section{Vote Tallying Protocol}
+\label{sec:VoteTallyingProtocol}
+The vote tallying protocoll describes the steps necessary to carry out vote tallying in the public space for some proposition after its voting phase has ended.
+It can be implemented as part of a vote(-delegation) client, as a public service and directly within the platform.
+The idea is that everyone is able to carry out the vote tallying process purely relying on public, signed data.
+The result of the vote tallying is the delegation graph of all valid voting keys.
+This graph can then be used to determine the end result of the vote based on the used voting method bound to the proposition.
 
 
 
-%\section{Feedback von Stimmendelegation}
-% * <johanning@informatik.uni-leipzig.de> 2018-02-12T12:49:41.623Z:
-% 
-% > \section{Feedback von Stimmendelegation}
-% > \label{sec:Model_VoteFeedback}
-% > Feedback on the delegation of votes is mediated through notifications. 
-% > As mentioned in \ref{sec:Notifications}, delegators are notified when their votes are used in a 'relevant' way by the delegate. Relevancy is managed through user profile settings. 
-% 
-% What was this supposed to be about (unless I was the one putting it in)?
-% 
-% ^.
-%\label{sec:Model_VoteFeedback}
-%Feedback on the delegation of votes is mediated through notifications. 
-%As mentioned in \ref{sec:Notifications}, delegators are notified when their votes are used in a 'relevant' way by the delegate. Relevancy is managed through user profile settings. 
 
-
-
-\section{Notifications}
-\label{sec:Notifications}
-Since information overflow is a problem with the scalability of the platform, and many roles mentioned above are characterized by the information they receive, information filtering / selective information is crucial. A good way to handle the information distribution within the platform is through notifications. Notifications are information about the creation of new information relevant to the user, generally due to their role within the political process.
-
-Notifications can be realized as messages sent to all 'interested' stakeholders within a process. Declaring interest within the system can be modeled through assume a certain role. However, notifications also can depend on user-determined settings within the profile, which can filter out certain notifications. Since this mechanism is described with the users, the following describes the possible notifications a user can receive.
-
-Notifications exist for:\todo{exist sounds like this is discussing the implementation already. better wording to distinguish this as a design?}
-\begin{itemize}
-\item Vote delegation of other users 
-\item For Proposition Followers: when propositions change (text or phase) or relevant discussion entries take place, or when alternative propositions are created
-\item For Proposition Followers: When propositions are voted upon / results on the voting are known
-\item For a Proposition Author: When a proposition change request is created
-\item For a Proposition Author: When a moderator changes the context
-\item For Moderators: When a report (inappropriate context or discussion entry) is filed
-\item For Discussion Participants: When someone responds to the respective entries
-\item For Context Followers: When a proposition in the context of interest is created
-\item For Context Followers: When the context taxonomy changes regarding followed interests
-\item For Delegates: When a delegated vote is withdrawn
-\item For Vote Delegators: When a vote was used in a proposition 
-\end{itemize}
-
-\section{Researchers Access}
-\label{sec:Model_ResearchersAccess}
-% * <johanning@informatik.uni-leipzig.de> 2018-02-12T12:15:14.572Z:
-% 
-% > \section{Researchers Access}
-% > \label{sec:Model_ResearchersAccess}
-% 
-% How concrete should we sketch this? Right now its just a 'we need to be aware of this', but I feel it needs to be more concrete...
-% 
-% ^.
-Since this project takes a Citizen Science approach to Liquid Democracy, researchers access to the data generated by the platform is crucial. Discussing this issue depends heavily on how the problem of accessibility and anonymity raised in \ref{ssec:Integration_AccessibilityAnonymity} is handled, since this determines how researchers / citizen scientists can access the data of interest and defines their range of action with the data of the platform. 
-
-\ref{ssec:Integration_AccessibilityAnonymity} mentions four strategies to deal with user data. While most of the approaches described provide a lot of fine-grained data to the researcher over a large number of users, and allow them a large range of research questions to ask, the aggregative approach (and to some degree the selective aggregative and the deflecting responsibility approach) restrict the data available for researchers. 
-
-More important than the availability of the data might be the accessibility of the data. For this it is decisive that APIs for accessing information relevant to researchers are included in the design of the platform. Since in CS, technical proficiency (or its development) can't be expected, one of the requirements of the design of the APIs is that 'relevant' information is readily available for non-professionals, be it through accessible (and thoroughly documented) APIs or frontends that present relevant information.
-
-While this can't be implemented to its fullest within the scope of this project, this aspect needs considerable consideration in the development of the platform (i.e. in ch. \ref{ch:ProjectRequirements}).
-
-%Steven
-\section{Visualization of the Processes}
-\label{sec:Model_Visualization}
-
-%Clara, Simon
-\section{Citizen Science Lab Processes}
-\label{sec:CSLab_Processes}
-% Prozess vom Lab schildern, also Fragestellung, Datensammeln, Analysieren und Publizieren: Hier einleiten
-
-%darstellen wie wiss. und nicht-wiss. zusammenarbeiten; inwiefern citizens mÓglichkeit haben in prozess einbezogen zu werden und zu agieren
-
-The workflow of the citizen science lab is sketched in the following.
-
-\subsection{Involvement in Formulating Research Questions}
-
-\subsection{Citizen Data Collection Process}
-
-\subsection{Data Analysis Tools}
-
-\subsection{Citizen Science Publication Process}
+%\section{Demo Application}
+%\label{ssec:DemoApplication}
