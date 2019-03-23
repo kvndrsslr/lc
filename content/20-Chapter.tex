@@ -1,18 +1,7 @@
 \chapter{Theory}
 \label{ch:Theory}
 
-In this section we will discuss the theoretical background of the project on which this report is based on. As noted in the introduction, the project aims at designing a Citizen Science accessible Liquid Democracy game and developing its (technical) specification. As such, it needs to be grounded in a thorough understanding of both the concept of \hyperref[sec:Theory_CS]{Citizen Science} and \hyperref[sec:Liquid_Democracy]{Liquid Democracy}. Additionally it needs to identify and address the problems and issues raised in relation to these concepts. 
-
-In order to address these issues, a discussion of their context is indispensable. In recognition of this, the structure of this section is as follows:
-After introducing the basic terms and the context they stem from (in \ref{ssec:Background_CS} and \ref{ssec:Liquid_Democracy}
-respectively), issues and open questions are addressed for both concepts separately (in \ref{sec:Issues_CS} and \ref{ssec:LD-Critical-Perspective} respectively). 
-
-Following a discussion on the background of the respective concepts, we will \hyperref[sec:Integration_CSLD]{discuss synergies and challenges} of integrating these perspectives. Based on this integrative perspective and the aspects discussed in the beginning of this section, we will \hyperref[sec:Criteria]{derive a number of criteria} a Liquid Democracy game grounded in Citizen Science needs to exhibit, in order to develop a theory-grounded approach to the project's objective.
-
-% Neu: Alternative
-
-In this section, we discuss the theoretical background the project is based on. As noted in the introduction, the project aims to develop a Citizen Science accessible Liquid Democracy game. As such, first of all, it is necessary to understand both the concept of Citizen Science and Liquid Democracy. Both terms are vast and used in many different backgrounds. Therefore, in the following section we examine both terms separately, to then have a closer look on how the project itself combines Citizen Science and Liquid Democracy. In a first step, we look closer at the term Citizen Science, it´s background and three theoretical perspectives on how to describe and classify Citizen Science. Finally, we summarize the common points of these three theories as well as open questions and difficulties a project of this nature might face.
-
+In this chapter we introduce the theoretical background of \textit{citizen science} (\tracknshrink{CS}) and \textit{liquid democracy} (\tracknshrink{LD}). At first, in \autoref{sec:Theory_CS}, we define the term citizen science, provide examples to illustrate the concept and how to classify them. Likewise, in \autoref{sec:Liquid_Democracy}, we briefly recap on democracy and why representative democracy has flaws, that liquid democracy may address. We then explain how liquid democracy works. At the end of each section we provide a critical perspective of the corresponding concept.
 
 
 % Clara
@@ -138,8 +127,6 @@ It is important to point out that the voting form \textit{proxy voting} shares s
 “In contrast to the classic proxy voting paradigm \parencite{Miller1969}, the key innovation underlying liquid democracy is that proxies [\textellipsis] may delegate their own vote to a proxy, and, in doing so, further delegate all the votes entrusted to them. Put another way [\textellipsis] votes may freely flow through the directed delegation graph until they reach a sink.”\\[1mm]
 \hspace*{\fill}\textcite{Kahng2018}
 \end{displayquote}
-
-\newpage
 
 The delegation graph is a fundamental component of liquid democracy. \autoref{fig:Delegation-Cascade} visualizes such a delegation graph/cascade. 
 
@@ -291,7 +278,7 @@ An easy, yet ‘cowardly’, third option for dealing with privacy and transpare
 
 \subsubsection{Selective Aggregation}
 
-A further, much more involved option would be to ‘hide' unaggregated information for inquiring scientists, and to allow only information of a certain level of aggregation. Though similar to the second option posed above, this is quite a different approach to the problem at hand, since this approach explicitly opposes restricting research questions to a set or a style of pre-formed research questions. The idea behind this approach is to allow all kind of data inquiries, as long as certain criteria are met. These criteria are thought to ensure the anonymity of the user identity against inquiring entities, and would be the main design issue of this concept. As an example, criteria could be quantitative, only allowing access to data with a given amount of entities. This could be realized for example by \tracknshrink{API} only allowing responses on data instances of a given size, a natural language example, simplified: \textit{how many people, who voted like this, are voting for that?} Establishing these criteria would probably result in a lot of work, but might well be worth it. Whether research would be possible with the partial answers this approach generates, is a different question altogether. 
+A further, much more involved option would be to ‘hide' unaggregated information for inquiring scientists, and to allow only information of a certain level of aggregation. Though similar to the second option posed above, this is quite a different approach to the problem at hand, since this approach explicitly opposes restricting research questions to a set or a style of pre-formed research questions. The idea behind this approach is to allow all kind of data inquiries, as long as certain criteria are met. These criteria are thought to ensure the anonymity of the user identity against inquiring entities, and would be the main design issue of this concept. As an example, criteria could be quantitative, only allowing access to data with a given amount of entities. This could be realized for example by a data query language with a filter instance, only allowing responses on data instances of a given size. When asking questions as ,,\textit{how many people, who voted like this, are voting for that?}'' a valid response would only be generated if the number of instances that fit the description is over some threshold. Establishing these criteria would probably result in a lot of work, but might well be worth it. Whether research would be possible with the partial answers this approach generates, is a different question altogether. 
 This approach further doesn't provide an answer to transparency of vote delegation for individual political subjects raised above.
 
 

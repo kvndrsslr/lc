@@ -2,6 +2,8 @@
 % SK: habe mal das Processes in der Überschrift
 \label{ch:Approach}
 
+In the previous chapter we discussed the theoretical background for two core components for such an application: (1) a participatory system allowing users to either vote or to delegate their voices, which is scaffolding the other core component: (2) an interface allowing interested users to access the system’s data in order to perform analyses on various topics. In other words a user becomes a researcher. (1) is describing the concept of \textit{liquid democracy} and (2) the approach of \textit{citizen science}. It is important to grasp the idea for both components before merging them. Thus in \autoref{sec:Liquid_Democracy} we introduce the political pathway for liquid democracy and in \autoref{sec:Theory_CS} the theory behind \textit{citizen science}. At the end for each section we identify and address issues raised in relation to these concepts. 
+
 This section will describe a model of a liquid democracy grounded in citizen science. Based on the theoretic analysis, we will sketch the relevant processes and entities within such a platform. This includes the core processes of liquid democracy, that are vote delegation and voting mechanism, the life cycle of propositions, user roles within the platform, the geographical and political context propositions take place in, the visualization, and, most importantly, the accessibility of data for citizen scientists. 
 
 
@@ -22,14 +24,15 @@ However, in a liquid democracy every citizen has the right to vote on propositio
 
 In this section we will explore related projects, that are freely accessible, open source software (\tracknshrink{FOSS}) and which share our two main goals; That is a platform allowing---to some extent---to (1) participate in democratic processes and (2) to access the platform’s data. Therefore, we do not focus on projects that implement regular survey/polling features (e.g., \textit{LimeSurvey}\footnote{\url{https://www.limesurvey.org/}}), as this would be only a small subset of that platform.
 
-Initially, when starting this work in 2017, we discovered some projects that met certain aspects of our main goals. Most of these projects, however, have been (officially) discontinued over time or have not been under active development (no commit for two years or more). Additionally, some of them were commercial projects or closed-source and thus not replicable or adaptable in any way. The website \textit{The Democracy Foundation}\footnote{\url{https://democracy.foundation/similar-projects/}} provides a list ranging from smaller projects to advanced governance platforms. Unfortunately, most of them are outdated as well or are not applicable to o ur scenario. Nonetheless, there were two potential candidates we took into consideration for building a prototype.
+Initially, when starting this work in 2017, we discovered some projects that met certain aspects of our main goals. Most of these projects, however, have been (officially) discontinued over time or have not been under active development (no commit for two years or more). Additionally, some of them were commercial projects or closed-source and thus not replicable or adaptable in any way. The website \textit{The Democracy Foundation}\footnote{\url{https://democracy.foundation/similar-projects/}} provides a list ranging from smaller projects to advanced governance platforms. Unfortunately, most of them are outdated as well or are not applicable to our scenario. Nonetheless, there were two potential candidates we took into consideration for building a prototype.
 
 The first promising platform we looked into was \textit{LiquidFeedback}\footnote{\url{https://liquidfeedback.org/}}. It is developed by the \textit{Public Software Group}\footnote{\url{https://www.public-software-group.org/}} and was used by Berlin’s Pirate Party for inner-party decision-making processes. Although the source code is available at the developers’ website, we encountered two major drawbacks. For one, we had difficulties during the setup process\footnote{\url{http://www.public-software-group.org/mercurial/liquid_feedback_frontend/raw-file/tip/INSTALL.html}}, and since there is no developer support (and no official repository, or other public developer community) it is a cumbersome process. Despite being labeled open source it is in the interest of the developer to implement the platform as payed service. Additionally, due to the large usesage of the programming language Lua---where none of us had any prior experience---we decided to skip this project.
 
-The other candidate is \textit{DemocracyOS}\footnote{\url{http://democracyos.org/}}. Developed by Argentina’s Net Party (span. \textit{Partido de la Red}) it offers a modern 
+The other candidate is \textit{DemocracyOS}\footnote{\url{http://democracyos.org/}}, which is actively developed by Argentina’s Net Party (span. \textit{Partido de la Red}). This platform provides a modern tech stack (backend: MongoDB, frontend: React) and good developer support\footnote{Docs: \url{http://docs.democracyos.org/} GitHub: \url{https://github.com/DemocracyOS/democracyos}}. Unfortunately, the project is structured in an obscure manner; for example the developers decided against differentiating between \texttt{src} files and \texttt{lib} files, thus mixing React components with regular helper functions and other libraries in on big \texttt{lib} folder. Since there is no clear separation of view, logic and helper libraries this creates an entangled graph of dependencies.
+
+Despite both platforms, especially the latter one, are both promising tools, there is still one fundamental issue: As of 2019 there is no \tracknshrink{FOSS} platform that implemented the idea of vote delegation in any way, and does provide sufficient support to engage developers. Since developing our very own digital liquid democracy platform would be an enormous project, we shifted our focus towards a conceptual framework.
 
 
-DemocracyEath
 
 % Participedia is a meta website gathering data from other sites:
 % \url{https://www.wissenschaftsmanagement.de/news/participedia-demokratie-staerken-durch-geteiltes-wissen-und-bielefelder-forscher-entwickeln}
@@ -37,10 +40,6 @@ DemocracyEath
 % nVotes is a simple voting plattform this could also be done with normal survey platforms such as LimeSurvey, so this not taken into account
 
 
-
-\subsection{Discussion of Related Work}
-\label{sec:DiscussionRW}
-Basically say why its all rubbish and we need to do it ourselves, leading into the \hyperref[ch:ProjectRequirements]{requirements}.xx
 
 
 \section{Conceptual Approach to the Platform}
