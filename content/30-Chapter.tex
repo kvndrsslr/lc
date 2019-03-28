@@ -15,11 +15,11 @@ Since we can not enumerate all the possible \tracknshrink{CS} projects with \tra
 On the other hand, the \tracknshrink{LD} functionalities of specific platforms can be assumed to not change from project to project.
 Therefore, our contribution in this work is split in two parts: (1) a \tracknshrink{LD} platform design that can be universally used in multiple \tracknshrink{CS} projects and (2) a \tracknshrink{CS}-enabling interface which exposes data from the \tracknshrink{LD} platform in a way such that it will be easy to build specific \tracknshrink{CS} projects on top of it.
 
-Based on our work in \ref{sec:Liquid_Democracy}, we derive the core functionalities of a \tracknshrink{LD} platform as (\tracknshrink{LD}1) collaborative editing of propositions, (\tracknshrink{LD}2) free, fair and secret voting on propositions and (\tracknshrink{LD}3) vote delegation.
+Based on our work in \ref{sec:Liquid_Democracy}, we derive the core functionalities of a \tracknshrink{LD} platform as \textbf{(\tracknshrink{LD}1)} collaborative editing of propositions, \textbf{(\tracknshrink{LD}2)} free, fair and secret voting on propositions and \textbf{(\tracknshrink{LD}3)} vote delegation.
 We observe that participatory systems on the web tend to produce an overwhelming amount of data and that most modern platforms tackle this problem by content filtering algorithms, which we do not consider to be appropriate for a \tracknshrink{LD} platform due to the danger of censorship.
-Rather, we would like to involve the user to actively filter propositions based and therefore derive the fourth criteria for a \tracknshrink{LD} platform as (\tracknshrink{LD}4) selective proposition browsing capabilities.
-Furthermore, as each individual in a \tracknshrink{LD} has the right to create propositions, we acknowledge that adversary users could abuse this right to generate a lot of noise (so called spam) in the fashion of a DDoS attack\footnote{\url{https://en.wikipedia.org/wiki/Denial-of-service_attack\#Distributed_DoS}}. Therefore we derive (\tracknshrink{LD}5) implementation of spam prevention mechanisms.
-Finally, we derive the last criteria for a \tracknshrink{LD} platform from the discussion in \ref{ssec:Integration_AccessibilityAnonymity} as (\tracknshrink{LD}6) protection of privacy.
+Rather, we would like to involve the user to actively filter propositions based and therefore derive the fourth criteria for a \tracknshrink{LD} platform as \textbf{(\tracknshrink{LD}4)} active information filtering capabilities.
+Furthermore, as each individual in a \tracknshrink{LD} has the right to create propositions, we acknowledge that adversary users could abuse this right to generate a lot of noise (so called spam) in the fashion of a DDoS attack\footnote{\url{https://en.wikipedia.org/wiki/Denial-of-service_attack\#Distributed_DoS}}. Therefore we derive \textbf{(\tracknshrink{LD}5)} implementation of spam prevention mechanisms.
+Finally, we derive the last criteria for a \tracknshrink{LD} platform from the discussion in \ref{ssec:Integration_AccessibilityAnonymity} as \textbf{(\tracknshrink{LD}6)} protection of privacy.
 
 We have seen in \ref{sec:Theory_CS} that we can categorize a citizen science project according to the degree of participation and its expected outcome.
 Our approach allows the implementation of \tracknshrink{LD}-based \tracknshrink{CS} projects on all levels of Hacklays ladder of participation, since our \tracknshrink{CS}-enabling interface empowers citizen science communities to kickstart their own projects and formulate research questions without the help of professional scientists.
@@ -28,7 +28,7 @@ The main issue to solve with this interface is the conflict between user privacy
 For lower levels of participation a more restrictive data access policy could be enforced, while higher levels of participation with involvement of the citizen scientists in the data evaluation and possibly even in the definition of research questions require complete and transparent access to all of the platforms data such as propositions, delegation graphs, voting results etc.
 In order to support the highest level of participation possible we see no other way than to trust in the citizen scientists self-responsibility, i.e. to partly relay control over the amount and kind of data shared to the users of the \tracknshrink{LD} platform.
 However, as users are not expected to be well trained in privacy protection, the choices of users should not be too fine-grained and rather be envisioned as a number of pre-specified policies.
-We therefore derive the additional criteria for a \tracknshrink{CS}-enabling interface as (\tracknshrink{CS}1) default restrictive data access with guaranteed privacy protection and (\tracknshrink{CS}2) opt-in completely transparent data access without guaranteed privacy protection.
+We therefore derive the additional criteria for a \tracknshrink{CS}-enabling interface as \textbf{(\tracknshrink{CS}1)} default restrictive data access with guaranteed privacy protection and \textbf{(\tracknshrink{CS}2)} opt-in completely transparent data access without guaranteed privacy protection.
 \todo{das woanders unterbringen}
 %Traditionally, in a parliamentarian democracy, the right to initiate and vote on propositions is exclusive for members of the parliament.
 %However, in a liquid democracy every citizen has the right to vote on propositions and to participate in their constitutive phase. Consequently, every participant should also have the unrestrained right to create propositions. In an anonymized large-scale digital liquid democracy, this right could be abused by malicious users to mass-create spam propositions in order to bury other propositions for example. This threat could be tackled by (1) phased proposition life cycles, (2) adaptive sorting algorithms based on bayesian filtering and (3) moderation. A proposition life cycle may involve that a user cannot create more than \textit{n} proposition per month/year. The value \textit{n} needs to be carefully chosen, either it is static hard-coded for all citizens or it is dynamically chosen by a citizen’s trustworthiness. Proposition life cycles should also involve different phases: such as draft, review, accepted. Regular citizens (see \autoref{sec:UserRoles}: \nameref{sec:UserRoles}) should therefore only see accepted proposals (signal) and not spam proposals (noise). Another threat is user fraud, that can be tackled by a sophisticated authentication process, discussed later.
@@ -62,19 +62,45 @@ To this end, we will start with the centerpiece of democratic discourse: proposi
 Then we describe the various roles users can take in the platform, before we describe voting and vote delegation mechanisms.
 Lastly, we elaborate the utility of notifications for a \tracknshrink{LD} platform and illustrate how the \tracknshrink{CS}-enabling interface exhibited by the platform can be used by citizen science projects.
 
-
-
 \subsection{Propositions}
 \label{sec:Model_Propositions}
+A democracies most important process in order to transform political positions and individual opinions into laws is the iteratively joint crafting of propositions which are, once finalized, subject to voting.
+Propositions therefore should be the first thing to think about when developing the concept of a \tracknshrink{LD} platform.
+Apart from their actual information content, propositions possess a number of additional, implicit properties, their metadata.
+In a digital realm this metadata is very important for the accessibility of the actual information content, for example through active filtering mechanisms as required by \textbf{(\tracknshrink{LD}4)}.
+Amongst others, propositions have the following metadata:
+\begin{itemize}
+\item Creator
+\item Time of creation
+\item Political context(s)
+\item Political administrative unit
+\end{itemize}
+
+Moreover, propositions typically evolve over time and therefore the snapshot of a proposition at a given time can be assigned an increasing version number.
 
 
 
-\subsubsection{Taxonomy}
+\subsubsection{Context Taxonomy}
 \label{sec:Model_Contexts}
 
-Choosing a proper taxonomy is crucial for Liquid Democracy Project as it is a sort of foundation for the work to follow. Certainly, clearly defined categories are important to make order of the ongoing topics and are essential to stay on top of things. In our cases however this taxonomy is essential as it is an important part of the voting process as well. On the one hand the categories can help the user to find votes he is interested in. Even more important with categories he can also determine for which issues he wants to vote himself and which topics he wants to pass on to a person with more expertise on this field. Taking for example a vote about the deforestation of the south of Germany. This vote could fall into a category such as environment. Imagining that the user himself is not that much of specialist when it comes to the environment and wants to pass on votes according this subject to a relative who is. Here the taxonomies not only determine if he get the topic in his feed but it also could automatically be passed on to his relative. This highlights a second problem. How do we make sure that the votes are categorized properly? More about this later. First, we have to make sure to set up a fundamental category that covers a wide spectrum of the political issues existing.
+Choosing a proper taxonomy to categorize propositions is crucial for a \tracknshrink{LD} project as it is a sort of foundation for the work to follow.
+Certainly, clearly defined categories are important to make order of the ongoing topics and are essential to stay on top of things.
+%In our cases however this taxonomy is essential as it is an important part of the voting process as well.
+On the one hand the categories can help the user to find votes he is interested in, which partly satisfies criteria \textbf{(\tracknshrink{LD}4)}.
+Even more important, with categories he can also determine for which issues he wants to vote himself and which topics he wants to pass on to a person with more expertise in this field.
+Taking for example a vote about the deforestation of the south of Germany, it could fall into a category such as environment.
+Imagining that the user himself is not that much of specialist when it comes to the environment and wants to delegate his votes for propositions on this subject to a relative who is.
+%Here the taxonomies not only determine if he gets the topic in his feed but it also could automatically be passed on to his relative.
+%This highlights a second problem: how do we make sure that the votes are categorized properly?
+%More about this later.
+%First, we have to make sure to set up a fundamental category that covers a wide spectrum of the political issues existing.
 
-In general, the taxonomy should meet three elemental requirements. First and foremost, the taxonomy must be exhaustive as we want to make sure that every occurring vote is covered. Secondly the categories need to be disjunct, meaning that two categories shouldn't describe the same subject. Additionally, the categories should be able to adapt and evolve as the political landscape as well changes with time. A taxonomy that fulfill all requirements perfectly probably don't exist but we tried to find one already existing system that met our requirements as best as possible.
+In general, a taxonomy for \tracknshrink{LD} propositions should meet three elemental requirements.
+First and foremost, the taxonomy must be exhaustive as we want to make sure that every occurring vote is covered.
+Secondly the categories need to be disjunct, meaning that two categories shouldn't describe the same subject.
+Additionally, the categories should be able to adapt and evolve as the political landscape as well changes with time.
+A taxonomy that fulfills all requirements perfectly probably does not exist, but we tried to find one already existing system that met our requirements as best as possible.
+
 % * <johanning@informatik.uni-leipzig.de> 2018-02-13T10:28:54.493Z:
 % 
 % > In general, the taxonomy should meet three elemental requirements. 
@@ -84,12 +110,26 @@ In general, the taxonomy should meet three elemental requirements. First and for
 % 
 % ^.
 
-A well-known external and source for document categorization is the Wikipedia taxonomy. The corpus of the open encyclopedia is often used to build automatic categorization approaches or to improve the performance of existing models.Seeing the pure size of the corpus and the fact that it changes constantly you don’t wonder why this is the case.  For our project however, the problem occurred that the political category described more the field of political science that general topics politics are coping with. 
+A well-known external and source for document categorization is the Wikipedia taxonomy.
+The corpus of the open encyclopedia is often used to build automatic categorization approaches or to improve the performance of existing models.Seeing the pure size of the corpus and the fact that it changes constantly you don’t wonder why this is the case.
+For our project however, the problem occurred that the political category described more the field of political science that general topics politics are coping with. 
 
-Almost the complete opposite was true for the for the taxonomy of Stack Overflow Politics. While the Wikipedia articles were almost purely about a scientific view on Politics, the branch of the well-known question and answer site Stack Overflow almost only consist of current topics discussed by the community. The created tags are therefore more useful for characterizing political topics. But as the issues discussed are tagged by the user posting the question, it often occurs that there are two tags describing the same field. So, taking the Stack taxonomy would have cost us a lot of time cleaning the data. 
+Almost the complete opposite was true for the for the taxonomy of Stack Overflow Politics.
+While the Wikipedia articles were almost purely about a scientific view on Politics, the branch of the well-known question and answer site Stack Overflow almost only consist of current topics discussed by the community.
+The created tags are therefore more useful for characterizing political topics.
+But as the issues discussed are tagged by the user posting the question, it often occurs that there are two tags describing the same field.
+So, taking the Stack taxonomy would have cost us a lot of time cleaning the data. 
 
 
-Going on searching for a more organized alternative we considered the taxonomy that classify the topics discussed by the Bundestag. For every new legislation period the parliament is putting together committees for different topics. Even if the number and names of these committees have slightly changed over time, the content is more or less consisting. On the official Website of the Bundestag we found a tabula sorting all protocols of the committees' meetings. The altogether 43 topics describe a bride rage of political topics. From family to energy the categories are clear structured, exhaustive and disjunct. Therefore they cover two of our tree requirements. 
+Going on searching for a more organized alternative we considered the taxonomy that classify the topics discussed by the Bundestag.
+For every new legislation period the parliament is putting together committees for different topics.
+Even if the number and names of these committees have slightly changed over time, the content is more or less consisting.
+On the official Website of the Bundestag we found a tabula sorting all protocols of the committees' meetings.
+The altogether 43 topics describe a bride range of political topics.
+From family to energy the categories are clearly structured, exhaustive and disjunct, therefore covering two of our tree requirements.
+Hence, we recommend to use this taxonomy as a starting point for newly created \tracknshrink{LD} platform instances.
+We note that in order to meet our third requirement, the platform should possess mechanisms for the collaborative editing of the taxonomy.
+
 
 \subsubsection{Geotags}
 \todo[inline]{Write section about geotags}
@@ -105,7 +145,6 @@ Going on searching for a more organized alternative we considered the taxonomy t
 \label{fig:proplife}
 \end{figure}
 
-A democracies most important process in order to transform political positions and individual opinions into laws is the iteratively joint crafting of propositions which are, once finalized, subject to voting.
 
 This process, starting with the initiation of a proposition and ending with the final vote cast, will consequently be dubbed the proposition life cycle.
 We split the proposition life cycle into three different phases: (1) initiation, (2) discussion and (3) voting.
