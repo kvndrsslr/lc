@@ -17,7 +17,7 @@ Therefore, we arrange our criteria in two groups.
 Criteria in the first group are directed towards a general \tracknshrink{LD} platform design that can be used in projects both with and without a \tracknshrink{CS} context.
 Those in the second group are directed towards a \tracknshrink{CS}-enabling interface a \tracknshrink{LD} platform can implement in order to explicitly support the development of specific \tracknshrink{CS} projects on top of it.
 
-Based on our work in \ref{sec:Liquid_Democracy}, we derive the core functionalities of a \tracknshrink{LD} platform as \textbf{(\tracknshrink{LD}1)} collaborative editing of propositions, \textbf{(\tracknshrink{LD}2)} free, fair and secret voting on propositions and \textbf{(\tracknshrink{LD}3)} vote delegation.
+Based on our work in \ref{sec:Liquid_Democracy}, we derive the core functionalities of a \tracknshrink{LD} platform as \textbf{(\tracknshrink{LD}1)} collaborative editing of propositions, \textbf{(\tracknshrink{LD}2)}  secret and verifiable voting on propositions and \textbf{(\tracknshrink{LD}3)} vote delegation.
 We observe that participatory systems on the web tend to produce an overwhelming amount of data and that most modern platforms tackle this problem by content filtering algorithms, which we do not consider to be appropriate for a \tracknshrink{LD} platform due to the danger of censorship.
 Rather, we would like to involve the user to actively filter propositions based and therefore derive the fourth criteria for a \tracknshrink{LD} platform as \textbf{(\tracknshrink{LD}4)} active information filtering capabilities.
 Furthermore, as each individual in a \tracknshrink{LD} has the right to create propositions, we acknowledge that adversary users could abuse this right to generate a lot of noise (so called spam) in the fashion of a DDoS attack\footnote{\url{https://en.wikipedia.org/wiki/Denial-of-service_attack\#Distributed_DoS}}. Therefore we derive \textbf{(\tracknshrink{LD}5)} implementation of spam prevention mechanisms.
@@ -31,9 +31,6 @@ For lower levels of participation a more restrictive data access policy could be
 In order to support the highest level of participation possible we see no other way than to trust in the citizen scientists self-responsibility, i.e. to partly relay control over the amount and kind of data shared to the users of the \tracknshrink{LD} platform.
 However, as users are not expected to be well trained in privacy protection, the choices of users should not be too fine-grained and rather be envisioned as a number of pre-specified policies.
 We therefore derive the additional criteria for a \tracknshrink{CS}-enabling interface as \textbf{(\tracknshrink{CS}1)} default restrictive data access with guaranteed privacy protection and \textbf{(\tracknshrink{CS}2)} opt-in completely transparent data access without guaranteed privacy protection.
-\todo{das woanders unterbringen}
-%Traditionally, in a parliamentarian democracy, the right to initiate and vote on propositions is exclusive for members of the parliament.
-%However, in a liquid democracy every citizen has the right to vote on propositions and to participate in their constitutive phase. Consequently, every participant should also have the unrestrained right to create propositions. In an anonymized large-scale digital liquid democracy, this right could be abused by malicious users to mass-create spam propositions in order to bury other propositions for example. This threat could be tackled by (1) phased proposition life cycles, (2) adaptive sorting algorithms based on bayesian filtering and (3) moderation. A proposition life cycle may involve that a user cannot create more than \textit{n} proposition per month/year. The value \textit{n} needs to be carefully chosen, either it is static hard-coded for all citizens or it is dynamically chosen by a citizen’s trustworthiness. Proposition life cycles should also involve different phases: such as draft, review, accepted. Regular citizens (see \autoref{sec:UserRoles}: \nameref{sec:UserRoles}) should therefore only see accepted proposals (signal) and not spam proposals (noise). Another threat is user fraud, that can be tackled by a sophisticated authentication process, discussed later.
 
 \section{Related Work}
 \label{sec:RelatedWork}
@@ -67,6 +64,7 @@ Having a clear view on both data fragments and user roles, we then discuss the c
 
 \subsection{Data Fragments}
 \label{ssec:data_fragments}
+In this section, we will present the essential data fragments in a \tracknshrink{LD} platform.
 
 \subsubsection{Propositions}
 \label{sec:Model_Propositions}
@@ -82,8 +80,33 @@ As with most categorial organization systems, broad, general contexts can be div
 Propositions typically evolve over time which can be conceptualized as a succession of versioned snapshot.
 To this end, a propositions state should be saved together with an increasing version numer at either fixed time intervals or manually by the individuals involved with the editing.
 Moreover, a propositions creation and its evolution should always be accompanied by a healthy discussion of the matter at hand between both individuals directly involved with the proposition editing and other individuals interested in expressing their political opinions.
-These discussions contents and their metadata are only meaningful when put in relation to the corresponding propositions.
-Therefore, they should be accessible as dependent information over the same interfaces which also exhibit the propositions data itself.
+These discussions contents and their metadata are discussed in the next section.
+
+\subsubsection{Discussion Entries}
+\label{ssec:Discussion_Entries}
+Discussion entries are posts from users that can be attached to several other data fragments that allow discussion.
+To allow an efficient evaluation of participants opinions on the direction of the discourse, discussion entries can be up- or downvoted by other users.
+Additionally, the textual content of a discussion entry can carry hyperlinks to a selection of other data fragments that it references.
+Examples of data fragments that should be referencable by hyperlinks in discussion entries are propositions, proposition change requests and discussion entries themselves.
+
+\subsubsection{Proposition Change Requests}
+\label{ssec:Proposition_Change_Requests}
+As we discussed briefly in the previous section about propositions, a proposition will evolve over its life time which means that it will be edited.
+Since it is desirable that edits to propositions are funded on a discursive process involving multiple individuals, we argue that only the original creator of the proposition, i.e. its owner, should be able to directly edit it.
+In order to allow other individuals to support the editing process, we introduce proposition change requests, which are data fragments that carry the edited propositon text together with a linked discussion entry and a reference to the underlying proposition. 
+These proposition change requests can then be accepted or rejected by the owner of the proposition.
+In addition to up- or downvoting the linked discussion entry, users can explicitly express their conditional support of the proposition in case the proposition change request gets accepted or rejected.
+This should help the responsible proposition owners to determine the value of specific change requests.
+Proposition change requests should not be used to completely turn a propositions goal on its head.
+For these cases there exists alternative propositions which will be discussed next.
+
+\subsubsection{Alternative Propositions and Proposition Groups}
+\label{ssec:AltProposition}
+In most cases, politics are too complex to capture the endeavor of all individuals in one proposition that can be answered with a simple yes or no.
+In order to provide means to depict political opinions more accurately, we introduce alternative propositions.
+Alternative propositions have all the properties of normal propositions with the exception that the political contexts of alternative propositions can not be different from those of the original proposition.
+Additionally, alternative propositions carry a reference to the original proposition, effectively placing them in a common \emph{proposition group}.
+
 \subsubsection{Context Taxonomy}
 \label{sec:Model_Contexts}
 While we earlier looked at contexts as metadata of propositions, in order to categorize propositions effectively, a context taxonomy must exist prior to proposition creation, which makes such a taxonomy an independent data fragment.
@@ -125,34 +148,59 @@ We note that in order to meet our third requirement, the platform should possess
 
 
 \subsubsection{Delegation Graphs}
-\todo{write}
+As we have seen in \ref{sec:Liquid_Democracy}, delegation graphs are directed graphs where vertices represent participants in a liquid democracy and edges represent the flow of votes from a \textit{principal} to a \textit{proxy}.
+Although theoretically delegation graphs can contain cycles, these have no practical meaning, because all the votes of the participants involved in cycles will never contibute to final voting results if the cycle remains unbroken.
+On the other hand, as soon as one participant in the cycle choses to vote directly, the cycle is broken.
+Therefore, for purposes of vote couting, we can always extract an \emph{effective delegation graph} from a given delegation graph by removing all its cycles.
+Note that with this model, cycles can be used by groups of participants with considerable overlap in their political opinions to pool their votes, effectively making sure that all their votes will be counted if at least one of them votes directly.
+
+Delegation graphs can be maintained for different levels of governance, hereafter named scopes.
+Scopes have increasing priority with descreasing generality.
+Delegation graphs with proposition scope have the highest priority and correspond to specific propositions, i.e. for each proposition there can be at most one delegation graph with proposition scope.
+Right below proposition scope we have context scope, where for each context there can be at most one delegation graph with context scope.
+The quasi ordering induced by the tree-shaped hierarchical context taxonomy can be used to determine a strict ordering between context-scoped delegation graphs with an ancestor relationship.
+This means that for two given contexts $c_1$ and $c_2$, where $c_1$ is a supercontext (ancestor) of $c_2$, $\text{prio}(c_2)>\text{prio}(c_1)$ holds.
+Finally, the lowest scope on the priority ladder is the global scope and there can be at most one delegation graph with this scope. 
+
+We will see in \todo{@KD: ref einfügen} how priority can be used for vote counting.
+
+For privacy reasons, delegation graphs with global or context scope are not materialized.\todo{@KD: move this to 4 and elaborate}
 
 \subsubsection{User Intents}
-\todo{write}
-
+\label{ssec:User_Intents}
+The next type of data fragment are so called user intents, which are categorized into vote intents and delegation intents.
+Delegation intents can be used to compose delegation graphs while vote intents are the digital counterpart of ballots.
+In order to meet the requirements of \textbf{(\tracknshrink{LD}2)} user intents should be anonymized to satisfy the secrecy property as well as public and authorized to satisfy the verifiability property.
+To this end. user intents should not only carry information about the specific intent but also authorization information.
 \subsubsection{Notifications}
-\todo{rewrite}
 \label{sec:Notifications}
-Since information overflow is a problem with the scalability of the platform, and many roles mentioned above are characterized by the information they receive, information filtering / selective information is crucial. A good way to handle the information distribution within the platform is through notifications. Notifications are information about the creation of new information relevant to the user, generally due to their role within the political process.
+As we already discussed in \ref{sec:Criteria}, information overflow is a problem that needs to be dealt with to ensure the scalability of the platform.
+A good way to handle the information distribution within the platform and therefore contribute to meet \textbf{(\tracknshrink{LD}4)} is through notifications.
+Notifications are information about the creation of new information relevant to the user, generally due to their role within the political process.
+As such, notifications can be realized as messages sent to all 'interested' stakeholders within a process.
 
-Notifications can be realized as messages sent to all 'interested' stakeholders within a process. Declaring interest within the system can be modeled through assume a certain role. However, notifications also can depend on user-determined settings within the profile, which can filter out certain notifications. Since this mechanism is described with the users, the following describes the possible notifications a user can receive.
+%Declaring interest within the system can be modeled through assume a certain role.
+%However, notifications also can depend on user-determined settings within the profile, which can filter out certain notifications.
+%Since this mechanism is described with the users, the following describes the possible notifications a user can receive.
+%Notifications exist for:\todo{@KD:exist sounds like this is discussing the implementation already. better wording to distinguish this as a design?}
+%\begin{itemize}
+%\item Vote delegation of other users 
+%\item For Proposition Followers: when propositions change (text or phase) or relevant discussion entries take place, or when alternative propositions are created
+%\item For Proposition Followers: When propositions are voted upon / results on the voting are known
+%\item For a Proposition Author: When a proposition change request is created
+%\item For a Proposition Author: When a moderator changes the context
+%\item For Moderators: When a report (inappropriate context or discussion entry) is filed
+%\item For Discussion Participants: When someone responds to the respective entries
+%\item For Context Followers: When a proposition in the context of interest is created
+%\item For Context Followers: When the context taxonomy changes regarding followed interests
+%\item For Delegates: When a delegated vote is withdrawn
+%\item For Vote Delegators: When a vote was used in a proposition 
+%\end{itemize}
+\todo{@KD: move the commented stuff to chapter 4}
 
-Notifications exist for:\todo{exist sounds like this is discussing the implementation already. better wording to distinguish this as a design?}
-\begin{itemize}
-\item Vote delegation of other users 
-\item For Proposition Followers: when propositions change (text or phase) or relevant discussion entries take place, or when alternative propositions are created
-\item For Proposition Followers: When propositions are voted upon / results on the voting are known
-\item For a Proposition Author: When a proposition change request is created
-\item For a Proposition Author: When a moderator changes the context
-\item For Moderators: When a report (inappropriate context or discussion entry) is filed
-\item For Discussion Participants: When someone responds to the respective entries
-\item For Context Followers: When a proposition in the context of interest is created
-\item For Context Followers: When the context taxonomy changes regarding followed interests
-\item For Delegates: When a delegated vote is withdrawn
-\item For Vote Delegators: When a vote was used in a proposition 
-\end{itemize}
-
-
+\subsubsection{Moderation Requests}
+\label{ssec:Moderation_Requests}
+\todo{@KD: write}
 
 \subsection{User Roles}
 \label{sec:UserRoles}
@@ -160,9 +208,11 @@ Notifications exist for:\todo{exist sounds like this is discussing the implement
 This section will describe the roles that user on the platform can take on.
 It is important to note that this is done from a perspective of what roles different stakeholders take in the relevant processes, and that it takes on the perspective of the business processes.
 
-This is not meant to imply that only some users can take on these roles or that these roles are technically different, and is not meant to restrict access to processes. We believe, as derived in \ref{sec:Liquid_Democracy} and \ref{sec:Theory_CS} that both from a Citizen Science as well as from a Liquid Democracy perspective participation in a democracy should be only as restricted as necessary, and as open as possible. While we do think that discursive structures need to be established within discussions, the possibilities for participation should not be restricted.
+This is not meant to imply that only some users can take on these roles or that these roles are technically different, and is not meant to restrict access to processes.
+We believe, as derived in \ref{sec:Liquid_Democracy} and \ref{sec:Theory_CS} that both from a citizen science as well as from a liquid democracy perspective participation in a democracy should be only as restricted as necessary, and as open as possible.
+While we do think that discursive structures need to be established within discussions, the possibilities for participation should not be restricted.
 
-In the following we will describe the roles the political subject can take within the structures of discourse in the platform we are developing, and we will justify why we think that access to these discursive activities should be limited to users taking on this role in the given context.
+In the following we will describe the roles the political subject can take within the structures of discourse in the platform and we will justify why we think that access to these discursive activities should be limited to users taking on this role in the given context.
 
 \subsubsection{Proposition follower}
 A proposition follower is a user that has expressed an interest in a given proposition. Proposition followers will receive updates on the state of a proposition, in particular on the progress of the phases of the proposition, alternative propositions based on it, changes in wording and contributions to the discussion about the proposition.
@@ -260,7 +310,7 @@ Administrators have a unique standing in the roles of the platform, in that they
 
 \subsubsection{Life Cycle of Propositions}
 \label{ssec:Model_Propositions_Life}
-\todo{check}
+\todo{@KD:check}
 \begin{figure}[H]
 \centering
 \includegraphics[height=0.6\paperheight]{img/lifecycle_flow_v0.pdf}
@@ -317,7 +367,11 @@ A detailed description of the voting mechanism is given in the following section
 
 \subsubsection{Voting}
 \label{sec:Voting_Mechanism}
-\todo{refactor}
+\todo{@KD:refactor}
+
+%Traditionally, in a parliamentarian democracy, the right to initiate and vote on propositions is exclusive for members of the parliament.
+%However, in a liquid democracy every citizen has the right to vote on propositions and to participate in their constitutive phase. Consequently, every participant should also have the unrestrained right to create propositions. In an anonymized large-scale digital liquid democracy, this right could be abused by malicious users to mass-create spam propositions in order to bury other propositions for example. This threat could be tackled by (1) phased proposition life cycles, (2) adaptive sorting algorithms based on bayesian filtering and (3) moderation. A proposition life cycle may involve that a user cannot create more than \textit{n} proposition per month/year. The value \textit{n} needs to be carefully chosen, either it is static hard-coded for all citizens or it is dynamically chosen by a citizen’s trustworthiness. Proposition life cycles should also involve different phases: such as draft, review, accepted. Regular citizens (see \autoref{sec:UserRoles}: \nameref{sec:UserRoles}) should therefore only see accepted proposals (signal) and not spam proposals (noise). Another threat is user fraud, that can be tackled by a sophisticated authentication process, discussed later.
+
 % \todo[inline]{move implementation-specific details to \ref{sec:Implementation_Voting} and keep this description conceptual}
 In order for the voting mechanism to fulfill the criteria developed in \ref{sec:Criteria}, the voting mechanism has to be secret, verifiable and decentralized. Ideally, it shouldn't be possible for any actor in the system to gather any information about the voting behavior of a voter, while at the same time being verifiable for any actor that votes got counted correctly. 
 
@@ -354,7 +408,7 @@ The whole message is then posted to a public space that abides by the criteria o
 
 \subsubsection{Vote Delegation}
 \label{sec:Model_VoteDelegation}
-\todo{refactor}
+\todo{@KD:refactor}
 Vote delegation is the process of transferring voting rights for a proposition or a context (or a number of them) to a delegate.
 Technically this means that the vote of the delegate is counted several times (once for the delegate as voting right holder and once for each delegation towards him).
 From a social perspective this means a transfer of trust from the delegator to the delegate in an area of trust, whether this may be established from expertise, sympathy or other reasons.
