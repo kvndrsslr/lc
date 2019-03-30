@@ -13,7 +13,9 @@ Finally, we will present a thorough conceptual sketch of a citizen science-enabl
 In this section we want to gather criteria for a \tracknshrink{CS}-enabled \tracknshrink{LD} platform in order to evaluate existing projects on the one hand, and to approach the conceptual design of such a system on the other hand. 
 Since we can not enumerate all the possible \tracknshrink{CS} projects with \tracknshrink{LD} backgrounds, we do not think that it is feasible to design a one-fits-all platform.
 On the other hand, the \tracknshrink{LD} functionalities of specific platforms can be assumed to not change from project to project.
-Therefore, our contribution in this work is split in two parts: (1) a \tracknshrink{LD} platform design that can be universally used in multiple \tracknshrink{CS} projects and (2) a \tracknshrink{CS}-enabling interface which exposes data from the \tracknshrink{LD} platform in a way such that it will be easy to build specific \tracknshrink{CS} projects on top of it.
+Therefore, we arrange our criteria in two groups.
+Criteria in the first group are directed towards a general \tracknshrink{LD} platform design that can be used in projects both with and without a \tracknshrink{CS} context.
+Those in the second group are directed towards a \tracknshrink{CS}-enabling interface a \tracknshrink{LD} platform can implement in order to explicitly support the development of specific \tracknshrink{CS} projects on top of it.
 
 Based on our work in \ref{sec:Liquid_Democracy}, we derive the core functionalities of a \tracknshrink{LD} platform as \textbf{(\tracknshrink{LD}1)} collaborative editing of propositions, \textbf{(\tracknshrink{LD}2)} free, fair and secret voting on propositions and \textbf{(\tracknshrink{LD}3)} vote delegation.
 We observe that participatory systems on the web tend to produce an overwhelming amount of data and that most modern platforms tackle this problem by content filtering algorithms, which we do not consider to be appropriate for a \tracknshrink{LD} platform due to the danger of censorship.
@@ -53,43 +55,44 @@ Despite both platforms, especially the latter one, are both promising tools, the
 
 % nVotes is a simple voting plattform this could also be done with normal survey platforms such as LimeSurvey, so this not taken into account
 
-
-
 \section{Conceptual Design}
 \label{sec:Conceptual_Approach}
-In this chapter we will develop a conceptual overview of both a \tracknshrink{LD} platform and a \tracknshrink{CS}-enabling interface based on the criteria derived in \ref{sec:Criteria}.
-To this end, we will start with the centerpiece of democratic discourse: propositions, their properties and lifecycle.
-Then we describe the various roles users can take in the platform, before we describe voting and vote delegation mechanisms.
-Lastly, we elaborate the utility of notifications for a \tracknshrink{LD} platform and illustrate how the \tracknshrink{CS}-enabling interface exhibited by the platform can be used by citizen science projects.
+In this section we will develop a conceptual overview of both a \tracknshrink{LD} platform and a \tracknshrink{CS}-enabling interface based on the criteria derived in \ref{sec:Criteria}.
+This task will be approached methodically from three conceptual views: data fragments, user roles and processes.
+We start by describing different data fragments that occur within a liquid democracy.
+%Namely, these are propositions, the centerpiece of democratic discourse: propositions, their properties and lifecycle.
+Then we describe the various roles users can take in the platform.
+Having a clear view on both data fragments and user roles, we then discuss the core processes of a \tracknshrink{CS}-enabled \tracknshrink{LD} platform.
+%Lastly, we elaborate the utility of notifications for a \tracknshrink{LD} platform and illustrate how the \tracknshrink{CS}-enabling interface exhibited by the platform can be used by citizen science projects.
 
-\subsection{Propositions}
+\subsection{Data Fragments}
+\label{ssec:data_fragments}
+
+\subsubsection{Propositions}
 \label{sec:Model_Propositions}
 A democracies most important process in order to transform political positions and individual opinions into laws is the iteratively joint crafting of propositions which are, once finalized, subject to voting.
 Propositions therefore should be the first thing to think about when developing the concept of a \tracknshrink{LD} platform.
-Apart from their actual information content, propositions possess a number of additional, implicit properties, their metadata.
-In a digital realm this metadata is very important for the accessibility of the actual information content, for example through active filtering mechanisms as required by \textbf{(\tracknshrink{LD}4)}.
-Amongst others, propositions have the following metadata:
-\begin{itemize}
-\item Creator
-\item Time of creation
-\item Political context(s)
-\item Political administrative unit
-\end{itemize}
+Apart from their actual information content, propositions possess additional metadata and dependency relationships to other information in the platform.
+Metadata is very important for the accessibility of the actual information content, for example through active filtering mechanisms as required by \textbf{(\tracknshrink{LD}4)}.
+Amongst others, proposition metadata include proposition creator, time of creation and the political context as well as the administrative unit a proposition belongs to.
+By political contexts (from here on just contexts), we mean the categorial themes in which political topics are organized.
+The context a proposition is associated with is a crucial piece of metadata in a \tracknshrink{LD} platform, as  clearly defined categories are important to make order of the ongoing topics and are essential to stay on top of things.
+As with most categorial organization systems, broad, general contexts can be divided down to narrower, more specficic ones and thus form a taxonomy, which we will discuss in detail in~\ref{sec:Model_Contexts}.
 
-Moreover, propositions typically evolve over time and therefore the snapshot of a proposition at a given time can be assigned an increasing version number.
-
-
-
+Propositions typically evolve over time which can be conceptualized as a succession of versioned snapshot.
+To this end, a propositions state should be saved together with an increasing version numer at either fixed time intervals or manually by the individuals involved with the editing.
+Moreover, a propositions creation and its evolution should always be accompanied by a healthy discussion of the matter at hand between both individuals directly involved with the proposition editing and other individuals interested in expressing their political opinions.
+These discussions contents and their metadata are only meaningful when put in relation to the corresponding propositions.
+Therefore, they should be accessible as dependent information over the same interfaces which also exhibit the propositions data itself.
 \subsubsection{Context Taxonomy}
 \label{sec:Model_Contexts}
+While we earlier looked at contexts as metadata of propositions, in order to categorize propositions effectively, a context taxonomy must exist prior to proposition creation, which makes such a taxonomy an independent data fragment.
 
-Choosing a proper taxonomy to categorize propositions is crucial for a \tracknshrink{LD} project as it is a sort of foundation for the work to follow.
-Certainly, clearly defined categories are important to make order of the ongoing topics and are essential to stay on top of things.
-%In our cases however this taxonomy is essential as it is an important part of the voting process as well.
-On the one hand the categories can help the user to find votes he is interested in, which partly satisfies criteria \textbf{(\tracknshrink{LD}4)}.
-Even more important, with categories he can also determine for which issues he wants to vote himself and which topics he wants to pass on to a person with more expertise in this field.
-Taking for example a vote about the deforestation of the south of Germany, it could fall into a category such as environment.
-Imagining that the user himself is not that much of specialist when it comes to the environment and wants to delegate his votes for propositions on this subject to a relative who is.
+Choosing a proper context taxonomy to categorize propositions is crucial for a \tracknshrink{LD} project as it is a sort of foundation for the work to follow.
+On the one hand the contexts can help users to find votes they are interested in, which partly satisfies criteria \textbf{(\tracknshrink{LD}4)}.
+Even more important, with contexts one can also determine for which issues one wants to vote oneself and which topics one wants to pass on to a person with more expertise in this field.
+Taking for example a vote about the deforestation of the south of Germany, it could fall into a context such as environment.
+Imagining that the someone is not that much of specialist when it comes to the environment and wants to delegate votes for propositions on this subject to a relative who is.
 %Here the taxonomies not only determine if he gets the topic in his feed but it also could automatically be passed on to his relative.
 %This highlights a second problem: how do we make sure that the votes are categorized properly?
 %More about this later.
@@ -101,15 +104,6 @@ Secondly the categories need to be disjunct, meaning that two categories shouldn
 Additionally, the categories should be able to adapt and evolve as the political landscape as well changes with time.
 A taxonomy that fulfills all requirements perfectly probably does not exist, but we tried to find one already existing system that met our requirements as best as possible.
 
-% * <johanning@informatik.uni-leipzig.de> 2018-02-13T10:28:54.493Z:
-% 
-% > In general, the taxonomy should meet three elemental requirements. 
-% 
-% we need to mention at some point (when we explain subcontexts) that subcontexts can only be associated with one supercontext in order to avoid delegation conflicts (i.e. where a proposition is associated with a context which is not delegated, but its supercontexts are delegated to different delegates. Now the question arises how the vote is counted / which delegation takes precedence (similar to the diamond problem in polymorphic inheritence)
-% 
-% 
-% ^.
-
 A well-known external and source for document categorization is the Wikipedia taxonomy.
 The corpus of the open encyclopedia is often used to build automatic categorization approaches or to improve the performance of existing models.Seeing the pure size of the corpus and the fact that it changes constantly you don’t wonder why this is the case.
 For our project however, the problem occurred that the political category described more the field of political science that general topics politics are coping with. 
@@ -119,7 +113,6 @@ While the Wikipedia articles were almost purely about a scientific view on Polit
 The created tags are therefore more useful for characterizing political topics.
 But as the issues discussed are tagged by the user posting the question, it often occurs that there are two tags describing the same field.
 So, taking the Stack taxonomy would have cost us a lot of time cleaning the data. 
-
 
 Going on searching for a more organized alternative we considered the taxonomy that classify the topics discussed by the Bundestag.
 For every new legislation period the parliament is putting together committees for different topics.
@@ -131,66 +124,34 @@ Hence, we recommend to use this taxonomy as a starting point for newly created \
 We note that in order to meet our third requirement, the platform should possess mechanisms for the collaborative editing of the taxonomy.
 
 
-\subsubsection{Geotags}
-\todo[inline]{Write section about geotags}
+\subsubsection{Delegation Graphs}
+\todo{write}
 
+\subsubsection{User Intents}
+\todo{write}
 
-\subsubsection{Life Cycle of Propositions}
-\label{ssec:Model_Propositions_Life}
+\subsubsection{Notifications}
+\todo{rewrite}
+\label{sec:Notifications}
+Since information overflow is a problem with the scalability of the platform, and many roles mentioned above are characterized by the information they receive, information filtering / selective information is crucial. A good way to handle the information distribution within the platform is through notifications. Notifications are information about the creation of new information relevant to the user, generally due to their role within the political process.
 
-\begin{figure}[H]
-\centering
-\includegraphics[height=0.6\paperheight]{img/lifecycle_flow_v0.pdf}
-\caption{Flow chart of the proposition life cycle}
-\label{fig:proplife}
-\end{figure}
+Notifications can be realized as messages sent to all 'interested' stakeholders within a process. Declaring interest within the system can be modeled through assume a certain role. However, notifications also can depend on user-determined settings within the profile, which can filter out certain notifications. Since this mechanism is described with the users, the following describes the possible notifications a user can receive.
 
+Notifications exist for:\todo{exist sounds like this is discussing the implementation already. better wording to distinguish this as a design?}
+\begin{itemize}
+\item Vote delegation of other users 
+\item For Proposition Followers: when propositions change (text or phase) or relevant discussion entries take place, or when alternative propositions are created
+\item For Proposition Followers: When propositions are voted upon / results on the voting are known
+\item For a Proposition Author: When a proposition change request is created
+\item For a Proposition Author: When a moderator changes the context
+\item For Moderators: When a report (inappropriate context or discussion entry) is filed
+\item For Discussion Participants: When someone responds to the respective entries
+\item For Context Followers: When a proposition in the context of interest is created
+\item For Context Followers: When the context taxonomy changes regarding followed interests
+\item For Delegates: When a delegated vote is withdrawn
+\item For Vote Delegators: When a vote was used in a proposition 
+\end{itemize}
 
-This process, starting with the initiation of a proposition and ending with the final vote cast, will consequently be dubbed the proposition life cycle.
-We split the proposition life cycle into three different phases: (1) initiation, (2) discussion and (3) voting.
-It intuitively makes sense to separate a propositions constitutive phase from its voting phase in order to guarantee that the intention of a casted vote stays consistent.
-We also subdivide the constitution phase into initiation phase and discussion phase in order to cope with high amounts of individual propositions by allowing only the most appealing propositions to be discussed, thereby channeling the communities efforts and creating an efficient political environment.
-
-In the following, we will successively illustrate each phase by describing its pre- and postconditions as well as its artifacts, actors and their interactions.
-
-\paragraph{Initiation phase}
-\label{ssec:Lifecycle_Initiation}
-
-The initiation phase begins when a new proposition is created by an user, which thereby becomes its proposition author (see \ref{ssec:Roles_Petitioner}).
-To create a proposition, the proposition author needs to specify the following mandatory information: a title, a main text, one primary context, any number of secondary contexts and any number of voting options.
-When a new proposition is created, it gets assigned to a new unique proposition group and we call it that proposition groups \emph{root proposition}.
-Other users can then create so called alternative propositions which share the same proposition group, title and primary context as the root proposition.
-Creators of alternative propositions are called alternative proposition authors.
-Proposition authors, as well as alternative proposition authors can always edit their respective propositions text, options and secondary contexts.
-Followers of a proposition groups primary context that are interested in getting it into the discussion phase can attest their support.
-Once a proposition group gains enough support (x\% of the primary context follower population), all propositions in it are moved into the discussion phase.
-
-%As the primary context 
-
-\paragraph{Discussion phase}
-\label{ssec:Lifecycle_Discussion}
-
-When moving into the discussion phase, more interactions between the supporters and the proposition authors are enabled while all interactions from the initiation phase are maintained.
-Users may now issue proposition modification requests to the texts.
-These are preferably small changes to the proposition text that can be seen publicly and may be up- or downvoted upon by other users.
-Moreover, users can express support for the proposition under the condition that a given modificiation request gets accepted or rejected.
-We decided for this admittedly complicated design as the semantics of simple like / dislike systems are very vague.
-To this end we introduced more options in order to give proposition authors the ability to distinguish critical edits, i.e., those with great impact on the success of their proposition, from rather insignificant ones.
-As another means of community involvement in the proposition constitution, users can discuss a proposition.
-In discussion entries, special links can be used to reference other entities of the platform.
-Referencable entities are either other discussion entries, (passages of) propositions or (passages of) modification requests.
-Other than in the intiation phase, support is not aggregated per proposal group.
-Once a single proposition gains enough support (x\% of the primary context follower population), it is moved into the voting phase.
-
-\paragraph{Voting phase}
-\label{ssec:Lifecycle_Voting}
-
-The voting phase is very different from the two previous phases, as entering it means all abilities to edit the proposition are revoked.
-Discussions are still enabled as we do not want to restrict freedom of expression.
-With the beginning of the voting phase legitimated users are able to either delegate their vote or place it on their own.
-The voting phase ends after a set amount of days that can be specified by the platform admins.
-All Vote and delegation intents that are voiced after the voting phase ends are not considered valid.
-A detailed description of the voting mechanism is given in the following section.
 
 
 \subsection{User Roles}
@@ -293,8 +254,70 @@ The admin(s) of the platform are appointed by its operator and have the most pow
 
 Administrators have a unique standing in the roles of the platform, in that they are no users, and are thus left outside of the political process, ensuring their neutrality in the discourse.
 
-\subsection{Voting mechanism}
+
+
+\subsection{Processes}
+
+\subsubsection{Life Cycle of Propositions}
+\label{ssec:Model_Propositions_Life}
+\todo{check}
+\begin{figure}[H]
+\centering
+\includegraphics[height=0.6\paperheight]{img/lifecycle_flow_v0.pdf}
+\caption{Flow chart of the proposition life cycle}
+\label{fig:proplife}
+\end{figure}
+
+
+This process, starting with the initiation of a proposition and ending with the final vote cast, will consequently be dubbed the proposition life cycle.
+We split the proposition life cycle into three different phases: (1) initiation, (2) discussion and (3) voting.
+It intuitively makes sense to separate a propositions constitutive phase from its voting phase in order to guarantee that the intention of a casted vote stays consistent.
+We also subdivide the constitution phase into initiation phase and discussion phase in order to cope with high amounts of individual propositions by allowing only the most appealing propositions to be discussed, thereby channeling the communities efforts and creating an efficient political environment.
+
+In the following, we will successively illustrate each phase by describing its pre- and postconditions as well as its artifacts, actors and their interactions.
+
+\paragraph{Initiation phase}
+\label{ssec:Lifecycle_Initiation}
+
+The initiation phase begins when a new proposition is created by an user, which thereby becomes its proposition author (see \ref{ssec:Roles_Petitioner}).
+To create a proposition, the proposition author needs to specify the following mandatory information: a title, a main text, one primary context, any number of secondary contexts and any number of voting options.
+When a new proposition is created, it gets assigned to a new unique proposition group and we call it that proposition groups \emph{root proposition}.
+Other users can then create so called alternative propositions which share the same proposition group, title and primary context as the root proposition.
+Creators of alternative propositions are called alternative proposition authors.
+Proposition authors, as well as alternative proposition authors can always edit their respective propositions text, options and secondary contexts.
+Followers of a proposition groups primary context that are interested in getting it into the discussion phase can attest their support.
+Once a proposition group gains enough support (x\% of the primary context follower population), all propositions in it are moved into the discussion phase.
+
+%As the primary context 
+
+\paragraph{Discussion phase}
+\label{ssec:Lifecycle_Discussion}
+
+When moving into the discussion phase, more interactions between the supporters and the proposition authors are enabled while all interactions from the initiation phase are maintained.
+Users may now issue proposition modification requests to the texts.
+These are preferably small changes to the proposition text that can be seen publicly and may be up- or downvoted upon by other users.
+Moreover, users can express support for the proposition under the condition that a given modificiation request gets accepted or rejected.
+We decided for this admittedly complicated design as the semantics of simple like / dislike systems are very vague.
+To this end we introduced more options in order to give proposition authors the ability to distinguish critical edits, i.e., those with great impact on the success of their proposition, from rather insignificant ones.
+As another means of community involvement in the proposition constitution, users can discuss a proposition.
+In discussion entries, special links can be used to reference other entities of the platform.
+Referencable entities are either other discussion entries, (passages of) propositions or (passages of) modification requests.
+Other than in the intiation phase, support is not aggregated per proposal group.
+Once a single proposition gains enough support (x\% of the primary context follower population), it is moved into the voting phase.
+
+\paragraph{Voting phase}
+\label{ssec:Lifecycle_Voting}
+The voting phase is very different from the two previous phases, as entering it means all abilities to edit the proposition are revoked.
+Discussions are still enabled as we do not want to restrict freedom of expression.
+With the beginning of the voting phase legitimated users are able to either delegate their vote or place it on their own.
+The voting phase ends after a set amount of days that can be specified by the platform admins.
+All Vote and delegation intents that are voiced after the voting phase ends are not considered valid.
+A detailed description of the voting mechanism is given in the following section.
+
+
+\subsubsection{Voting}
 \label{sec:Voting_Mechanism}
+\todo{refactor}
 % \todo[inline]{move implementation-specific details to \ref{sec:Implementation_Voting} and keep this description conceptual}
 In order for the voting mechanism to fulfill the criteria developed in \ref{sec:Criteria}, the voting mechanism has to be secret, verifiable and decentralized. Ideally, it shouldn't be possible for any actor in the system to gather any information about the voting behavior of a voter, while at the same time being verifiable for any actor that votes got counted correctly. 
 
@@ -329,8 +352,9 @@ The whole message is then posted to a public space that abides by the criteria o
 % \end{itemize}
 
 
-\subsection{Vote Delegation}
+\subsubsection{Vote Delegation}
 \label{sec:Model_VoteDelegation}
+\todo{refactor}
 Vote delegation is the process of transferring voting rights for a proposition or a context (or a number of them) to a delegate.
 Technically this means that the vote of the delegate is counted several times (once for the delegate as voting right holder and once for each delegation towards him).
 From a social perspective this means a transfer of trust from the delegator to the delegate in an area of trust, whether this may be established from expertise, sympathy or other reasons.
@@ -362,62 +386,42 @@ The decentralized model of publicly stating delegate intents which was already i
 
 
 
-\subsection{Notifications}
-\label{sec:Notifications}
-Since information overflow is a problem with the scalability of the platform, and many roles mentioned above are characterized by the information they receive, information filtering / selective information is crucial. A good way to handle the information distribution within the platform is through notifications. Notifications are information about the creation of new information relevant to the user, generally due to their role within the political process.
-
-Notifications can be realized as messages sent to all 'interested' stakeholders within a process. Declaring interest within the system can be modeled through assume a certain role. However, notifications also can depend on user-determined settings within the profile, which can filter out certain notifications. Since this mechanism is described with the users, the following describes the possible notifications a user can receive.
-
-Notifications exist for:\todo{exist sounds like this is discussing the implementation already. better wording to distinguish this as a design?}
-\begin{itemize}
-\item Vote delegation of other users 
-\item For Proposition Followers: when propositions change (text or phase) or relevant discussion entries take place, or when alternative propositions are created
-\item For Proposition Followers: When propositions are voted upon / results on the voting are known
-\item For a Proposition Author: When a proposition change request is created
-\item For a Proposition Author: When a moderator changes the context
-\item For Moderators: When a report (inappropriate context or discussion entry) is filed
-\item For Discussion Participants: When someone responds to the respective entries
-\item For Context Followers: When a proposition in the context of interest is created
-\item For Context Followers: When the context taxonomy changes regarding followed interests
-\item For Delegates: When a delegated vote is withdrawn
-\item For Vote Delegators: When a vote was used in a proposition 
-\end{itemize}
-
-\subsection{Researchers Access}
-\label{sec:Model_ResearchersAccess}
-% * <johanning@informatik.uni-leipzig.de> 2018-02-12T12:15:14.572Z:
-% 
-% > \subsection{Researchers Access}
-% > \label{sec:Model_ResearchersAccess}
-% 
-% How concrete should we sketch this? Right now its just a 'we need to be aware of this', but I feel it needs to be more concrete...
-% 
-% ^.
-Since this project takes a Citizen Science approach to Liquid Democracy, researchers access to the data generated by the platform is crucial. Discussing this issue depends heavily on how the problem of accessibility and anonymity raised in \ref{ssec:Integration_AccessibilityAnonymity} is handled, since this determines how researchers / citizen scientists can access the data of interest and defines their range of action with the data of the platform. 
-
-\ref{ssec:Integration_AccessibilityAnonymity} mentions four strategies to deal with user data. While most of the approaches described provide a lot of fine-grained data to the researcher over a large number of users, and allow them a large range of research questions to ask, the aggregative approach (and to some degree the selective aggregative and the deflecting responsibility approach) restrict the data available for researchers. 
-
-More important than the availability of the data might be the accessibility of the data. For this it is decisive that APIs for accessing information relevant to researchers are included in the design of the platform. Since in CS, technical proficiency (or its development) can't be expected, one of the requirements of the design of the APIs is that 'relevant' information is readily available for non-professionals, be it through accessible (and thoroughly documented) APIs or frontends that present relevant information.
-
-While this can't be implemented to its fullest within the scope of this project, this aspect needs considerable consideration in the development of the platform (i.e. in ch. \ref{ch:ProjectRequirements}).
-
-%Steven
-\subsection{Visualization of the Processes}
-\label{sec:Model_Visualization}
-
-%Clara, Simon
-\subsection{Citizen Science Lab Processes}
-\label{sec:CSLab_Processes}
-% Prozess vom Lab schildern, also Fragestellung, Datensammeln, Analysieren und Publizieren: Hier einleiten
-
-%darstellen wie wiss. und nicht-wiss. zusammenarbeiten; inwiefern citizens mÓglichkeit haben in prozess einbezogen zu werden und zu agieren
-
-The workflow of the citizen science lab is sketched in the following.
-
-\subsubsection{Involvement in Formulating Research Questions}
-
-\subsubsection{Citizen Data Collection Process}
-
-\subsubsection{Data Analysis Tools}
-
-\subsubsection{Citizen Science Publication Process}
+%
+%\subsection{Researchers Access}
+%\label{sec:Model_ResearchersAccess}
+%% * <johanning@informatik.uni-leipzig.de> 2018-02-12T12:15:14.572Z:
+%% 
+%% > \subsection{Researchers Access}
+%% > \label{sec:Model_ResearchersAccess}
+%% 
+%% How concrete should we sketch this? Right now its just a 'we need to be aware of this', but I feel it needs to be more concrete...
+%% 
+%% ^.
+%Since this project takes a Citizen Science approach to Liquid Democracy, researchers access to the data generated by the platform is crucial. Discussing this issue depends heavily on how the problem of accessibility and anonymity raised in \ref{ssec:Integration_AccessibilityAnonymity} is handled, since this determines how researchers / citizen scientists can access the data of interest and defines their range of action with the data of the platform. 
+%
+%\ref{ssec:Integration_AccessibilityAnonymity} mentions four strategies to deal with user data. While most of the approaches described provide a lot of fine-grained data to the researcher over a large number of users, and allow them a large range of research questions to ask, the aggregative approach (and to some degree the selective aggregative and the deflecting responsibility approach) restrict the data available for researchers. 
+%
+%More important than the availability of the data might be the accessibility of the data. For this it is decisive that APIs for accessing information relevant to researchers are included in the design of the platform. Since in CS, technical proficiency (or its development) can't be expected, one of the requirements of the design of the APIs is that 'relevant' information is readily available for non-professionals, be it through accessible (and thoroughly documented) APIs or frontends that present relevant information.
+%
+%While this can't be implemented to its fullest within the scope of this project, this aspect needs considerable consideration in the development of the platform (i.e. in ch. \ref{ch:ProjectRequirements}).
+%
+%%Steven
+%\subsection{Visualization of the Processes}
+%\label{sec:Model_Visualization}
+%
+%%Clara, Simon
+%\subsection{Citizen Science Lab Processes}
+%\label{sec:CSLab_Processes}
+%% Prozess vom Lab schildern, also Fragestellung, Datensammeln, Analysieren und Publizieren: Hier einleiten
+%
+%%darstellen wie wiss. und nicht-wiss. zusammenarbeiten; inwiefern citizens mÓglichkeit haben in prozess einbezogen zu werden und zu agieren
+%
+%The workflow of the citizen science lab is sketched in the following.
+%
+%\subsubsection{Involvement in Formulating Research Questions}
+%
+%\subsubsection{Citizen Data Collection Process}
+%
+%\subsubsection{Data Analysis Tools}
+%
+%\subsubsection{Citizen Science Publication Process}
