@@ -17,7 +17,7 @@ Therefore, we arrange our criteria in two groups.
 Criteria in the first group are directed towards a general \tracknshrink{LD} platform design that can be used in projects both with and without a \tracknshrink{CS} context.
 Those in the second group are directed towards a \tracknshrink{CS}-enabling interface a \tracknshrink{LD} platform can implement in order to explicitly support the development of specific \tracknshrink{CS} projects on top of it.
 
-Based on our work in \ref{sec:Liquid_Democracy}, we derive the core functionalities of a \tracknshrink{LD} platform as \textbf{(\tracknshrink{LD}1)} collaborative editing of propositions, \textbf{(\tracknshrink{LD}2)}  secret and verifiable voting on propositions and \textbf{(\tracknshrink{LD}3)} vote delegation.
+Based on our work in \ref{sec:Liquid_Democracy}, we derive the core functionalities of a \tracknshrink{LD} platform as \textbf{(\tracknshrink{LD}1)} collaborative editing of propositions, \textbf{(\tracknshrink{LD}2)}  secret and verifiable voting on propositions and \textbf{(\tracknshrink{LD}3)} secret and verifiable vote delegation.
 We observe that participatory systems on the web tend to produce an overwhelming amount of data and that most modern platforms tackle this problem by content filtering algorithms, which we do not consider to be appropriate for a \tracknshrink{LD} platform due to the danger of censorship.
 Rather, we would like to involve the user to actively filter propositions based and therefore derive the fourth criteria for a \tracknshrink{LD} platform as \textbf{(\tracknshrink{LD}4)} active information filtering capabilities.
 Furthermore, as each individual in a \tracknshrink{LD} has the right to create propositions, we acknowledge that adversary users could abuse this right to generate a lot of noise (so called spam) in the fashion of a DDoS attack\footnote{\url{https://en.wikipedia.org/wiki/Denial-of-service_attack\#Distributed_DoS}}. Therefore we derive \textbf{(\tracknshrink{LD}5)} implementation of spam prevention mechanisms.
@@ -64,15 +64,16 @@ Having a clear view on both data fragments and user roles, we then discuss the c
 
 \subsection{Data Fragments}
 \label{ssec:data_fragments}
-In this section, we will present the essential data fragments in a \tracknshrink{LD} platform.
+%In this section, we will present the essential data fragments in a \tracknshrink{LD} platform.
 
 \subsubsection{Propositions}
 \label{sec:Model_Propositions}
 A democracies most important process in order to transform political positions and individual opinions into laws is the iteratively joint crafting of propositions which are, once finalized, subject to voting.
 Propositions therefore should be the first thing to think about when developing the concept of a \tracknshrink{LD} platform.
-Apart from their actual information content, propositions possess additional metadata and dependency relationships to other information in the platform.
+Apart from a title, the proposition text and a list of voting options, propositions possess additional metadata and dependency relationships to other data fragments in the platform.
 Metadata is very important for the accessibility of the actual information content, for example through active filtering mechanisms as required by \textbf{(\tracknshrink{LD}4)}.
 Amongst others, proposition metadata include proposition creator, time of creation and the political context as well as the administrative unit a proposition belongs to.
+
 By political contexts (from here on just contexts), we mean the categorial themes in which political topics are organized.
 The context a proposition is associated with is a crucial piece of metadata in a \tracknshrink{LD} platform, as  clearly defined categories are important to make order of the ongoing topics and are essential to stay on top of things.
 As with most categorial organization systems, broad, general contexts can be divided down to narrower, more specficic ones and thus form a taxonomy, which we will discuss in detail in~\ref{sec:Model_Contexts}.
@@ -92,7 +93,7 @@ Examples of data fragments that should be referencable by hyperlinks in discussi
 \subsubsection{Proposition Change Requests}
 \label{ssec:Proposition_Change_Requests}
 As we discussed briefly in the previous section about propositions, a proposition will evolve over its life time which means that it will be edited.
-Since it is desirable that edits to propositions are funded on a discursive process involving multiple individuals, we argue that only the original creator of the proposition, i.e. its owner, should be able to directly edit it.
+Since it is desirable that edits to propositions are funded on a discursive process involving multiple individuals as required by \textbf{(\tracknshrink{LD}1)} we argue that only the original creator of the proposition, i.e. its owner, should be able to directly edit it.
 In order to allow other individuals to support the editing process, we introduce proposition change requests, which are data fragments that carry the edited propositon text together with a linked discussion entry and a reference to the underlying proposition. 
 These proposition change requests can then be accepted or rejected by the owner of the proposition.
 In addition to up- or downvoting the linked discussion entry, users can explicitly express their conditional support of the proposition in case the proposition change request gets accepted or rejected.
@@ -128,7 +129,8 @@ Additionally, the categories should be able to adapt and evolve as the political
 A taxonomy that fulfills all requirements perfectly probably does not exist, but we tried to find one already existing system that met our requirements as best as possible.
 
 A well-known external and source for document categorization is the Wikipedia taxonomy.
-The corpus of the open encyclopedia is often used to build automatic categorization approaches or to improve the performance of existing models.Seeing the pure size of the corpus and the fact that it changes constantly you don’t wonder why this is the case.
+The corpus of the open encyclopedia is often used to build automatic categorization approaches or to improve the performance of existing models.
+Seeing the pure size of the corpus and the fact that it changes constantly you don’t wonder why this is the case.
 For our project however, the problem occurred that the political category described more the field of political science that general topics politics are coping with. 
 
 Almost the complete opposite was true for the for the taxonomy of Stack Overflow Politics.
@@ -144,8 +146,7 @@ On the official Website of the Bundestag we found a tabula sorting all protocols
 The altogether 43 topics describe a bride range of political topics.
 From family to energy the categories are clearly structured, exhaustive and disjunct, therefore covering two of our tree requirements.
 Hence, we recommend to use this taxonomy as a starting point for newly created \tracknshrink{LD} platform instances.
-We note that in order to meet our third requirement, the platform should possess mechanisms for the collaborative editing of the taxonomy.
-
+We note that in order to meet our third requirement, the platform should possess mechanisms for the collaborative editing of the taxonomy which will be described in section~\ref{ssec:Context_Taxonomy_Evolution}.
 
 \subsubsection{Delegation Graphs}
 As we have seen in \ref{sec:Liquid_Democracy}, delegation graphs are directed graphs where vertices represent participants in a liquid democracy and edges represent the flow of votes from a \textit{principal} to a \textit{proxy}.
@@ -170,8 +171,17 @@ For privacy reasons, delegation graphs with global or context scope are not mate
 \label{ssec:User_Intents}
 The next type of data fragment are so called user intents, which are categorized into vote intents and delegation intents.
 Delegation intents can be used to compose delegation graphs while vote intents are the digital counterpart of ballots.
-In order to meet the requirements of \textbf{(\tracknshrink{LD}2)} user intents should be anonymized to satisfy the secrecy property as well as public and authorized to satisfy the verifiability property.
+In order to meet the requirements of \textbf{(\tracknshrink{LD}2)} and \textbf{(\tracknshrink{LD}3)} user intents should be anonymized to satisfy the secrecy property as well as public and authorized to satisfy the verifiability property.
 To this end. user intents should not only carry information about the specific intent but also authorization information.
+
+\subsubsection{User Accounts}
+\label{ssec:User_Accounts}
+User accounts are an important instrument to build trust amongst users of a \tracknshrink{LD} platform.
+They can potentially offer a variety of personal as well as professional and political information about a certain user.
+\todo{@KD: haveTime ? elaborate : leaveAsIs }
+However, in order to follow the protection of privacy \textbf{(\tracknshrink{LD}6)}, users should be able to chose themselves which information they want to be displayed to the public.
+Moreover, as we have seen in the previous section on user intents, user accounts are decoupled from sensitive political information, i.e. the user intents by means of anonymization.
+
 \subsubsection{Notifications}
 \label{sec:Notifications}
 As we already discussed in \ref{sec:Criteria}, information overflow is a problem that needs to be dealt with to ensure the scalability of the platform.
@@ -200,12 +210,15 @@ As such, notifications can be realized as messages sent to all 'interested' stak
 
 \subsubsection{Moderation Requests}
 \label{ssec:Moderation_Requests}
-\todo{@KD: write}
+Moderation requests are instrumental in enforcing platform rules, as they can help to prevent spam \textbf{(\tracknshrink{LD}5)} as well as other malicious and non-tolerable actions on the platform such as hate speech and advertisement.
+Users can issue moderation requests for data fragments that are prone to abuse such as propositions, proposition change requests and discussion entries.
+A moderation request carries a reference to another data fragment together with a message that details the specific kind of platform rules violation.
+A group of trusted, privileged users can then take action on these requests.
 
 \subsection{User Roles}
 \label{sec:UserRoles}
-\todo{how many, what they can do and why}
-This section will describe the roles that user on the platform can take on.
+%\todo{how many, what they can do and why}
+This section will describe the roles that users on the platform can take on.
 It is important to note that this is done from a perspective of what roles different stakeholders take in the relevant processes, and that it takes on the perspective of the business processes.
 
 This is not meant to imply that only some users can take on these roles or that these roles are technically different, and is not meant to restrict access to processes.
@@ -215,96 +228,95 @@ While we do think that discursive structures need to be established within discu
 In the following we will describe the roles the political subject can take within the structures of discourse in the platform and we will justify why we think that access to these discursive activities should be limited to users taking on this role in the given context.
 
 \subsubsection{Proposition follower}
-A proposition follower is a user that has expressed an interest in a given proposition. Proposition followers will receive updates on the state of a proposition, in particular on the progress of the phases of the proposition, alternative propositions based on it, changes in wording and contributions to the discussion about the proposition.
+A proposition follower is a user that has expressed an interest in a given proposition. Proposition followers will receive updates on the state of a proposition, alternative propositions based on it, changes in wording and contributions to the discussion about the proposition.
 
-This does not grant them any rights any other user doesn't have, and it thus simply a conceptual role (and one that needs to be regarded in the notification system).
+This does not grant them any rights any other user does not have, and it is thus simply a conceptual role that needs to be regarded in the notification system.
 
 \subsubsection{Proposition author}
-\label{ssec:Roles_Petitioner}
-The petitioner is the role a user can take on when initiating the political process by starting a \hyperref[sec:Model_Propositions]{proposition}. Since the process of propositions is already described in \ref{sec:Model_Propositions}, the following focuses on the role.
+\label{ssec:Roles_propositioner}
+The propositioner is the role a user can take on when initiating the political process by starting a \hyperref[sec:Model_Propositions]{proposition}.
+%Since the process of propositions is already described in \ref{sec:Model_Propositions}, the following focuses on the role.
+A propositioner has the right to change the text of a proposition, either by editing directly, or by moderating the proposition change requests.
+Access to these activities is limited to the propositioner in order to guarantee consistency of the proposition, and to incentivize discussion about aspects relevant to users not in the role of the propositioner.
+Not allowing other users to edit the proposition also prevents malicious or strategic editing as well as discussions about text changes through change requests.
+By having to seek approval for modification, a discourse about the aspects important to the proposition modification requester is strengthened.
+Moreover does the proposition editing restriction encourage alternative propositions, strengthening the discourse through (hopefully) constructive alternatives.
 
-A petitioner has the right to change the text of a proposition, either by editing directly, or by moderating the change requests. Access to these activities is limited to the petitioner in order to guarantee consistency of the petition, and to incentivize discussion about aspects relevant to users not in the role of the petitioner. Not allowing other users to edit the petition also prevents malicious or strategic editing as well as discussions about text changes through change requests. By having to seek approval for modification, a discourse about the aspects important to the petition modification requester is strengthened.
-Moreover does the petition editing restriction encourage alternative petitions, strengthening the discourse through (hopefully) constructive alternatives.
+As we have seen in \ref{ssec:AltProposition}, users can also create alternative propositions to existing ones, thus becoming alternative proposition authors.
+These propositions are assigned to the same proposition group.
+For this proposition the alternative proposition author counts as \hyperref[ssec:Roles_propositioner]{proposition author}, and has the same rights as them for the same reasons.
+Since an alternative proposition works basically the same way as the original proposition, the differentiation between a proposition author and an alternative proposition author is merely semantical. 
 
-Users can also create alternative petitions to existing ones, thus becoming alternative petition authors (for the mechanics of alternative petitions see \ref{sec:Model_Propositions}). These petitions are assigned to the same petition group. For this petition the alternative petition author counts as \hyperref[ssec:Roles_Petitioner]{petition author}, and has the same rights as them for the same reasons. Since an alternative petition works basically the same way as the original petition, the differentiation between a petition author and an alternative petition author is merely semantical. 
-
-By creating a petition (or an alternative petition), a user becomes a petition follower of this petition as well.
-
-\subsubsection{Proposition modification requester}
-The proposition modification requester is a \hyperref[ssec:Roles_DiscussionParticipant]{discussion participant} that raises a constructive petition text edit request. 
-As noted in \ref{sec:Model_Propositions}, a proposition text edit request proposes the addition, deletion or textual editing of a passage of petition text, with (potential) new wording. \todo{can they withdraw / edit their modification? Or just 'withdraw their support' for the editing petition?}
+By creating a proposition (or an alternative proposition), a user becomes a proposition follower of this proposition as well.
 
 \subsubsection{Discussion participant}
 \label{ssec:Roles_DiscussionParticipant}
-As the name suggests, a discussion participant is a user that engages in a discussion about a proposition / a proposition group. A user becomes a discussion participant as soon as she contributes to the discussion by writing a discussion post or responding to one. \todo[inline]{decide whether this means that the user receives notifications about the discussion. Also decide whether she becomes a proposition follower through this}.
+As the name suggests, a discussion participant is a user that engages in a discussion about some data fragment by creating a discussion entry.
+Users become discussion participants as soon as they contributes to the discussion by writing a discussion post or responding to one.
+\todo{@all: decide whether this means that the user receives notifications about the discussion. Also decide whether she becomes a proposition follower through this}.
+
+\subsubsection{Proposition modification requester}
+The proposition modification requester is a \hyperref[ssec:Roles_DiscussionParticipant]{discussion participant} that raises a constructive proposition text edit request. 
+As noted in \ref{ssec:Proposition_Change_Requests}, a proposition text edit request proposes the addition, deletion or textual editing of a passage of proposition text, with (potential) new wording.
 
 \subsubsection{Moderator}
 \label{ssec:Roles_Moderator}
-A moderator is a user with a particular interest and reputation in a context (or a number of contexts). Moderator status can be issued to users that engaged in the platform over a prolonged stretch of time within a given context or a number of its subcontextes, if the user so wishes. The moderator role gives a user moderating power of the discussions falling within the context they moderate, such as deciding whether a users' behavior is inappropriate, posts should be deleted (or at least flagged as questionable) or (in conjunction with moderators of other contexts) whether a user should be (temporally or permanently) banned from the platform. 
+A moderator is a user with a particular interest and reputation in a context (or a number of contexts).
+Moderator status can be issued to users that engaged in the platform over a prolonged stretch of time within a given context or a number of its subcontextes, if the user so wishes.
+The moderator role gives a user moderating power of the moderation requests falling within the context they moderate, such as deciding whether a users' behavior is inappropriate, posts should be deleted (or at least flagged as questionable) or (in conjunction with moderators of other contexts) whether a user should be (temporally or permanently) banned from the platform.
 
-Whether these actions can be performed by a moderator alone, or require the decision of a 'moderator council" depends on the policy of the operator / configuration of the platform. This also hold for deciding how inappropriate behavior of moderators is dealt with.
+Whether these actions can be performed by a moderator alone, or require the decision of a ,,moderator counci'' depends on the policy of the are very specific questions that we do not aim to answer in this conceptual platform design.
+This also hold for deciding how inappropriate behavior of moderators is dealt with.
 
-Moderators / a council of moderators further decides about changes to the taxonomy regarding the context of their responsibility. How changes in the taxonomy are managed is described \hyperref[sec:Model_Contexts]{here}.
+Moderators / a council of moderators further decides about changes to the taxonomy regarding the context of their responsibility.
+How changes in the taxonomy are managed is described in section~\ref{sec:Model_Contexts}.
 
 \subsubsection{Supporter}
 \label{ssec:Roles_Supporter}
-Petition group, petition in discussion phase and conditional support for change requests
+A supporter is a user that expresses agreement with a 'discursive entity' in order to provide some assessment about the popularity of contributions to a discussion.
+These can come from a large range of sources, such as propositions, proposition change requests or discussion entries. 
 
-A supporter is a user expresses her agreement with a 'discursive entity' in order to provide some assessment about the popularity of contributions to a discussion. These can come from a large range of sources, such as petition groups, petitions in the discussion phase, change requests or discussion posts. 
+%Of these proposition groups, (alternative) propositions in the discussion phase and change requests are crucial for the author of them assess how the political process with these could go.
 
-Of these petition groups, (alternative) petitions in the discussion phase and change requests are crucial for the author of them assess how the political process with these could go.
+%In addition to helping the author to assess the political mood, support has some functional aspects as well:
+%\begin{itemize}
+%\item For a proposition group support decides whether a proposition group enters a discussion phase (see \hyperref[ssec:Lifecycle_Initiation]{proposition initiation phase})
+%\item For a proposition in discussion phase support for the original or an alternative proposition (in most cases) decides whether an alternative proposition will enter the voting phase (see \hyperref[ssec:Lifecycle_Discussion]{proposition discussion phase})
+%\item For a change request support has no direct functional consequences; An incorporated change request however might however, depending on the configuration, translate directly into support for the changed proposition if the change request supporter (or the respective delegated votes) doesn't yet support the proposition in the discussion phase (\todo[inline]{discuss this}). The support for a change request also sends a strong signal for the proposition initiator for political support of this proposition
+%\item While this is not necessarily the case (and might depend on the configuration of the system), support for a discussion entry might add to its relevance, potentially placing it on a more visible spot within he discussion threat. Depending on the operators frontend, the support for a discussion entry assists the ranking of the discussion entry (\todo[inline]{discuss}).
+%\end{itemize}
 
-In addition to helping the author to assess the political mood, support has some functional aspects as well:
-\begin{itemize}
-\item For a petition group support decides whether a petition group enters a discussion phase (see \hyperref[ssec:Lifecycle_Initiation]{proposition initiation phase})
-\item For a petition in discussion phase support for the original or an alternative proposition (in most cases) decides whether an alternative proposition will enter the voting phase (see \hyperref[ssec:Lifecycle_Discussion]{proposition discussion phase})
-\item For a change request support has no direct functional consequences; An incorporated change request however might however, depending on the configuration, translate directly into support for the changed proposition if the change request supporter (or the respective delegated votes) doesn't yet support the proposition in the discussion phase (\todo[inline]{discuss this}). The support for a change request also sends a strong signal for the proposition initiator for political support of this proposition
-\item While this is not necessarily the case (and might depend on the configuration of the system), support for a discussion entry might add to its relevance, potentially placing it on a more visible spot within he discussion threat. Depending on the operators frontend, the support for a discussion entry assists the ranking of the discussion entry (\todo[inline]{discuss}).
-\end{itemize}
-
+\todo{@KD: reconsider where to put commented stuff (if time)}
 
 \subsubsection{Voting Right Holder}
 \label{ssec:Roles_VotingRightHolder}
-A voting right holder is any user that is allowed to vote on a proposition. Since utilizing ones own vote overwrites vote delegation, technically every user is a voting right holder for any proposition; Often time however, a user will not exercise their own voting right after delegating their vote. In this case the term 'voting right holder' refers to the user the vote is delegated to. 
+A voting right holder is any user that is allowed to vote on a proposition.
+Since utilizing ones own vote overwrites vote delegation, technically every user is a voting right holder for any proposition; Often time however, a user will not exercise their own voting right after delegating their vote.
+In this case the term 'voting right holder' refers to the user the vote is delegated to. 
 
-Unsurprisingly voting right holder are users that can participate in the voting process of a proposition.
-
-
-\subsubsection{Interessenten (anderer Begriff)}
-% * <johanning@informatik.uni-leipzig.de> 2018-02-11T23:35:47.354Z:
-% 
-% > \subsubsection{Interessenten (anderer Begriff)}
-% > \label{ssec:Roles_Interessenten}
-% 
-% Was war hier nochmal der Unterschied zu followern? Versteh ich nicht mehr...
-% 
-% ^.
-\label{ssec:Roles_Interessenten}
+Unsurprisingly, voting right holder are users that can participate in the voting process of a proposition.
 
 \subsubsection{Delegator}
 \label{ssec:Roles_Delegator}
-A delegator is a voting right holder that delegated his voting right for a single proposition or a number of propositions falling within the same context. Although a delegator can use her voting right on any propositions (and basically (temporarily) revoke the delegation) and become a voting right holder again, in the usual case it assumed that the voting right was delegated to not exercise the voting right. If the voting right was delegated for a context, it counts as delegated for all subcontexts and all propositions falling within these bounds.  
+A delegator is a voting right holder that delegated his voting right for a single proposition or a number of propositions falling within the same context.
+Although a delegator can use her voting right on any propositions (and basically (temporarily) revoke the delegation) and become a voting right holder again, in the usual case it assumed that the voting right was delegated to not exercise the voting right.
+If the voting right was delegated for in context scope, it counts as delegated for all subcontexts and all propositions falling within these bounds. 
 
 \subsubsection{Delegate}
 \label{ssec:Roles_Delegate}
-A delegate is a user (or institution) that another user delegated their voting right to. They thus carry votes with them and can basically decide how the delegator voted for propositions falling within the scope of the vote delegation. Delegates can further delegate votes delegated to them, transferring their votes and the votes delegated to them to the delegate of their choice. Through this they become a delegator with all that this entails. Observe that this can be done for subcontexts or propositions of votes delegated to them, making them both delegator and delegate for different contexts or propositions.
-
-\subsubsection{Alternativantragstellender}
-% * <johanning@informatik.uni-leipzig.de> 2018-02-12T11:39:55.838Z:
-%
-% > \subsubsection{Alternativantragstellender}
-% > \label{ssec:Roles_Alternativantragstellender}
-%
-% ^Gesondert notwendig? Bereits mit proposition author hinreichend abgedeckt?
-\label{ssec:Roles_Alternativantragstellender}
+A delegate is a user that another user delegated their voting right to.
+They thus carry votes with them and can basically decide how the delegator voted for propositions falling within the scope of the vote delegation.
+Delegates can further delegate votes delegated to them, transferring their votes and the votes delegated to them to the delegate of their choice. 
+hrough this they become a delegator with all that this entails.
+Observe that this can be done differently for context as well as proposition scope, making them both delegator and delegate for different delegation scopes.
 
 \subsubsection{Admin}
 \label{ssec:Roles_Admin}
-The admin(s) of the platform are appointed by its operator and have the most powerful position within the process. In addition to provide the technical infrastructure of the platform and to be able to change its configuration / the parametrization of the voting process, they also act as a point of appeal for users that deem the decisions of the moderators as inappropriate, and admins can overwrite the decisions of the moderators. In drastic cases, admins are also authorized to revoke the status of moderators if repeated inappropriate behavior has been reported. 
+The admin(s) of the platform should be appointed by the platforms operator and have the most powerful position within it.
+In addition to providing the technical infrastructure of the platform and to be able to change its configuration, they also act as a point of appeal for users that deem the decisions of the moderators as inappropriate, and admins can overwrite the decisions of the moderators.
+In drastic cases, admins are also authorized to revoke the status of moderators if repeated inappropriate behavior has been reported. 
 
-Administrators have a unique standing in the roles of the platform, in that they are no users, and are thus left outside of the political process, ensuring their neutrality in the discourse.
-
-
+Administrators have a unique standing in the roles of the platform, in that they are not users, and are thus left outside of the political process, ensuring their neutrality in the discourse.
 
 \subsection{Processes}
 
@@ -329,14 +341,14 @@ In the following, we will successively illustrate each phase by describing its p
 \paragraph{Initiation phase}
 \label{ssec:Lifecycle_Initiation}
 
-The initiation phase begins when a new proposition is created by an user, which thereby becomes its proposition author (see \ref{ssec:Roles_Petitioner}).
+The initiation phase begins when a new proposition is created by an user, which thereby becomes its proposition author (see \ref{ssec:Roles_propositioner}).
 To create a proposition, the proposition author needs to specify the following mandatory information: a title, a main text, one primary context, any number of secondary contexts and any number of voting options.
 When a new proposition is created, it gets assigned to a new unique proposition group and we call it that proposition groups \emph{root proposition}.
-Other users can then create so called alternative propositions which share the same proposition group, title and primary context as the root proposition.
+Other users can then create alternative propositions which share the same proposition group, title and primary context as the root proposition.
 Creators of alternative propositions are called alternative proposition authors.
 Proposition authors, as well as alternative proposition authors can always edit their respective propositions text, options and secondary contexts.
 Followers of a proposition groups primary context that are interested in getting it into the discussion phase can attest their support.
-Once a proposition group gains enough support (x\% of the primary context follower population), all propositions in it are moved into the discussion phase.
+Once a proposition group gains enough support ($X\%$ of the primary context follower population), all propositions in it are moved into the discussion phase.
 
 %As the primary context 
 
@@ -345,23 +357,20 @@ Once a proposition group gains enough support (x\% of the primary context follow
 
 When moving into the discussion phase, more interactions between the supporters and the proposition authors are enabled while all interactions from the initiation phase are maintained.
 Users may now issue proposition modification requests to the texts.
-These are preferably small changes to the proposition text that can be seen publicly and may be up- or downvoted upon by other users.
-Moreover, users can express support for the proposition under the condition that a given modificiation request gets accepted or rejected.
-We decided for this admittedly complicated design as the semantics of simple like / dislike systems are very vague.
-To this end we introduced more options in order to give proposition authors the ability to distinguish critical edits, i.e., those with great impact on the success of their proposition, from rather insignificant ones.
+Moreover, as previously described in~\ref{ssec:Proposition_Change_Requests}, users can express support for the proposition under the condition that a given modificiation request gets accepted or rejected.
 As another means of community involvement in the proposition constitution, users can discuss a proposition.
-In discussion entries, special links can be used to reference other entities of the platform.
-Referencable entities are either other discussion entries, (passages of) propositions or (passages of) modification requests.
+In discussion entries, special links can be used to reference other data fragments on the platform.
+Referencable data fragments are either other discussion entries, (passages of) propositions or (passages of) modification requests.
 Other than in the intiation phase, support is not aggregated per proposal group.
-Once a single proposition gains enough support (x\% of the primary context follower population), it is moved into the voting phase.
+Once a single proposition gains enough support ($X\%$ of the primary context follower population), it is moved into the voting phase.
 
 \paragraph{Voting phase}
 \label{ssec:Lifecycle_Voting}
 The voting phase is very different from the two previous phases, as entering it means all abilities to edit the proposition are revoked.
 Discussions are still enabled as we do not want to restrict freedom of expression.
 With the beginning of the voting phase legitimated users are able to either delegate their vote or place it on their own.
-The voting phase ends after a set amount of days that can be specified by the platform admins.
-All Vote and delegation intents that are voiced after the voting phase ends are not considered valid.
+The voting phase ends after a set amount of days that should be specified by the platform admins.
+All user intents that are voiced after the voting phase ends are not considered valid.
 A detailed description of the voting mechanism is given in the following section.
 
 
@@ -370,10 +379,16 @@ A detailed description of the voting mechanism is given in the following section
 \todo{@KD:refactor}
 
 %Traditionally, in a parliamentarian democracy, the right to initiate and vote on propositions is exclusive for members of the parliament.
-%However, in a liquid democracy every citizen has the right to vote on propositions and to participate in their constitutive phase. Consequently, every participant should also have the unrestrained right to create propositions. In an anonymized large-scale digital liquid democracy, this right could be abused by malicious users to mass-create spam propositions in order to bury other propositions for example. This threat could be tackled by (1) phased proposition life cycles, (2) adaptive sorting algorithms based on bayesian filtering and (3) moderation. A proposition life cycle may involve that a user cannot create more than \textit{n} proposition per month/year. The value \textit{n} needs to be carefully chosen, either it is static hard-coded for all citizens or it is dynamically chosen by a citizen’s trustworthiness. Proposition life cycles should also involve different phases: such as draft, review, accepted. Regular citizens (see \autoref{sec:UserRoles}: \nameref{sec:UserRoles}) should therefore only see accepted proposals (signal) and not spam proposals (noise). Another threat is user fraud, that can be tackled by a sophisticated authentication process, discussed later.
+%However, in a liquid democracy every citizen has the right to vote on propositions and to participate in their constitutive phase. Consequently, every participant should also have the unrestrained right to create propositions.
+%In an anonymized large-scale digital liquid democracy, this right could be abused by malicious users to mass-create spam propositions in order to bury other propositions for example.
+%This threat could be tackled by (1) phased proposition life cycles, (2) adaptive sorting algorithms based on bayesian filtering and (3) moderation.
+%Moreover, a strategy may involve that a user cannot create more than \textit{n} proposition per month/year.
+%The value \textit{n} needs to be carefully chosen, either it is static hard-coded for all citizens or it is dynamically chosen by a citizen’s trustworthiness.
 
 % \todo[inline]{move implementation-specific details to \ref{sec:Implementation_Voting} and keep this description conceptual}
-In order for the voting mechanism to fulfill the criteria developed in \ref{sec:Criteria}, the voting mechanism has to be secret, verifiable and decentralized. Ideally, it shouldn't be possible for any actor in the system to gather any information about the voting behavior of a voter, while at the same time being verifiable for any actor that votes got counted correctly. 
+
+In order for the voting mechanism to fulfill the criteria developed in \ref{sec:Criteria}, the voting mechanism has to be secret, verifiable and decentralized.
+Ideally, it shouldn't be possible for any actor in the system to gather any information about the voting behavior of a voter, while at the same time being verifiable for any actor that votes got counted correctly. 
 
 In line with the principles of security-by-design, in the following we will describe a design for vote casting and counting mechanism that allows manipulation-resistant secret vote casting, which largely preserves privacy.
 While not being ideal, due to our lack of expertise in zero-knowledge-proof designed systems, the mechanisms described in the following fulfills these criteria well enough for a prototype.
@@ -400,7 +415,7 @@ Then, he adds his public key from the first step and the unblinded signature fro
 The whole message is then posted to a public space that abides by the criteria outlined earlier.
 \end{enumerate}
 
-\paragraph*{Remarks}
+%\paragraph*{Remarks}
 % \begin{itemize}
 % \item 
 % \end{itemize}
@@ -412,15 +427,25 @@ The whole message is then posted to a public space that abides by the criteria o
 Vote delegation is the process of transferring voting rights for a proposition or a context (or a number of them) to a delegate.
 Technically this means that the vote of the delegate is counted several times (once for the delegate as voting right holder and once for each delegation towards him).
 From a social perspective this means a transfer of trust from the delegator to the delegate in an area of trust, whether this may be established from expertise, sympathy or other reasons.
-As such, the delegation mechanism encompasses attracting support publicly (what would be campaigning for a vote as a candidate in the representative system), friendship, different trust-based mechanisms and much more; These social phenomenon however are not technically relevant for showing the principles of liquid democracy and will be external to the platform to develop.
-Our application will focus entirely on the delegation mechanisms lying on the basis of this.
-The vote delegation can be visualized via a delegation graph, a directed graph with the users as nodes and the delegations as edges.
-One could either have a distinct delegation graph for every proposition, for every context, or have one delegation graph with an edge for every delegation (i.e. a labeled multigraph). \todo[inline]{This is more implementation than model and should probably be descruibed in ch.\ref{ch:ProjectRequirements}}
-As with Liquid Feedback, this model avoids circular graphs by breaking the loop with the vote of one of the delegators (implicitly revoking the delegation for the respective proposition; see \href{http://principles.liquidfeedback.org/}{the Liquid Feedback book}).
+As such, the delegation mechanism encompasses attracting support publicly (what would be campaigning for a vote as a candidate in the representative system), friendship, different trust-based mechanisms and much more; These social phenomenon however are not technically relevant for a \tracknshrink{LD} platform and while \nameref{ssec:User_Accounts} provide restriced means of trust mediation, most of these social processes will be external to the platform. 
+%The vote delegation can be visualized via a delegation graph (), a directed graph with the users as nodes and the delegations as edges.
+%One could either have a distinct delegation graph for every proposition, for every context, or have one delegation graph with an edge for every delegation (i.e. a labeled multigraph). \todo[inline]{This is more implementation than model and should probably be descruibed in ch.\ref{ch:ProjectRequirements}}
+%As with Liquid Feedback, this model avoids circular graphs by breaking the loop with the vote of one of the delegators (implicitly revoking the delegation for the respective proposition; see \href{http://principles.liquidfeedback.org/}{the Liquid Feedback book}).
 
 Delegation mechanisms can be used for all stages of the \hyperref[sec:Model_Propositions]{proposition lifecycle}, i.e. for proposition group initiation support, support in the discussion phase and the voting phase.
 The decentralized model of publicly stating delegate intents which was already introduced in section~\ref{sec:Voting_Mechanism} can be used throughout all these stages, effectively giving citizen scientists the ability to harvest data about the evolution of the delegation graph from proposition creation to the close of votings.
 
+
+\subsubsection{Context Taxonomy Evolution}
+\label{ssec:Context_Taxonomy_Evolution}
+The evolution of the context taxonomy should be a joint effort between users interested in particular contexts and responsible moderators.
+Therefore, the platform should allow for discussions on specific contexts.
+Whenever an (informal) consensus is reached amongst participants in such an discussions, a couple of responsible moderators should contact the platform administators which can then implement the change.
+
+For reasons of data integrity, changes to the context taxonomy should be very well justified and moderators should in general have rather conservative stances on changing the context taxonomy
+
+We therefore decided to not design specific data fragments and roles to make this process more automatable and independent from the platform administrators.
+Another argument for this non-integrative approach is that, depending on the actual platform implementation, it might not be trivial to guarantee data integrity for specific taxonomy changes and hence might require expert knowledge to execute.
 
 
 %\subsection{Feedback von Stimmendelegation}
