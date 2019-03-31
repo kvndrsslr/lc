@@ -32,7 +32,7 @@ The main issue to solve with this interface is the conflict between user privacy
 For lower levels of participation a more restrictive data access policy could be enforced, while higher levels of participation with involvement of the citizen scientists in the data evaluation and possibly even in the definition of research questions require complete and transparent access to all of the platforms data such as propositions, delegation graphs, voting results etc.
 In order to support the highest level of participation possible we see no other way than to trust in the citizen scientists self-responsibility, i.e. to partly relay control over the amount and kind of data shared to the users of the \tracknshrink{LD} platform.
 However, as users are not expected to be well trained in privacy protection, the choices of users should not be too fine-grained and rather be envisioned as a number of pre-specified policies.
-We therefore derive the additional criteria for a \tracknshrink{CS}-enabling interface as \textbf{(\tracknshrink{CS}1)} default restrictive data access with guaranteed privacy protection and \textbf{(\tracknshrink{CS}2)} opt-in completely transparent data access without guaranteed privacy protection.
+We therefore derive the additional criteria for a \tracknshrink{CS}-enabling interface as \textbf{(\tracknshrink{CS}1)} complete access to non-sensitive platform data, \textbf{(\tracknshrink{CS}2)} default restrictive access to sensitive platform data with guaranteed privacy protection and \textbf{(\tracknshrink{CS}3)} opt-in completely transparent access access to sensitive platform data without guaranteed privacy protection.
 
 \section{Related Work}
 \label{sec:RelatedWork}
@@ -172,8 +172,6 @@ Finally, the lowest scope on the priority ladder is the global scope and there c
 
 We will see in \autoref{ssec:Vote_Counting} how priority can be used for vote counting.
 
-For privacy reasons, delegation graphs with global or context scope are not materialized.\todo{@KD: move this to 4 and elaborate}
-
 \subsubsection{User Intents}
 \label{ssec:User_Intents}
 The next type of artifact are so called user intents, which are categorized into support intents, vote intents and delegation intents.
@@ -214,7 +212,7 @@ As such, notifications can be realized as messages sent to all 'interested' stak
 %\item For Delegates: When a delegated vote is withdrawn
 %\item For Vote Delegators: When a vote was used in a proposition 
 %\end{itemize}
-\todo{@KD: move the commented stuff to chapter 4}
+\todo{@KD: if time: move to new subsubchapter in processes}
 
 \subsubsection{Moderation Requests}
 \label{ssec:Moderation_Requests}
@@ -283,18 +281,6 @@ How changes in the taxonomy are managed is described in section~\ref{sec:Model_C
 \label{ssec:Roles_Supporter}
 A supporter is a user that expresses agreement with a 'discursive entity' in order to provide some assessment about the popularity of contributions to a discussion.
 These can come from a large range of sources, such as propositions, proposition change requests or discussion entries. 
-
-%Of these proposition groups, (alternative) propositions in the discussion phase and change requests are crucial for the author of them assess how the political process with these could go.
-
-%In addition to helping the author to assess the political mood, support has some functional aspects as well:
-%\begin{itemize}
-%\item For a proposition group support decides whether a proposition group enters a discussion phase (see \hyperref[ssec:Lifecycle_Initiation]{proposition initiation phase})
-%\item For a proposition in discussion phase support for the original or an alternative proposition (in most cases) decides whether an alternative proposition will enter the voting phase (see \hyperref[ssec:Lifecycle_Discussion]{proposition discussion phase})
-%\item For a change request support has no direct functional consequences; An incorporated change request however might however, depending on the configuration, translate directly into support for the changed proposition if the change request supporter (or the respective delegated votes) doesn't yet support the proposition in the discussion phase (\todo[inline]{discuss this}). The support for a change request also sends a strong signal for the proposition initiator for political support of this proposition
-%\item While this is not necessarily the case (and might depend on the configuration of the system), support for a discussion entry might add to its relevance, potentially placing it on a more visible spot within he discussion threat. Depending on the operators frontend, the support for a discussion entry assists the ranking of the discussion entry (\todo[inline]{discuss}).
-%\end{itemize}
-
-\todo{@KD: reconsider where to put commented stuff (if time)}
 
 \subsubsection{Voting Right Holder}
 \label{ssec:Roles_VotingRightHolder}
@@ -404,7 +390,7 @@ This is done using a cryptographic method known as blind signature.
 Note that by using a blind signature scheme secrecy is preserved because the central authority has no ability to link a given user intent to an identity.
 The user intent has been \emph{blindly} singed, and therefore no information about what was signed has been retained. 
 The argument for introducing a centralized service into the system is that in any democratic environment some authority has to decide who is part of that environment and therefore has the right to participate by casting user intents.
-Surely, one could imagine a system where the right to vote is granted based on consensus as proposed by the \cite{}\todo{@KD:insert citation}.
+Surely, one could imagine a system where the right to vote is granted based on consensus as proposed by the Democracy\.Earth Foundation~\parencite{Democracy.Earth2018}.
 However, we do not agree that this system can work on any scale and we are not aware of a way to mathematically prove this assumption.
 In the following we will discuss the interaction of the individual types of user intentions.
 
@@ -431,23 +417,7 @@ Support intents work just as vote intents, with the following semantical excepti
 
 
 
-\todo{@KD: move to 4}
-%For a given user and a proposition, the vote casting mechanism works as follows:
-%\begin{enumerate}
-%\item The user creates a fresh RSA key pair.
-%The length of the key should be as large as possible to protect against attacks for the foreseeable future.
-%\item The user authenticates at the vote registry.
-%\item If the user is authorized to vote, the vote registry blind signs the public key the user has generated in the first step.
-%\item The user can now announce vote or delegate intents to the public.
-%To this end, the user assembles the appropriate message and signs it with his private key he generated in the first step.
-%Then, he adds his public key from the first step and the unblinded signature from the third step to the message.
-%The whole message is then posted to a public space that abides by the criteria outlined earlier.
-%\end{enumerate}
 
-%\paragraph*{Remarks}
-% \begin{itemize}
-% \item 
-% \end{itemize}
 
 
 \subsubsection{Vote Counting}
@@ -502,9 +472,38 @@ Another argument for this non-integrative approach is that, depending on the act
 
 
 
-%
-%\subsection{Researchers Access}
-%\label{sec:Model_ResearchersAccess}
+
+\subsubsection{Transparent Data Access}
+\label{sec:Model_ResearchersAccess}
+
+As we have argued in \autoref{sec:Criteria} sensitive data of users needs to be protected while still allowing citizen scientists to access information relevant to their specific project.
+However, most of the data artifacts we discussed in \autoref{ssec:data_fragments} are not sensitive and could easily be anonymized by replacing references to users with generic hashes in propositions, proposition modification requests and discussion entries.
+User accounts could also be opened up to citizen scientists through removing sensitive information such as full name, age and residency from them and additionally providing some binary properties that indicate presence of information in the original data.
+We can therefore see that by providing all the non-sensitive information through a well documented interface, we satisfy the requirements of \textbf{(\tracknshrink{CS}1)}.
+
+It could be argued that this approach is too restrictive and unnecessary, since all the data visible on the platform could also be crawled by citizen scientists, but as these probably want to republish some of the data together with their findings and users could withdraw information from the platform in the meantime, citizen scientists should adhere to fair play in this regards in order to not get involved in legal issues.
+
+The most sensitive information in a \tracknshrink{LD} platform, the user intents, are at the same time probably the most interesting and valuable for citizen scientists.
+Note that our design of user intents and their emission in the public space as described in \autoref{ssec:User_Intents} and \autoref{sec:User_Intent_Emission} already satisfy the requirements of \textbf{(\tracknshrink{CS}2)}.
+They fully preserve privacy, as (1) the original creator of an user intention can not be deduced by the user intent itself and (2) by forcing delegation intents to be reduced to proposition scope, it is possible to generate anonymized user aliases per proposition such that deducing information about single users through structural analysis of multiple delegation graphs is not possible.
+
+The easiest way to solve \textbf{(\tracknshrink{CS}3)} would be to give the user the choice to completely disregard privacy by loosening up all information to citizen scientist access.
+However we do not think that a lot of users would chose this option.
+A more careful approach is therefore necessary.
+Very sensitive personal information such as full name, age and residency should be stripped away regardlessly.
+However, the protection from structural analysis could be weakened, such that it would be theoretically possible for both actual citizen scientist (which we assume to not have evil intentions) and adversaries to deduce the political intentions of at least a few users.
+
+This probably less threatening option could be made even safer for users by using techniques as discussed in \autoref{ssec:Integration_pattern}.
+Users could opt-in to collect references to user intents they issued together with a proof of ownership.
+These references could then be periodically submitted to a server hosted by a trusted citizen science project.
+The server could then infer links between multiple delegation graphs and through machine learning synthesize a specialized dataset with similar characteristics relevant to the specific project.
+Afterwards, the server would delete the sensitive information and publish the synthetic dataset.
+
+Obviously, this option is only safer w.r.t. users perception, as they need to establish trust towards the operators of a given citizen science project.
+This does however not guard against misuse of the sensible informations by either the projects operators themselves or adversaries that could gain access to the server through security breaches and users should be made aware of this when given the option.
+Zero-knowledge proofs are outside the scope of this work, but it could be an interesting direction for future research to investigate methods to  cryptographically ensure privacy protection for this data synthesizing 
+
+
 %% * <johanning@informatik.uni-leipzig.de> 2018-02-12T12:15:14.572Z:
 %% 
 %% > \subsection{Researchers Access}
@@ -513,11 +512,9 @@ Another argument for this non-integrative approach is that, depending on the act
 %% How concrete should we sketch this? Right now its just a 'we need to be aware of this', but I feel it needs to be more concrete...
 %% 
 %% ^.
-%Since this project takes a Citizen Science approach to Liquid Democracy, researchers access to the data generated by the platform is crucial. Discussing this issue depends heavily on how the problem of accessibility and anonymity raised in \ref{ssec:Integration_AccessibilityAnonymity} is handled, since this determines how researchers / citizen scientists can access the data of interest and defines their range of action with the data of the platform. 
 %
-%\ref{ssec:Integration_AccessibilityAnonymity} mentions four strategies to deal with user data. While most of the approaches described provide a lot of fine-grained data to the researcher over a large number of users, and allow them a large range of research questions to ask, the aggregative approach (and to some degree the selective aggregative and the deflecting responsibility approach) restrict the data available for researchers. 
 %
-%More important than the availability of the data might be the accessibility of the data. For this it is decisive that APIs for accessing information relevant to researchers are included in the design of the platform. Since in CS, technical proficiency (or its development) can't be expected, one of the requirements of the design of the APIs is that 'relevant' information is readily available for non-professionals, be it through accessible (and thoroughly documented) APIs or frontends that present relevant information.
+%
 %
 %While this can't be implemented to its fullest within the scope of this project, this aspect needs considerable consideration in the development of the platform (i.e. in ch. \ref{ch:ProjectRequirements}).
 %

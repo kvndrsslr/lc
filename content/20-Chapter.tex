@@ -282,6 +282,9 @@ This approach further doesn't provide an answer to transparency of vote delegati
 
 
 \subsubsection{Pattern-Coherent Data Synthesis}
+\label{ssec:Integration_pattern}
 
-An approach relying on very recent progress in the field of machine learning would be to completely decouple the internal platform data from the data observable by citizen scientists by using pattern-coherent data synthesis. In this approach which belongs to the field of unsupervised learning, the platform would continuously feed the internal platform data to one or many machine learning algorithms in order to train them on particular patterns inherent in the data. Subsequently, the trained model would be used in order to synthesize data which will then exhibit the same patterns as the original data. \todo[]{@KD:elaborate this idea}
-
+An approach inspired by very recent progress in the field of machine learning~\parencite{Boesche2013} would be to completely decouple the internal platform data from the data observable by citizen scientists by using pattern-coherent data synthesis.
+In this approach which belongs to the field of unsupervised learning, sensitive data, especially user-identity preserving sets of delegation graphs, could continuously be fed to one or many machine learning algorithms in order to train them on particular patterns inherent in the data.
+Subsequently, the trained model would be used in order to synthesize data which would then exhibit the same properties as the original data for properties deemed relevant by the \tracknshrink{CS} project.
+Such a synthesized dataset could then be used without concerns of privacy violation.

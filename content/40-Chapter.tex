@@ -5,12 +5,11 @@ democracy platform from a software engineering perspective.
 Based on the \hyperref[ch:Approach]{discussion of the approach} in \autoref{ch:Approach}, to fulfill the objective of this project, and due to the fact that no suitable software exists to base the project on, this section will document the initial software engineering process upon which can be built in order to realize a platform that meets the derived \hyperref[sec:Criteria]{criteria} for a \tracknshrink{CS}-enabled \tracknshrink{LD} platform.
 
 Therefore, we start by explicitly documenting the \hyperref[sec:SoftwareRequirements]{software requirements} which we derive from the previous chapters.
-We then continue by laying the foundation for a more technical view of the platform by discussing possibilities of its \hyperref[sec:ArchitecturalDesign]{architectural design} before we go into detail on the available options concerning the \hyperref[sec:ApplicationDesign]{application design} in the exemplary setting of a microservices architecture.
+We then continue by laying the foundation for a more technical view of the platform by discussing possibilities of its \hyperref[sec:ArchitecturalDesign]{architectural design} before we go into detail on the available options concerning the \hyperref[sec:ApplicationDesign]{application design} in the exemplary setting of a microservices architecture and a local client.
 The chapter is then concluded by the specification of two protocols, namely the \hyperref[sec:PublicDeclarationOfIntentProtocol]{public declaration of intent protocol} and the \hyperref[sec:VoteTallyingProtocol]{vote tallying protocol}, that revolve around vote, support and delegation intents posted in the public space.
 
-\todo{Wire the protocols to an argument made earlier that the platform and the delegation/voting as well as vote tallying process are best separated for data protection reasons}
-\todo{Create user stories pertaining to citizen scientists interaction with the platform}
-\todo{Enhance user stories}
+
+\todo{@KD: Create user stories pertaining to citizen scientists interaction with the platform}
 
 % narrative: discuss architectural design -> choose microservices
 % how to name the section on the actual microservices implementations?
@@ -192,18 +191,25 @@ However, there are still a number of options available for the architecture of b
 
 \subsection{Client-side Architecture}
 \label{ssec:ClientSideArchitecture}
-It is a very common pattern in contemporary software development to build a variety of thick, stateful clients that all interface with the same stateless server(s) over an API thats implemented using industry standard web technology such as REST.
+It is a very common pattern in contemporary software development to build a variety of thick, stateful clients that all interface with the same stateless server(s) over an API that is commonly implemented using industry standard web technology such as REST.
 Hence, we should not refer to \textit{the} client, because there might be any suitable number of clients, e.g. single page applications rendered in the browser, server-rendered web applications, native mobile clients, native desktop clients, etc.
 
-While it can be argued that clients contribute more to the vision of a given user story than the server, there are other important techniques suited towards UX design that need to accompany user stories in order to develop a modern client, which we do not see to fall in scope of this work.
-We will therefore only concern ourselves with the server side of the platform.
+While it can be argued that users will only ever need to interfere with a client and hence the vision a user story depicts can be easily translated to requirements on client user interfaces, there are other important techniques for UX design that need to accompany user stories in order to develop a modern client.
+However, we do not consider UX design to be relevant for this work and will therefore only concern ourselves with some formal responsibilites of the client and otherwise lay our focus on the engineering of the server side of the platform.
 
 \subsection{Server-side Architecture}
 \label{ssec:ServerSideArchitecture}
 
 With the widespread adaption of smartphones and LTE, servers need to be able to process and respond to millions of requests from clients all over the world within milliseconds, handling hardware failure, network issues and malicious attacks amongst other stressors while maintaining a high availability of at least 3 nines.
 
-These fast growing requirements on server-side applications have led to a vast amount of efforts in the reinvention of server-side software architecture over the last ten years, mainly by big tech companies such as Netflix, Facebook, Amazon and Google.
+These fast growing requirements on server-side applications have led to a vast amount of efforts in the reinvention of server-side software architecture over the last ten to fifteen years, mainly by big tech companies such as Netflix, Facebook, Amazon and Google.
+The result of these efforts was the adoption of a new type of highly modularized server-side architecture, the so-called microservices architecture.
+Microservices are rather small server applications that encapsulate business logic for a small, distinguished type of application data and hide the underlying database(s) from clients.
+They typically expose functionality as RESTful web services.
+Microservices constitute a good architectural choice for applications where the application domain can be divided into small chunks in such a way that business processes can be carried out without complex interactions between the individual parts.
+
+We argue that implementing the Liquid Citizen platform within the microservices model would be a good choice, as most of the individual artifacts that are to be managed by the platform such as propositions, contexts, discussion entries, user accounts and notifications are clearly separated and do not interact with each other in complicated ways.
+Moreover, using the microservices architecture, each of the microservices could implement their own \tracknshrink{CS}-enabling interface and thereby offering citizen science projects to be very selective about the data they want to use, streamlining development of additional software for these projects.
 
 %\input{img/tikz-blockdiagramm}
 
@@ -218,44 +224,46 @@ These fast growing requirements on server-side applications have led to a vast a
 %Since the components however form a service ecosystem where the different components need to interact / exchange data with one another, care needs to be taken to integrate the components well with one another, which violates their independence, but is needed for functionality. These aspects will be discussed in the following, in the \hyperref[ssec:Microservices]{description of the microservices}. The respective components, as modules of the software, are sketched \hyperref[ssec:Modules]{afterwards}.
 
 
-\section{Exemplary Application Design for Microservices}
+\section{An Exemplary Application Design}
 \label{sec:ApplicationDesign}
 
- \subsection{Proposition Server}
 
- \paragraph*{POST: createProposition()} \mbox{} \\
- Creates a new proposition according to the parameters transmitted, as well as the proposition group alternative propositions to the newly created proposition will belong to.
-
- Transmitted parameters conflicting with the proposition configuration of the proposition service will be ignored.
-
- \paragraph*{POST: createAlternativeProposition(propositionGroupID)} \mbox{} \\
- Creates a new alternative proposition belonging to the propositionGroupID of the referred proposition.
-
- Transmitted parameters conflicting with the proposition configuration of the proposition service will be ignored.
-
- \paragraph*{POST: createPropositionToken(propositionID,plainTextOption)} \mbox{} \\
- Creates a propositionToken for the respective proposition, associated with the respective plainTextOption (as long as the proposition and the option exists). The propositionToken can be used to derive the plainTextOption associated with it, and is introduced so the plainTextOption can't be manipulated by other actors in the vote evaluation process.
-
- \paragraph*{POST: derivePlainTextOption(propositionToken)} \mbox{} \\
- Returns the plain text option associated with the proposition token.
-
-
- \paragraph*{GET: getPropositionInformation(propositionID, foobar)} \mbox{} \\
- Will return relevant information about the proposition in question.
-
- \paragraph*{GET: getPropositionVoteClosingTime(propositionID)} \mbox{} \\
- Returns the vote closing time of the proposition (when the voting period ended).
-
- \paragraph*{GET: getPropositionVoteOpeningTime(propositionID)} \mbox{} \\
- Returns the vote opening time of the proposition (when the voting period started).
-
- \paragraph*{POST: signVote(vote)} \mbox{} \\
- Signs a vote with the current time stamp to prove that the vote was casted on time. 
-
- \paragraph*{Data base structure proposition service} \mbox{} \\
- The proposition service stores the data for the propositions as well as the proposition tokens used for vote casting. For this it features two tables, one with the proposition data (to be specified) and one with a mapping of the optionTokens and the respective plainTextOptions.
-
-
+%
+% \subsection{Proposition Server}
+%
+% \paragraph*{POST: createProposition()} \mbox{} \\
+% Creates a new proposition according to the parameters transmitted, as well as the proposition group alternative propositions to the newly created proposition will belong to.
+%
+% Transmitted parameters conflicting with the proposition configuration of the proposition service will be ignored.
+%
+% \paragraph*{POST: createAlternativeProposition(propositionGroupID)} \mbox{} \\
+% Creates a new alternative proposition belonging to the propositionGroupID of the referred proposition.
+%
+% Transmitted parameters conflicting with the proposition configuration of the proposition service will be ignored.
+%
+% \paragraph*{POST: createPropositionToken(propositionID,plainTextOption)} \mbox{} \\
+% Creates a propositionToken for the respective proposition, associated with the respective plainTextOption (as long as the proposition and the option exists). The propositionToken can be used to derive the plainTextOption associated with it, and is introduced so the plainTextOption can't be manipulated by other actors in the vote evaluation process.
+%
+% \paragraph*{POST: derivePlainTextOption(propositionToken)} \mbox{} \\
+% Returns the plain text option associated with the proposition token.
+%
+%
+% \paragraph*{GET: getPropositionInformation(propositionID, foobar)} \mbox{} \\
+% Will return relevant information about the proposition in question.
+%
+% \paragraph*{GET: getPropositionVoteClosingTime(propositionID)} \mbox{} \\
+% Returns the vote closing time of the proposition (when the voting period ended).
+%
+% \paragraph*{GET: getPropositionVoteOpeningTime(propositionID)} \mbox{} \\
+% Returns the vote opening time of the proposition (when the voting period started).
+%
+% \paragraph*{POST: signVote(vote)} \mbox{} \\
+% Signs a vote with the current time stamp to prove that the vote was casted on time. 
+%
+% \paragraph*{Data base structure proposition service} \mbox{} \\
+% The proposition service stores the data for the propositions as well as the proposition tokens used for vote casting. For this it features two tables, one with the proposition data (to be specified) and one with a mapping of the optionTokens and the respective plainTextOptions.
+%
+%
 
 
 \section{Public Declaration of Intent Protocol}
@@ -267,6 +275,23 @@ The protocol describes three phases:
   \item Public Declaration of Intent Key (PIK) Generation
   \item Assembling the declaration of intent message
 \end{enumerate}
+
+%For a given user and a proposition, the vote casting mechanism works as follows:
+%\begin{enumerate}
+%\item The user creates a fresh RSA key pair.
+%The length of the key should be as large as possible to protect against attacks for the foreseeable future.
+%\item The user authenticates at the vote registry.
+%\item If the user is authorized to vote, the vote registry blind signs the public key the user has generated in the first step.
+%\item The user can now announce vote or delegate intents to the public.
+%To this end, the user assembles the appropriate message and signs it with his private key he generated in the first step.
+%Then, he adds his public key from the first step and the unblinded signature from the third step to the message.
+%The whole message is then posted to a public space that abides by the criteria outlined earlier.
+%\end{enumerate}
+
+%\paragraph*{Remarks}
+% \begin{itemize}
+% \item 
+% \end{itemize}
 
 
 \section{Vote Tallying Protocol}
