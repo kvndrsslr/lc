@@ -80,10 +80,10 @@ By political contexts (from here on just named \textit{contexts}), we mean the c
 The context a proposition is associated with is a crucial piece of metadata in a \tracknshrink{LD} platform, as  clearly defined categories are important to make order of the ongoing topics and are essential to stay on top of things.
 As with most categorial organization systems, broad, general contexts can be divided down to narrower, more specficic ones and thus form a taxonomy, which we will discuss in detail in~\ref{sec:Model_Contexts}.
 
-As described in~\ref{sec:Model_Contexts}, subjects belong to different, sometimes multiple contexts. In order to allow for the versatility demanded there, but recognizing that a principle context (at some level within the taxonomy) is the focus of a proposition, we decide 
+As described in~\ref{sec:Model_Contexts}, issues belong to different, sometimes multiple contexts. In order to allow for the versatility demanded there, but recognizing that a principle context (at some level within the taxonomy) is the focus of a proposition, we decided to assign a primary context and an arbitrary number of secondary contexts to the proposition as part of its metadata. Since the primary context addresses the very core of the proposition, changing the primary context is not possible. These restrictions are lifted for secondary context. With this, we believe to have reached a good compromise between keeping the identity of a context intact, while allowing for large flexibility.
 
-Propotatosite contextual the data through assigning a primary context and an arbitrary number of secondary contexts.iometans typically evolve ovto anner time which can be conceptualized as a succession of versioned snapshots.
-To this end, a propositions state should be saved together with an increasing version numer at either fixed time intervals or manually by the individuals involved with the editing.
+Propositions typically evolve over time which can be conceptualized as a succession of versioned snapshots.
+To this end, a propositions state should be saved together with an increasing version number at either fixed time intervals or manually by the individuals involved with the editing.
 Moreover, a propositions creation and its evolution should always be accompanied by a healthy discussion of the matter at hand between both individuals directly involved with the proposition editing and other individuals interested in expressing their political opinions.
 These discussions contents and their metadata are discussed in the next section.
 
@@ -109,7 +109,7 @@ For these cases there exists alternative propositions which will be discussed ne
 \label{ssec:AltProposition}
 In most cases, politics are too complex to capture the endeavor of all individuals in one proposition that can be answered with a simple yes or no.
 In order to provide means to depict political opinions more accurately, we introduce alternative propositions.
-Alternative propositions have all the properties of normal propositions with the exception that the political contexts of alternative propositions can not be different from those of the original proposition. This allows for large versatility of the proposition, while ensuring that both propositions address the same (political) context.
+Alternative propositions have all the properties of normal propositions with the exception that the primary political context of an alternative proposition can not be different from those of the original proposition. This allows for large versatility of the proposition, while ensuring that both propositions address the same (political) context.
 Additionally, alternative propositions carry a reference to the original proposition, effectively placing them in a common \emph{proposition group}.
 
 \subsubsection{Context Taxonomy}
@@ -386,7 +386,7 @@ Ideally, it shouldn't be possible for any actor in the system to gather any info
 In line with the principles of security-by-design, in the following we will describe a design for user intent emission that allows manipulation-resistant secret emission of user intents and which largely preserves privacy.
 While not being ideal, due to our lack of expertise in zero-knowledge-proof designed systems, the mechanisms described in the following fulfills these criteria well enough for the scope of this work.
 
-The main feature of our system design is that user intents are casted publicly, i.e. they are distributed over the Internet in a way that (1) everyone can access them and (b) no non-critical number of malicious users is able to delete, invalidate or otherwise tamper with user intents.
+The main feature of our system design is that user intents are casted publicly, i.e. they are distributed over the Internet in a way that (1) everyone can access them and (2) no non-critical number of malicious users is able to delete, invalidate or otherwise tamper with user intents.
 That means that user intents may be casted using a distributed ledger, a publicly managed collection of mirrored vote servers or any other system that abides by these criteria.
 
 We require one central trusted authority, which contributes to the verifiability of the process by providing means of identifying a given user intent as valid.

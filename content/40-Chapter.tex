@@ -26,12 +26,12 @@ The goal of all requirements analysis processes is to identify the requirements 
 
 For the sake of brevity and to increase the agility of potential developers of the platform, we chose to follow the scrum methodologies approach to requirements analysis.
 In the scrum method, requirements are formulated as so called user stories.
-An user story is a statement of the form "As X I want Y." where X is a user role and Y is the detailed description of an activity the given role should be able to perform with the envisioned final software product.
+A user story is a statement of the form "As X I want Y (in order to [reach a Z])."), where X is a user role, Y is the detailed description of an activity the given role should be able to perform with the envisioned final software product and Z is the goal the user wants to reach.
 In the scrum methodology, user stories are then broken down into tasks which are assigned to contributors / developers in scrum sprints.
 
 However, we are aiming for an abstract albeit accurate documentation of the Liquid Citizen platform's requirements, not for a step-by-step manual, which we could not provide anyway without the knowledge of final decisions in the compartments of architecture, languages and frameworks used.
 To this end, we will now record all requirements that can be extracted from our previous discussion in chapters~\ref{ch:Theory}~and~\ref{ch:Approach} as user stories.
-We have assigned each story a priority score between one and ten. Stories scoring 10 are absolutely necessary for the simplest of prototypes, while those on the other end of the spectrum are not necessary for the core functionality at all and could potentially be delivered as updates even after the platform is already used in production.
+We have assigned a priority score between one and ten to each user story. Stories scoring 10 are absolutely necessary for the simplest of prototypes, while those on the other end of the spectrum are not necessary for the core functionality at all and could potentially be delivered as updates even after the platform is already used in production.
 
 \userstory{10}
 As a \textit{user} I want to initiate a proposition in order start the political process in a certain context of my interest, thereby becoming the \textit{petition author} of the newly initiated proposition.
@@ -189,13 +189,13 @@ However, there are still a number of options available for the architecture of b
 It is a very common pattern in contemporary software development to build a variety of thick, stateful clients that all interface with the same stateless server(s) over an API that is commonly implemented using industry standard web technology such as REST.
 Hence, we should not refer to \textit{the} client, because there might be any suitable number of clients, e.g. single page applications rendered in the browser, server-rendered web applications, native mobile clients, native desktop clients, etc.
 
-While it can be argued that users will only ever need to interfere with a client and hence the vision a user story depicts can be easily translated to requirements on client user interfaces, there are other important techniques for UX design that need to accompany user stories in order to develop a modern client.
+While it can be argued that users will only ever need to interfere with a client and hence the vision a user story depicts can be easily translated to requirements on client user interfaces, there are other important techniques for user experience (UX) design that need to accompany user stories in order to develop a modern client.
 However, we do not consider UX design to be relevant for this work and will therefore only concern ourselves with some formal responsibilites of the client and otherwise lay our focus on the engineering of the server side of the platform.
 
 \subsection{Server-side Architecture}
 \label{ssec:ServerSideArchitecture}
 
-With the widespread adaption of smartphones and LTE, servers need to be able to process and respond to millions of requests from clients all over the world within milliseconds, handling hardware failure, network issues and malicious attacks amongst other stressors while maintaining a high availability of at least 3 nines.
+With the widespread adaption of smartphones and LTE, servers need to be able to process and respond to millions of requests from clients all over the world within milliseconds, handling hardware failure, network issues and malicious attacks amongst other stressors while maintaining a high availability of at least 3 nines (i.e. $>99.9\%$).
 
 These fast growing requirements on server-side applications have led to a vast amount of efforts in the reinvention of server-side software architecture over the last ten to fifteen years, mainly by big tech companies such as Netflix, Facebook, Amazon and Google.
 The result of these efforts was the adoption of a new type of highly modularized server-side architecture, the so-called microservices architecture.
