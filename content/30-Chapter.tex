@@ -116,37 +116,39 @@ While we earlier looked at contexts as metadata of propositions, in order to cat
 
 Choosing a proper context taxonomy to categorize propositions is crucial for a \tracknshrink{LD} project as it is a sort of foundation for the work to follow.
 On the one hand the contexts can help users to find votes they are interested in, which partly satisfies criteria \textbf{(\tracknshrink{LD}5)}.
-Even more important, with contexts one can also determine for which issues one wants to vote oneself and which topics one wants to pass on to a person with more expertise in this field.
-Taking for example a vote about the deforestation of the south of Germany, it could fall into a context such as environment.
-Imagining that someone is not that much of a specialist when it comes to the environment, they could delegate votes for all propositions on this subject to a relative who is.
+Even more important, with contexts the political subject can also determine for which issues they want to vote for themselves and which topics they want to pass on to a person with more expertise in this field.
+Taking for example a vote about the deforestation of the south of Germany; a proposition about this matter could fall into a context as environmental politics (or in a more fine-grained taxonomy in the context of forestry).
+Imagining that someone is not that much of a specialist when it comes to environmental politics, they could delegate votes for all propositions on this subject to a political subject they trust and assume to be knowledgeable about this context. The example could also be assigned to a regional context (southern Germany, or more specifically the region concerned), allowing to discern regional interest (and the interest of the people affected by decisions in this context). These contexts are not mutually exclusive, and a proposition could be assigned to several (non-exclusive) contexts.
 %Here the taxonomies not only determine if he gets the topic in his feed but it also could automatically be passed on to his relative.
 %This highlights a second problem: how do we make sure that the votes are categorized properly?
 %More about this later.
 %First, we have to make sure to set up a fundamental category that covers a wide spectrum of the political issues existing.
 
 In general, a taxonomy for \tracknshrink{LD} propositions should meet three elemental requirements.
-First and foremost, the taxonomy must be exhaustive as we want to make sure that every occurring vote is covered.
-Secondly the categories need to be disjunct, meaning that two categories shouldn't describe the same subject.
+First and foremost, the taxonomy must be exhaustive as we want to make sure that every occurring proposition is covered.
+Secondly the categories need to be disjoint\footnote{With the exception of hierarchically dependent categories}, meaning that two categories shouldn't describe the same subject.
 Additionally, the categories should be able to adapt and evolve as the political landscape as well changes with time.
 A taxonomy that fulfills all requirements perfectly probably does not exist, but we tried to find one already existing system that met our requirements as best as possible.
 
-A well-known external and source for document categorization is the Wikipedia taxonomy.
+An exception to the second criterion for a taxonomy (its disjoint status) are hierarchically dependent categories. While taxonomies in the strict sense don't exhibit meronomic (i.e. part-whole) relationships, in practice they often do. This is particularly the case with geographic categories (e.g. states or counties within a country and municipalities within a state), but it also concerns fields or topics of politics. In the example above, forestry could be seen as a sub-category of environmental (or  economic) politics, and can further be broken down in sub-contexts that address more specific issues. While connections to other areas exist (e.g. forestry being a part of economic or environmental politics, and forestry being connected to matters concerning groundwater, erosion, micro-climate, biodiversity, air quality and pollution as well as carbon (net) emission politics to mention just a few), relationships of sub- and super contexts allows for much flexibility and versatility of contexts. Complex connections between different categories on the same hierarchical level can be achieved with allowing to assign sub-categories to several super-categories\footnote{e.g. by forestry politics being part of environmental and economic politics or more fine-grained categories being sub-categories of forestry, biodiversity and groundwater politics}.
+
+A well-known external source for document categorization is the Wikipedia taxonomy.
 The corpus of the open encyclopedia is often used to build automatic categorization approaches or to improve the performance of existing models.
 Seeing the pure size of the corpus and the fact that it changes constantly you don’t wonder why this is the case.
-For our project however, the problem occurred that the political category described more the field of political science that general topics politics are coping with. 
+\todo{Satz mir nicht ganz klar} For our project however, the problem occurred that the political category described more the field of political science that general topics politics are coping with. 
 
-Almost the complete opposite was true for the for the taxonomy of Stack Overflow Politics.
+Almost the complete opposite is true for the taxonomy of Stack Overflow Politics.
 While the Wikipedia articles were almost purely about a scientific view on Politics, the branch of the well-known question and answer site Stack Overflow almost only consist of current topics discussed by the community.
 The created tags are therefore more useful for characterizing political topics.
 But as the issues discussed are tagged by the user posting the question, it often occurs that there are two tags describing the same field.
-So, taking the Stack taxonomy would have cost us a lot of time cleaning the data. 
+The poor data quality of the Stack taxonomy and the necessity for time-consuming clean-up made this data source rather unattractive.
 
-Going on searching for a more organized alternative we considered the taxonomy that classify the topics discussed by the Bundestag.
-For every new legislation period the parliament is putting together committees for different topics.
-Even if the number and names of these committees have slightly changed over time, the content is more or less consisting.
-On the official Website of the Bundestag we found a tabula sorting all protocols of the committees' meetings.
-The altogether 43 topics describe a bride range of political topics.
-From family to energy the categories are clearly structured, exhaustive and disjunct, therefore covering two of our tree requirements.
+As a more organized data source that still addresses political topics instead of subjects of political science, we chose the taxonomy that classify the topics discussed by the Bundestag.
+For every new legislation period, the parliament puts together committees for different topics.
+Even if the number and names of these committees have slightly changed over time, the content is more or less consistent over time.
+The official website of the Bundestag groups protocols of the committees' meeting into 43 topics describing a wide range of political topics.
+From family to energy the categories are clearly structured, exhaustive and disjoint, therefore covering two of our three requirements. Since it furthermore changes slightly over time, our third requirement is partly met as well.
+
 Hence, we recommend to use this taxonomy as a starting point for newly created \tracknshrink{LD} platform instances.
 We note that in order to meet our third requirement, the platform should possess mechanisms for the collaborative editing of the taxonomy which will be described in section~\ref{ssec:Context_Taxonomy_Evolution}.
 
@@ -163,7 +165,7 @@ Therefore, for purposes of vote couting, we can always extract an \emph{effectiv
 Note that with this model, cycles can be used by groups of participants with considerable overlap in their political opinions to pool their votes, effectively making sure that all their votes will be counted if at least one of them votes directly.
 
 Delegation graphs can be maintained for different levels of governance, hereafter named scopes.
-Scopes have increasing priority with descreasing generality.
+\todo{Not clear what priority means in this context. Would be good what to mention what this means (in this project / for our platform), and what its effects are); wird auf 3.3.3.3 verwiesen, sollte aber zumindest angerissen werden (halbsatz reicht denke ich)}Scopes have increasing priority with decreasing generality.
 Delegation graphs with proposition scope have the highest priority and correspond to specific propositions, i.e. for each proposition there can be at most one delegation graph with proposition scope.
 Right below proposition scope we have context scope, where for each context there can be at most one delegation graph with context scope.
 The quasi ordering induced by the tree-shaped hierarchical context taxonomy can be used to determine a strict ordering between context-scoped delegation graphs with an ancestor relationship.
@@ -174,10 +176,11 @@ We will see in \autoref{ssec:Vote_Counting} how priority can be used for vote co
 
 \subsubsection{User Intents}
 \label{ssec:User_Intents}
-The next type of artifact are so called user intents, which are categorized into support intents, vote intents and delegation intents.
+\todo{Diskussion der intents ziemlich kurz im Vergleich zu anderen Teilen, aber okay}
+The next type of artifact are so called user intents, which are categorized into delegation intents, vote intents and support intents.
 Delegation intents can be used to compose delegation graphs while vote intents are the digital counterpart of ballots.
 Support intents are like vote intents but there are less restrictions on how much support intents a user can issue per proposition group.
-In order to meet the requirements of \textbf{(\tracknshrink{LD}2)} and \textbf{(\tracknshrink{LD}3)} user intents should be anonymized to satisfy the secrecy property as well as public and authorized to satisfy the verifiability property.
+In order to meet the requirements of \textbf{(\tracknshrink{LD}2)} and \textbf{(\tracknshrink{LD}3)}, user intents should be anonymized to satisfy the secrecy property as well as public and authorized to satisfy the verifiability property.
 To this end, user intents should not only carry information about the specific intent but also authorization information.
 
 \subsubsection{User Accounts}
@@ -185,7 +188,7 @@ To this end, user intents should not only carry information about the specific i
 User accounts are an important instrument to build trust amongst users of a \tracknshrink{LD} platform.
 They can potentially offer a variety of personal as well as professional and political information about a certain user.
 \todo{@KD: haveTime ? elaborate : leaveAsIs }
-However, in order to follow the protection of privacy \textbf{(\tracknshrink{LD}7)}, users should be able to chose themselves which information they want to be displayed to the public.
+However, in order to follow the protection of privacy \textbf{(\tracknshrink{LD}7)}, users should be able to chose for themselves which information they want to be displayed to the public.
 Moreover, as we have seen in the previous section on user intents, user accounts are decoupled from sensitive political information, i.e. the user intents by means of anonymization.
 
 \subsubsection{Notifications}
@@ -217,7 +220,7 @@ As such, notifications can be realized as messages sent to all 'interested' stak
 \subsubsection{Moderation Requests}
 \label{ssec:Moderation_Requests}
 Moderation requests are instrumental in enforcing platform rules, as they can help to prevent spam \textbf{(\tracknshrink{LD}6)} as well as other malicious and non-tolerable actions on the platform such as hate speech and advertisement.
-Users can issue moderation requests for artifacts that are prone to abuse such as propositions, proposition change requests and discussion entries.
+Users can issue moderation requests for artifacts that are prone to abuse, such as propositions, proposition change requests and discussion entries.
 A moderation request carries a reference to another artifact together with a message that details the specific kind of platform rules violation.
 A group of trusted, privileged users can then take action on these requests.
 
@@ -240,7 +243,7 @@ This does not grant them any rights any other user does not have, and it is thus
 
 \subsubsection{Proposition author}
 \label{ssec:Roles_propositioner}
-The propositioner is the role a user can take on when initiating the political process by starting a \hyperref[sec:Model_Propositions]{proposition}.
+The proposition author, in the following called \textit{propositioner}, is the role a user can take on when initiating the political process by starting a \hyperref[sec:Model_Propositions]{proposition}.
 %Since the process of propositions is already described in \ref{sec:Model_Propositions}, the following focuses on the role.
 A propositioner has the right to change the text of a proposition, either by editing directly, or by moderating the proposition change requests.
 Access to these activities is limited to the propositioner in order to guarantee consistency of the proposition, and to incentivize discussion about aspects relevant to users not in the role of the propositioner.
@@ -258,8 +261,7 @@ By creating a proposition (or an alternative proposition), a user becomes a prop
 \subsubsection{Discussion participant}
 \label{ssec:Roles_DiscussionParticipant}
 As the name suggests, a discussion participant is a user that engages in a discussion about some artifact by creating a discussion entry.
-Users become discussion participants as soon as they contributes to the discussion by writing a discussion post or responding to one.
-\todo{@all: decide whether this means that the user receives notifications about the discussion. Also decide whether she becomes a proposition follower through this}.
+Users become discussion participants as soon as they contributes to the discussion by writing a discussion post or responding to one. A discussion participant receives notifications about the discussion, and becomes a proposition follower as well (unless explicitly chosen otherwise)
 
 \subsubsection{Proposition modification requester}
 The proposition modification requester is a \hyperref[ssec:Roles_DiscussionParticipant]{discussion participant} that raises a constructive proposition text edit request. 
@@ -271,11 +273,11 @@ A moderator is a user with a particular interest and reputation in a context (or
 Moderator status can be issued to users that engaged in the platform over a prolonged stretch of time within a given context or a number of its subcontextes, if the user so wishes.
 The moderator role gives a user moderating power of the moderation requests falling within the context they moderate, such as deciding whether a users' behavior is inappropriate, posts should be deleted (or at least flagged as questionable) or (in conjunction with moderators of other contexts) whether a user should be (temporally or permanently) banned from the platform.
 
-Whether these actions can be performed by a moderator alone, or require the decision of a ,,moderator counci'' depends on the policy of the are very specific questions that we do not aim to answer in this conceptual platform design.
-This also hold for deciding how inappropriate behavior of moderators is dealt with.
+Whether these actions can be performed by a moderator alone, or require the decision of a ,,moderator council'' depends on the policy of the platform implementation; this is a rather specific questions that we do not aim to answer in this conceptual platform design.
+This also holds for deciding how inappropriate behavior of moderators is dealt with.
 
-Moderators / a council of moderators further decides about changes to the taxonomy regarding the context of their responsibility.
-How changes in the taxonomy are managed is described in section~\ref{sec:Model_Contexts}.
+Moderators (or a council of moderators) further decide about changes to the taxonomy regarding the context of their responsibility.
+How changes in the taxonomy are managed exactly (as mentioned in section~\ref{sec:Model_Contexts}) depends on the platform implementation.
 
 \subsubsection{Supporter}
 \label{ssec:Roles_Supporter}
@@ -286,29 +288,29 @@ These can come from a large range of sources, such as propositions, proposition 
 \label{ssec:Roles_VotingRightHolder}
 A voting right holder is any user that is allowed to vote on a proposition.
 Since utilizing ones own vote overwrites vote delegation, technically every user is a voting right holder for any proposition; Often time however, a user will not exercise their own voting right after delegating their vote.
-In this case the term 'voting right holder' refers to the user the vote is delegated to. 
+In this case the term 'voting right holder' refers to the user the vote is delegated to (i.e. the proxy). 
 
 Unsurprisingly, voting right holder are users that can participate in the voting process of a proposition.
 
 \subsubsection{Delegator}
 \label{ssec:Roles_Delegator}
-A delegator is a voting right holder that delegated his voting right for a single proposition or a number of propositions falling within the same context.
-Although a delegator can use her voting right on any propositions (and basically (temporarily) revoke the delegation) and become a voting right holder again, in the usual case it assumed that the voting right was delegated to not exercise the voting right.
+A delegator, also called a principal, is a voting right holder that delegated their voting right for a single proposition or a number of propositions falling within the same context.
+Although a delegator can use their voting right on any propositions (and basically (temporarily) revoke the delegation) and become a voting right holder again, in the usual case it assumed that the voting right was delegated to not exercise the voting right.
 If the voting right was delegated for in context scope, it counts as delegated for all subcontexts and all propositions falling within these bounds. 
 
 \subsubsection{Delegate}
 \label{ssec:Roles_Delegate}
-A delegate is a user that another user delegated their voting right to.
+A delegate, also called a proxy, is a user that another user delegated their voting right to.
 They thus carry votes with them and can basically decide how the delegator voted for propositions falling within the scope of the vote delegation.
 Delegates can further delegate votes delegated to them, transferring their votes and the votes delegated to them to the delegate of their choice. 
-hrough this they become a delegator with all that this entails.
+Through this they become a delegator with all that this entails.
 Observe that this can be done differently for context as well as proposition scope, making them both delegator and delegate for different delegation scopes.
 
 \subsubsection{Admin}
 \label{ssec:Roles_Admin}
 The admin(s) of the platform should be appointed by the platforms operator and have the most powerful position within it.
 In addition to providing the technical infrastructure of the platform and to be able to change its configuration, they also act as a point of appeal for users that deem the decisions of the moderators as inappropriate, and admins can overwrite the decisions of the moderators.
-In drastic cases, admins are also authorized to revoke the status of moderators if repeated inappropriate behavior has been reported. 
+In drastic cases, admins are also authorized to revoke the status of moderators if repeated inappropriate behavior has been reported, depending on the policy of the platform operator or platform implementation.
 
 Administrators have a unique standing in the roles of the platform, in that they are not users, and are thus left outside of the political process, ensuring their neutrality in the discourse.
 
