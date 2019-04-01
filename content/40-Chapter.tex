@@ -34,7 +34,7 @@ To this end, we will now record all requirements that can be extracted from our 
 We have assigned a priority score between one and ten to each user story. Stories scoring 10 are absolutely necessary for the simplest of prototypes, while those on the other end of the spectrum are not necessary for the core functionality at all and could potentially be delivered as updates even after the platform is already used in production.
 
 \userstory{10}
-As a \textit{user} I want to initiate a proposition in order start the political process in a certain context of my interest, thereby becoming the \textit{petition author} of the newly initiated proposition.
+As a \textit{user} I want to initiate a proposition in order start the political process in a certain context of my interest, thereby becoming the \textit{proposition author} of the newly initiated proposition.
 
 \userstory{10}
 As a \textit{user} and potential \textit{vote accumulator} I want to vote on a proposition in the voting phase.
@@ -114,7 +114,7 @@ As a \textit{user} I want to support a proposition group in order to propel it t
  As a \textit{moderator} I want to block users violating the platform rules.
 
 \userstory{6}
- As a \textit{moderator} I want to block proposals violating the platform rules.
+ As a \textit{moderator} I want to block propositions violating the platform rules.
 
 \userstory{6}
  As a \textit{proposition author} I want to get notifications on new change requests pertaining to my followed propositions.
@@ -263,8 +263,8 @@ Moreover, using the microservices architecture, each of the microservices could 
 
 \section{Public Declaration of Intent Protocol}
 \label{sec:PublicDeclarationOfIntentProtocol}
-The public declaration of intent protocol describes the steps necessary to post a vote, support or delegation intent to a public space.
-This protocol needs to be implemented by a client that optimally should be external to the platform for security reasons.
+The public declaration of intent protocol describes how to secretly post or withdraw a vote, support or delegation intent to a public space.
+%This protocol needs to be implemented by a client that optimally should be external to the platform for security reasons.
 The protocol describes three processes, namely
 \begin{enumerate}
   \item Public Declaration of Intent Key (PIK) Generation
@@ -273,6 +273,15 @@ The protocol describes three processes, namely
 \end{enumerate}
 
 Each of these processes will be discussed in detail below.
+
+\subsection{Public Declaration of Intent Key (PIK) Generation}
+As we introduced in \autoref{}
+
+\subsection{Assembly of User Intent Messages}
+
+
+\subsection{Assembly of User Intent Withdrawal Messages}
+
 
 
 
