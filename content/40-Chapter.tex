@@ -9,8 +9,6 @@ We then continue by laying the foundation for a more technical view of the platf
 The chapter is then concluded by the specification of two protocols, namely the \hyperref[sec:PublicDeclarationOfIntentProtocol]{public declaration of intent protocol} and the \hyperref[sec:VoteTallyingProtocol]{vote tallying protocol}, that revolve around vote, support and delegation intents posted in the public space.
 
 
-\todo{@KD: Create user stories pertaining to citizen scientists interaction with the platform}
-
 % narrative: discuss architectural design -> choose microservices
 % how to name the section on the actual microservices implementations?
 
@@ -157,9 +155,6 @@ As a \textit{user} I want to support a proposition group in order to propel it t
  As an \textit{admin} I want to block or unblock users.
 
 \userstory{4}
- As a \textit{user} I want to see the relevant behavior of another user in order to understand their political (Verhaltensspuren) … (Simon, go for it) \unsure{was haben wir damit gemeint?}
-
-\userstory{4}
  As a \textit{user} I want my data to be shielded from other third parties in order preserve my private identity.
 
 \userstory{4}
@@ -268,13 +263,18 @@ Moreover, using the microservices architecture, each of the microservices could 
 
 \section{Public Declaration of Intent Protocol}
 \label{sec:PublicDeclarationOfIntentProtocol}
-The public declaration of intent protocol describes the steps necessary to post a vote or delegation intent to a public space.
-This protocol needs to be implemented by a vote(-delegation) client that optimally should be external to the platform for security reasons.
-The protocol describes three phases:
+The public declaration of intent protocol describes the steps necessary to post a vote, support or delegation intent to a public space.
+This protocol needs to be implemented by a client that optimally should be external to the platform for security reasons.
+The protocol describes three processes, namely
 \begin{enumerate}
   \item Public Declaration of Intent Key (PIK) Generation
-  \item Assembling the declaration of intent message
+  \item Assembly of User Intent Messages
+  \item Assembly of User Intent Withdrawal Messages
 \end{enumerate}
+
+Each of these processes will be discussed in detail below.
+
+
 
 %For a given user and a proposition, the vote casting mechanism works as follows:
 %\begin{enumerate}
