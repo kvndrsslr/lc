@@ -97,8 +97,9 @@ Examples of artifacts that should be referencable by hyperlinks in discussion en
 \subsubsection{Proposition Change Requests}
 \label{ssec:Proposition_Change_Requests}
 As we discussed briefly in the previous section about propositions, a proposition will evolve over its life time which means that it will be edited.
-\todo{Logik des Satzes nicht klar (warum daraus folgt dass nur der creator editieren sollte)} Since it is desirable that edits to propositions are based on a discursive process involving multiple individuals as required by \textbf{(\tracknshrink{LD}1)} we argue that only the original creator of the proposition, i.e. its owner, should be able to directly edit it.
-In order to allow other individuals to support the editing process, we introduce proposition change requests, which are artifacts that carry the edited propositon text together with a linked discussion entry and a reference to the underlying proposition. 
+We argue that only the original creator of the proposition, i.e. its owner, should be able to directly edit it in order to ensure its consistency and prevent malicious editing of propositions by individuals with different opinions.
+It is therefore also a measure of minority protection.
+Since it is desirable that edits to propositions are based on a discursive process involving multiple individuals as required by \textbf{(\tracknshrink{LD}1)}, we introduce proposition change requests, which are artifacts that carry the edited propositon text together with a linked discussion entry and a reference to the underlying proposition. 
 These proposition change requests can then be accepted or rejected by the owner of the proposition.
 In addition to up- or downvoting the linked discussion entry, users can explicitly express their conditional support of the proposition in case the proposition change request gets accepted or rejected.
 This should help the responsible proposition owners to determine the value of specific change requests.
@@ -136,8 +137,9 @@ An exception to the second criterion for a taxonomy (its disjoint status) are hi
 
 A well-known external source for document categorization is the Wikipedia taxonomy.
 The corpus of the open encyclopedia is often used to build automatic categorization approaches or to improve the performance of existing models.
-Seeing the pure size of the corpus and the fact that it changes constantly you don’t wonder why this is the case.
-\todo{Satz mir nicht ganz klar} For our project however, the problem occurred that the political category described more the field of political science that general topics politics are coping with. 
+Its pure size and the fact that it is constantly updated are very good reasons for this.
+However, upon manual investigation we observed that the political categories in Wikipedia describe fields of political science rather than general topics politics are coping with. 
+Therefore, this taxonomy is unfortunately not useful for our goals.
 
 Almost the complete opposite is true for the taxonomy of Stack Overflow Politics.
 While the Wikipedia articles were almost purely about a scientific view on Politics, the branch of the well-known question and answer site Stack Overflow almost only consist of current topics discussed by the community.
@@ -167,7 +169,7 @@ Therefore, for purposes of vote couting, we can always extract an \emph{effectiv
 Note that with this model, cycles can be used by groups of participants with considerable overlap in their political opinions to pool their votes, effectively making sure that all their votes will be counted if at least one of them votes directly.
 
 Delegation graphs can be maintained for different levels of governance, hereafter named scopes.
-\todo{Not clear what priority means in this context. Would be good what to mention what this means (in this project / for our platform), and what its effects are); wird auf 3.3.3.3 verwiesen, sollte aber zumindest angerissen werden (halbsatz reicht denke ich)}Scopes have increasing priority with decreasing generality.
+Scopes have increasing priority with decreasing generality, meaning that the delegation relationships established by more specific delegation graphs take precedence over the ones established by more general delegation graphs.
 Delegation graphs with proposition scope have the highest priority and correspond to specific propositions, i.e. for each proposition there can be at most one delegation graph with proposition scope.
 Right below proposition scope we have context scope, where for each context there can be at most one delegation graph with context scope.
 The quasi ordering induced by the tree-shaped hierarchical context taxonomy can be used to determine a strict ordering between context-scoped delegation graphs with an ancestor relationship.
@@ -510,7 +512,7 @@ The easiest way to solve \textbf{(\tracknshrink{CS}3)} would be to give the user
 However we do not think that a lot of users would choose this option.
 A more careful approach is therefore necessary.
 Very sensitive personal information such as full name, age and residency should be stripped away regardlessly.
-However, the protection from structural analysis could be weakened, such that it would be theoretically possible for both actual citizen scientist \todo{not very security-by-designy which we mentioned}which we assume to not have evil intentions) and adversaries to deduce the political intentions of at least a few users.
+However, the protection from structural analysis could be weakened, such that it would theoretically be possible for adversaries to deduce the political intentions of at least a few users.
 
 This probably less threatening option could be made even safer for users by using techniques as discussed in \autoref{ssec:Integration_pattern}.
 Users could opt-in to collect references to user intents they issued together with a proof of ownership.
