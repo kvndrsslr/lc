@@ -74,13 +74,15 @@ The most important tool in a democracy to transform political positions and indi
 In the remainder of this work, by propositions we are referring to political proposals that motivate a change in legislation and enumerate a list of possible options for this particular change, which participants in a democracy can vote on.
 Apart from a title, the propositions motivational text and a list of voting options, propositions possess additional metadata and dependency relationships to other artifacts in the platform.
 Metadata is very important for the accessibility of the actual information content, for example through active filtering mechanisms as required by \textbf{(\tracknshrink{LD}5)}.
-Amongst others, proposition metadata include proposition creator, time of creation and the political context as well as the administrative unit a proposition belongs to.
+Amongst others, proposition metadata include proposition creator, time of creation and the political context(s) as well as the administrative unit a proposition belongs to.
 
 By political contexts (from here on just named \textit{contexts}), we mean the categorial themes in which political topics are organized.
 The context a proposition is associated with is a crucial piece of metadata in a \tracknshrink{LD} platform, as  clearly defined categories are important to make order of the ongoing topics and are essential to stay on top of things.
 As with most categorial organization systems, broad, general contexts can be divided down to narrower, more specficic ones and thus form a taxonomy, which we will discuss in detail in~\ref{sec:Model_Contexts}.
 
-Propositions typically evolve over time which can be conceptualized as a succession of versioned snapshots.
+As described in~\ref{sec:Model_Contexts}, subjects belong to different, sometimes multiple contexts. In order to allow for the versatility demanded there, but recognizing that a principle context (at some level within the taxonomy) is the focus of a proposition, we decide 
+
+Propotatosite contextual the data through assigning a primary context and an arbitiometans typically evolve ovto anner time which can be conceptualized as a succession of versioned snapshots.
 To this end, a propositions state should be saved together with an increasing version numer at either fixed time intervals or manually by the individuals involved with the editing.
 Moreover, a propositions creation and its evolution should always be accompanied by a healthy discussion of the matter at hand between both individuals directly involved with the proposition editing and other individuals interested in expressing their political opinions.
 These discussions contents and their metadata are discussed in the next section.
@@ -335,28 +337,28 @@ In the following, we will successively illustrate each phase by describing its p
 \paragraph{Initiation phase}
 \label{ssec:Lifecycle_Initiation}
 
-The initiation phase begins when a new proposition is created by an user, which thereby becomes its proposition author (see \ref{ssec:Roles_propositioner}).
+The initiation phase begins when a new proposition is created by a user, which thereby becomes its proposition author (see \ref{ssec:Roles_propositioner}).
 To create a proposition, the proposition author needs to specify the following mandatory information: a title, a main text, one primary context, any number of secondary contexts and any number of voting options.
-When a new proposition is created, it gets assigned to a new unique proposition group and we call it that proposition groups \emph{root proposition}.
+When a new proposition is created, it gets assigned to a new unique proposition group and we call the proposition the \emph{root proposition} of the proposition group.
 Other users can then create alternative propositions which share the same proposition group, title and primary context as the root proposition.
 Creators of alternative propositions are called alternative proposition authors.
 Proposition authors, as well as alternative proposition authors can always edit their respective propositions text, options and secondary contexts.
 Followers of a proposition groups primary context that are interested in getting it into the discussion phase can attest their support.
-Once a proposition group gains enough support ($X\%$ of the primary context follower population), all propositions in it are moved into the discussion phase.
+Once a proposition group gains enough support ($X\%$ of the primary context follower population, which $X$ depending on the configuration of the platform implementation), all propositions in it are moved into the discussion phase.
 
 %As the primary context 
 
 \paragraph{Discussion phase}
 \label{ssec:Lifecycle_Discussion}
 
-When moving into the discussion phase, more interactions between the supporters and the proposition authors are enabled while all interactions from the initiation phase are maintained.
+When moving into the discussion phase, more interaction between the supporters and the proposition authors is enabled while all interaction from the initiation phase is maintained.
 Users may now issue proposition modification requests to the texts.
 Moreover, as previously described in~\ref{ssec:Proposition_Change_Requests}, users can express support for the proposition under the condition that a given modificiation request gets accepted or rejected.
 As another means of community involvement in the proposition constitution, users can discuss a proposition.
 In discussion entries, special links can be used to reference other artifacts on the platform.
 Referencable artifacts are either other discussion entries, (passages of) propositions or (passages of) modification requests.
 Other than in the intiation phase, support is not aggregated per proposition group.
-Once a single proposition gains enough support ($X\%$ of the primary context follower population), it is moved into the voting phase.
+Once a single proposition gains enough support ($Y\%$ of the primary context follower population, with $Y$ again depending on the configuration of the platform), it is moved into the voting phase.
 
 \paragraph{Voting phase}
 \label{ssec:Lifecycle_Voting}
@@ -407,7 +409,7 @@ Although users should be able to change their delegation intents on a given prop
 
 \paragraph{Vote intents}
 As one can easily validate a vote intent against the central trusted authority as well as obtain the power of a vote intent by parsing the delegation graph from the delegation intents in the public space, each individual, even those not involved directly in the platform, has the ability to count and verify votes.
-Although users should be able to change their vote intents on a given proposition for the entire span of its voting phase, an additional mechanism should ensure that previous vote intents are invalidated upon issuing a new one.
+Since users should be able to change their vote intents on a given proposition for the entire span of its voting phase, an additional mechanism should ensure that previous vote intents are invalidated upon issuing a new one.
 When building the delegation graph, delegation intents targeted towards a given combination of user and proposition should be invalidated by vote intents targeted towards the same combination, thereby avoiding to count ones vote power twice.
 
 \paragraph{Support intents}
@@ -430,18 +432,18 @@ As counting support scores and counting votes have merely semantical differences
 \begin{enumerate}
   \item For a given proposition $p$, collect all user intents from the public space
   \item Build the delegation graph $\mathcal{D}$ from the delegation intents
-  \item Invert all edges in $\mathcal{D}$ to obtain $\mathcal{D}^I$
+  \item Invert all edges in $\mathcal{D}$ to obtain $\mathcal{D}^I$\footnote{Replace all directed edges $(u,v)$ by edges $(v,u)$, $u,v \in N, (u,v) \in E$, with $D=(N,E)$}
   \item All vote intents are collected in a list $V$
-  \item Assign the next vote intent in $V$ to $v$
+  \item If $V$ is not exhausted, assign the next vote intent in $V$ to $v$, else terminate
   \item Check $v$ against the central trusted authority for validity 
-  \item If $v$ is not valid, return to number 6
-  \item Initalize the voting power $p_v$ of $v$ to 1
+  \item If $v$ is not valid, return to number 5
+  \item Initialize the voting power $p_v$ of $v$ to 1
   \item If $\mathcal{D}^I$ does not contain $v$, advance to number 13
   \item Remove all incoming edges of $v$ in $\mathcal{D}^I$
-  \item Find all sinks $S$ in $\mathcal{D}^I$ that are reachable from $v$
+  \item Find all nodes $S$ in $\mathcal{D}^I$ that are reachable from $v$
   \item Set $p_v$ to $|S|+1$
   \item In the voting protocol, add $p_v$ to the vote count for the option that $v$ voted for
-  \item If $V$ is not exhausted, return to number 6
+  \item Return to number 5
 \end{enumerate}
 
 
@@ -449,9 +451,9 @@ As counting support scores and counting votes have merely semantical differences
 \label{ssec:Context_Taxonomy_Evolution}
 The evolution of the context taxonomy should be a joint effort between users interested in particular contexts and responsible moderators.
 Therefore, the platform should allow for discussions on specific contexts.
-Whenever an (informal) consensus is reached amongst participants in such an discussions, a couple of responsible moderators should contact the platform administators which can then implement the change.
+Whenever an (informal) consensus is reached among participants in such discussions, responsible moderators should contact the platform admins which can then implement the change.
 
-For reasons of data integrity, changes to the context taxonomy should be very well justified and moderators should in general have rather conservative stances on changing the context taxonomy
+For reasons of data integrity, changes to the context taxonomy should be very well justified and moderators should in general have rather conservative stances on changing the context taxonomy.
 
 We therefore decided to not design specific artifacts and roles to make this process more automatable and independent from the platform administrators.
 Another argument for this non-integrative approach is that, depending on the actual platform implementation, it might not be trivial to guarantee data integrity for specific taxonomy changes and hence might require expert knowledge to execute.
@@ -487,13 +489,13 @@ It could be argued that this approach is too restrictive and unnecessary, since 
 
 The most sensitive information in a \tracknshrink{LD} platform, the user intents, are at the same time probably the most interesting and valuable for citizen scientists.
 Note that our design of user intents and their emission in the public space as described in \autoref{ssec:User_Intents} and \autoref{sec:User_Intent_Emission} already satisfy the requirements of \textbf{(\tracknshrink{CS}2)}.
-They fully preserve privacy, as (1) the original creator of an user intention can not be deduced by the user intent itself and (2) by forcing delegation intents to be reduced to proposition scope, it is possible to generate anonymized user aliases per proposition such that deducing information about single users through structural analysis of multiple delegation graphs is not possible.
+They fully preserve privacy, as (1) the original creator of a user intention can not be deduced by the user intent itself and (2) by forcing delegation intents to be reduced to proposition scope, it is possible to generate anonymized user aliases per proposition such that deducing information about single users through structural analysis of multiple delegation graphs is not possible.
 
 The easiest way to solve \textbf{(\tracknshrink{CS}3)} would be to give the user the choice to completely disregard privacy by loosening up all information to citizen scientist access.
-However we do not think that a lot of users would chose this option.
+However we do not think that a lot of users would choose this option.
 A more careful approach is therefore necessary.
 Very sensitive personal information such as full name, age and residency should be stripped away regardlessly.
-However, the protection from structural analysis could be weakened, such that it would be theoretically possible for both actual citizen scientist (which we assume to not have evil intentions) and adversaries to deduce the political intentions of at least a few users.
+However, the protection from structural analysis could be weakened, such that it would be theoretically possible for both actual citizen scientist \todo{not very security-by-designy which we mentioned}which we assume to not have evil intentions) and adversaries to deduce the political intentions of at least a few users.
 
 This probably less threatening option could be made even safer for users by using techniques as discussed in \autoref{ssec:Integration_pattern}.
 Users could opt-in to collect references to user intents they issued together with a proof of ownership.
