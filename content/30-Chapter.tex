@@ -176,15 +176,6 @@ Finally, the lowest scope on the priority ladder is the global scope and there c
 
 We will see in \autoref{ssec:Vote_Counting} how priority can be used for vote counting.
 
-\subsubsection{User Intents}
-\label{ssec:User_Intents}
-\todo{Diskussion der intents ziemlich kurz im Vergleich zu anderen Teilen, aber okay}
-The next type of artifact are so called user intents, which are categorized into delegation intents, vote intents and support intents.
-Delegation intents can be used to compose delegation graphs while vote intents are the digital counterpart of ballots.
-Support intents are like vote intents but there are less restrictions on how much support intents a user can issue per proposition group.
-In order to meet the requirements of \textbf{(\tracknshrink{LD}2)} and \textbf{(\tracknshrink{LD}3)}, user intents should be anonymized to satisfy the secrecy property as well as public and authorized to satisfy the verifiability property.
-To this end, user intents should not only carry information about the specific intent but also authorization information.
-
 \subsubsection{User Accounts}
 \label{ssec:User_Accounts}
 User accounts are an important instrument to build trust amongst users of a \tracknshrink{LD} platform.
@@ -192,6 +183,23 @@ They can potentially offer a variety of personal as well as professional and pol
 \todo{@KD: haveTime ? elaborate : leaveAsIs }
 However, in order to follow the protection of privacy \textbf{(\tracknshrink{LD}7)}, users should be able to chose for themselves which information they want to be displayed to the public.
 Moreover, as we have seen in the previous section on user intents, user accounts are decoupled from sensitive political information, i.e. the user intents by means of anonymization.
+
+\subsubsection{User Intents}
+\label{ssec:User_Intents}
+The next type of artifact are so called user intents, which are categorized into delegation intents, vote intents and support intents.
+\emph{Delegation intents} carry information regarding an intent to delegate a vote to another user for a given delegation scope.
+They therefore can be envisioned as edges of the delegation graph for the given scope.
+Conversely, delegation graphs for a given scope can be composed by collecting all the corresponding delegation intents.
+\emph{Vote intents} are the digital counterpart of ballots.
+They therefore carry information regarding an intent to cast a vote for a specific voting option within a given proposition.
+\emph{Support intents} carry information regarding an intent to express support of a proposition, a proposition modification request or a whole proposition group.
+In order to meet the requirements of \textbf{(\tracknshrink{LD}2)} and \textbf{(\tracknshrink{LD}3)}, user intents should be anonymized to satisfy the secrecy property as well as public and authorized to satisfy the verifiability property.
+To this end, user intents should not only carry information about the specific intent but also authorization information in the form of a \textit{participation privilege}, which we discuss next.
+
+\subsubsection{Participation Privileges}
+\label{ssec:Participation_Privileges}
+Privileges of participation are unique, anonymized tokens which grant their owner the right to state user intents.
+They should be issued by a trusted authority.
 
 \subsubsection{Notifications}
 \label{sec:Notifications}
@@ -389,13 +397,20 @@ While not being ideal, due to our lack of expertise in zero-knowledge-proof desi
 The main feature of our system design is that user intents are casted publicly, i.e. they are distributed over the Internet in a way that (1) everyone can access them and (2) no non-critical number of malicious users is able to delete, invalidate or otherwise tamper with user intents.
 That means that user intents may be casted using a distributed ledger, a publicly managed collection of mirrored vote servers or any other system that abides by these criteria.
 
-We require one central trusted authority, which contributes to the verifiability of the process by providing means of identifying a given user intent as valid.
-This is done using a cryptographic method known as blind signature.
-Note that by using a blind signature scheme secrecy is preserved because the central authority has no ability to link a given user intent to an identity.
-The user intent has been \emph{blindly} singed, and therefore no information about what was signed has been retained. 
+We require one central trusted authority, which (1) distributes \textit{priviledges of participation} amongst authorized users of the platform and (2) provides means of identifying a given user intent as valid.
+It thereby contributes to the verifiability of user intents by guaranteeing that valid user intents can only be formulated by authorized individuals, i.e. participants in the platform.
 The argument for introducing a centralized service into the system is that in any democratic environment some authority has to decide who is part of that environment and therefore has the right to participate by casting user intents.
 Surely, one could imagine a system where the right to vote is granted based on consensus as proposed by the Democracy\.Earth Foundation~\parencite{DemocracyEarth2018}.
 However, we do not agree that this system can work on any scale and we are not aware of a way to mathematically prove this assumption.
+
+It is clear that no individual should be able to obtain the privilege of participation multiple times, which can be broken down to the requirements that (R1) no natural person should be able to obtain more than one user accounts and (R2) that no user account should be able to obtain the privilege of participation twice.
+Since there is no easy way to solve (R1) purely in the digital realm, it should be the responsibility of the platform operators to come up with a system which distributes unique user accounts to participants without the possibility of malicious persons to obtain more than one.
+The second requirement (R2) is easily assured if the trusted authority keeps track of the users which have already obtained their privilege of participation and denies to grant it again.
+Note that however this approach is problematic w.r.t. the anonymity property of participation privileges, as the trusted authority could maliciously keep track of which user has been granted which privilege of participation.
+However, this problem can be erradicated using a cryptographic method known as blind signature.
+By using a blind signature scheme secrecy is preserved because the central authority has no ability to link a given user intent to an identity.
+The user intent has been \emph{blindly} singed, and therefore no information about what was signed has been retained. 
+
 In the following we will discuss the interaction of the individual types of user intentions.
 
 \paragraph{Delegation intents}
