@@ -45,7 +45,7 @@ The first promising platform we looked into was \textit{LiquidFeedback}\footnote
 
 The other candidate is \textit{DemocracyOS}\footnote{\url{http://democracyos.org/}}, which is actively developed by Argentina’s Net Party (span. \textit{Partido de la Red}). This platform provides a modern tech stack (backend: MongoDB, frontend: React) and good developer support\footnote{Docs: \url{http://docs.democracyos.org/} GitHub: \url{https://github.com/DemocracyOS/democracyos}}. Unfortunately, the project is structured in an obscure manner; for example the developers decided against differentiating between \texttt{src} files and \texttt{lib} files, thus mixing React components with regular helper functions and other libraries in on big \texttt{lib} folder. Since there is no clear separation of view, logic and helper libraries this creates an entangled graph of dependencies.
 
-Despite both platforms, especially the latter one, are both promising tools, there is still one fundamental issue: As of 2019 there is no \tracknshrink{FOSS} platform that implemented the idea of vote delegation in any way, and does provide sufficient support to engage developers. Since developing our very own digital liquid democracy platform would be an enormous project, we shifted our focus towards a conceptual framework.
+Despite both platforms, especially the latter one, being promising tools, there is still one fundamental issue: As of 2019 there is no \tracknshrink{FOSS} platform that implemented the idea of vote delegation in any way, and does provide sufficient support to engage developers. Since developing our very own digital liquid democracy platform would be an enormous project, we shifted our focus towards developing a conceptual framework.
 
 
 
@@ -70,17 +70,17 @@ Having a clear view on both artifacts and user roles, we then discuss the core p
 
 \subsubsection{Propositions}
 \label{sec:Model_Propositions}
-A democracies most important process in order to transform political positions and individual opinions into laws is the iteratively joint crafting of propositions which are, once finalized, subject to voting.
-Propositions therefore should be the first thing to think about when developing the concept of a \tracknshrink{LD} platform.
-Apart from a title, the proposition text and a list of voting options, propositions possess additional metadata and dependency relationships to other artifacts in the platform.
+The most important tool in a democracy to transform political positions and individual opinions into laws are propositions.
+In the remainder of this work, by propositions we are referring to political proposals that motivate a change in legislation and enumerate a list of possible options for this particular change, which participants in a democracy can vote on.
+Apart from a title, the propositions motivational text and a list of voting options, propositions possess additional metadata and dependency relationships to other artifacts in the platform.
 Metadata is very important for the accessibility of the actual information content, for example through active filtering mechanisms as required by \textbf{(\tracknshrink{LD}5)}.
 Amongst others, proposition metadata include proposition creator, time of creation and the political context as well as the administrative unit a proposition belongs to.
 
-By political contexts (from here on just contexts), we mean the categorial themes in which political topics are organized.
+By political contexts (from here on just named \textit{contexts}), we mean the categorial themes in which political topics are organized.
 The context a proposition is associated with is a crucial piece of metadata in a \tracknshrink{LD} platform, as  clearly defined categories are important to make order of the ongoing topics and are essential to stay on top of things.
 As with most categorial organization systems, broad, general contexts can be divided down to narrower, more specficic ones and thus form a taxonomy, which we will discuss in detail in~\ref{sec:Model_Contexts}.
 
-Propositions typically evolve over time which can be conceptualized as a succession of versioned snapshot.
+Propositions typically evolve over time which can be conceptualized as a succession of versioned snapshots.
 To this end, a propositions state should be saved together with an increasing version numer at either fixed time intervals or manually by the individuals involved with the editing.
 Moreover, a propositions creation and its evolution should always be accompanied by a healthy discussion of the matter at hand between both individuals directly involved with the proposition editing and other individuals interested in expressing their political opinions.
 These discussions contents and their metadata are discussed in the next section.
@@ -95,7 +95,7 @@ Examples of artifacts that should be referencable by hyperlinks in discussion en
 \subsubsection{Proposition Change Requests}
 \label{ssec:Proposition_Change_Requests}
 As we discussed briefly in the previous section about propositions, a proposition will evolve over its life time which means that it will be edited.
-Since it is desirable that edits to propositions are funded on a discursive process involving multiple individuals as required by \textbf{(\tracknshrink{LD}1)} we argue that only the original creator of the proposition, i.e. its owner, should be able to directly edit it.
+\todo{Logik des Satzes nicht klar (warum daraus folgt dass nur der creator editieren sollte)} Since it is desirable that edits to propositions are based on a discursive process involving multiple individuals as required by \textbf{(\tracknshrink{LD}1)} we argue that only the original creator of the proposition, i.e. its owner, should be able to directly edit it.
 In order to allow other individuals to support the editing process, we introduce proposition change requests, which are artifacts that carry the edited propositon text together with a linked discussion entry and a reference to the underlying proposition. 
 These proposition change requests can then be accepted or rejected by the owner of the proposition.
 In addition to up- or downvoting the linked discussion entry, users can explicitly express their conditional support of the proposition in case the proposition change request gets accepted or rejected.
@@ -107,7 +107,7 @@ For these cases there exists alternative propositions which will be discussed ne
 \label{ssec:AltProposition}
 In most cases, politics are too complex to capture the endeavor of all individuals in one proposition that can be answered with a simple yes or no.
 In order to provide means to depict political opinions more accurately, we introduce alternative propositions.
-Alternative propositions have all the properties of normal propositions with the exception that the political contexts of alternative propositions can not be different from those of the original proposition.
+Alternative propositions have all the properties of normal propositions with the exception that the political contexts of alternative propositions can not be different from those of the original proposition. This allows for large versatility of the proposition, while ensuring that both propositions address the same (political) context.
 Additionally, alternative propositions carry a reference to the original proposition, effectively placing them in a common \emph{proposition group}.
 
 \subsubsection{Context Taxonomy}
@@ -118,7 +118,7 @@ Choosing a proper context taxonomy to categorize propositions is crucial for a \
 On the one hand the contexts can help users to find votes they are interested in, which partly satisfies criteria \textbf{(\tracknshrink{LD}5)}.
 Even more important, with contexts one can also determine for which issues one wants to vote oneself and which topics one wants to pass on to a person with more expertise in this field.
 Taking for example a vote about the deforestation of the south of Germany, it could fall into a context such as environment.
-Imagining that the someone is not that much of specialist when it comes to the environment and wants to delegate votes for propositions on this subject to a relative who is.
+Imagining that someone is not that much of a specialist when it comes to the environment, they could delegate votes for all propositions on this subject to a relative who is.
 %Here the taxonomies not only determine if he gets the topic in his feed but it also could automatically be passed on to his relative.
 %This highlights a second problem: how do we make sure that the votes are categorized properly?
 %More about this later.
