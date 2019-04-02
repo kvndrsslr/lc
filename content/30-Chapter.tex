@@ -71,8 +71,8 @@ Having a clear view on both artifacts and user roles, we then discuss the core p
 \subsubsection{Propositions}
 \label{sec:Model_Propositions}
 The most important tool in a democracy to transform political positions and individual opinions into laws are propositions.
-In the remainder of this work, by propositions we are referring to political proposals that motivate a change in legislation and enumerate a list of possible options for this particular change, which participants in a democracy can vote on.
-Apart from a title, the propositions motivational text and a list of voting options, propositions possess additional metadata and dependency relationships to other artifacts in the platform.
+In the remainder of this work, by propositions we are referring to political proposals that motivate a change in legislation, which participants in a democracy can vote to either accept or reject.
+Apart from a title and a motivational text, propositions possess additional metadata and dependency relationships to other artifacts in the platform.
 Metadata is very important for the accessibility of the actual information content, for example through active filtering mechanisms as required by \textbf{(\tracknshrink{LD}5)}.
 Amongst others, proposition metadata include proposition creator, time of creation and the political context(s) as well as the administrative unit a proposition belongs to.
 
@@ -80,7 +80,7 @@ By political contexts (from here on just named \textit{contexts}), we mean the c
 The context a proposition is associated with is a crucial piece of metadata in a \tracknshrink{LD} platform, as  clearly defined categories are important to make order of the ongoing topics and are essential to stay on top of things.
 As with most categorial organization systems, broad, general contexts can be divided down to narrower, more specficic ones and thus form a taxonomy, which we will discuss in detail in~\ref{sec:Model_Contexts}.
 
-As described in~\ref{sec:Model_Contexts}, issues belong to different, sometimes multiple contexts. In order to allow for the versatility demanded there, but recognizing that a principle context (at some level within the taxonomy) is the focus of a proposition, we decided to assign a primary context and an arbitrary number of secondary contexts to the proposition as part of its metadata. Since the primary context addresses the very core of the proposition, changing the primary context is not possible. These restrictions are lifted for secondary context. With this, we believe to have reached a good compromise between keeping the identity of a context intact, while allowing for large flexibility.
+Sometimes multiple contexts could be appropriate for a given proposition. In order to allow for this versatility, but recognizing that a principle context (at some level within the taxonomy) is the focus of a proposition, we decided to assign a single primary context and an arbitrary number of secondary contexts to the proposition as part of its metadata. Since the primary context addresses the very core of the proposition, changing the primary context is not possible. These restrictions are lifted for secondary context. With this, we believe to have reached a good compromise between keeping the identity of a context intact, while allowing for large flexibility.
 
 Propositions typically evolve over time which can be conceptualized as a succession of versioned snapshots.
 To this end, a propositions state should be saved together with an increasing version number at either fixed time intervals or manually by the individuals involved with the editing.
@@ -99,8 +99,10 @@ Examples of artifacts that should be referencable by hyperlinks in discussion en
 As we discussed briefly in the previous section about propositions, a proposition will evolve over its life time which means that it will be edited.
 We argue that only the original creator of the proposition, i.e. its owner, should be able to directly edit it in order to ensure its consistency and prevent malicious editing of propositions by individuals with different opinions.
 It is therefore also a measure of minority protection.
+
 Since it is desirable that edits to propositions are based on a discursive process involving multiple individuals as required by \textbf{(\tracknshrink{LD}1)}, we introduce proposition change requests, which are artifacts that carry the edited propositon text together with a linked discussion entry and a reference to the underlying proposition. 
 These proposition change requests can then be accepted or rejected by the owner of the proposition.
+
 In addition to up- or downvoting the linked discussion entry, users can explicitly express their conditional support of the proposition in case the proposition change request gets accepted or rejected.
 This should help the responsible proposition owners to determine the value of specific change requests.
 Proposition change requests should not be used to completely turn a propositions goal on its head.
@@ -110,8 +112,16 @@ For these cases there exists alternative propositions which will be discussed ne
 \label{ssec:AltProposition}
 In most cases, politics are too complex to capture the endeavor of all individuals in one proposition that can be answered with a simple yes or no.
 In order to provide means to depict political opinions more accurately, we introduce alternative propositions.
-Alternative propositions have all the properties of normal propositions with the exception that the primary political context of an alternative proposition can not be different from those of the original proposition. This allows for large versatility of the proposition, while ensuring that both propositions address the same (political) context.
-Additionally, alternative propositions carry a reference to the original proposition, effectively placing them in a common \emph{proposition group}.
+
+Once an alternative proposition is created, it is placed in a common \emph{proposition group} with the original proposition.
+For the sake of simplicity in the remainder of this work, we also consider single propositions without any alternative propositions to belong to a proposition group.
+This however requires a slight change in the semantics of a proposition; a proposition no longer owns its primary context, we instead move it to the proposition group.
+
+Therefore, all propositions within a common proposition group will always share the same primary context, which is a desirable property as we will see in \autoref{ssec:Lifecycle_Initiation}.
+The seondary contexts of an alternative proposition are by default inherited from the original proposition, however, alternative proposition may change these without restrictions.
+
+Futhermore, once a proposition groups contains more than one proposition, the voting options of users will no longer be  acceptance or rejection of the original propositions.
+Instead, each alternative proposition will be represented as a voting option and an additional \textit{nil} voting option will represent rejection of all alternatives.
 
 \subsubsection{Context Taxonomy}
 \label{sec:Model_Contexts}
@@ -170,8 +180,8 @@ Note that with this model, cycles can be used by groups of participants with con
 
 Delegation graphs can be maintained for different levels of governance, hereafter named scopes.
 Scopes have increasing priority with decreasing generality, meaning that the delegation relationships established by more specific delegation graphs take precedence over the ones established by more general delegation graphs.
-Delegation graphs with proposition scope have the highest priority and correspond to specific propositions, i.e. for each proposition there can be at most one delegation graph with proposition scope.
-Right below proposition scope we have context scope, where for each context there can be at most one delegation graph with context scope.
+Delegation graphs with proposition group scope have the highest priority and correspond to specific proposition groups, i.e. for each proposition group there can be at most one delegation graph with proposition group scope.
+Right below proposition group scope we have context scope, where for each context there can be at most one delegation graph with context scope.
 The quasi ordering induced by the tree-shaped hierarchical context taxonomy can be used to determine a strict ordering between context-scoped delegation graphs with an ancestor relationship.
 This means that for two given contexts $c_1$ and $c_2$, where $c_1$ is a supercontext (ancestor) of $c_2$, $\text{prio}(c_2)>\text{prio}(c_1)$ holds.
 Finally, the lowest scope on the priority ladder is the global scope and there can be at most one delegation graph with this scope. 
@@ -193,8 +203,8 @@ The next type of artifact are so called user intents, which are categorized into
 They therefore can be envisioned as edges of the delegation graph for the given scope.
 Conversely, delegation graphs for a given scope can be composed by collecting all the corresponding delegation intents.
 \emph{Vote intents} are the digital counterpart of ballots.
-They therefore carry information regarding an intent to cast a vote for a specific voting option within a given proposition.
-\emph{Support intents} carry information regarding an intent to express support of a proposition, a proposition modification request or a whole proposition group.
+They therefore carry information regarding an intent to cast a vote for a specific voting option within a given proposition group.
+\emph{Support intents} carry information regarding an intent to express support of a proposition group.
 In order to meet the requirements of \textbf{(\tracknshrink{LD}2)} and \textbf{(\tracknshrink{LD}3)}, user intents should be anonymized to satisfy the secrecy property as well as public and authorized to satisfy the verifiability property.
 To this end, user intents should not only carry information about the specific intent but also authorization information in the form of a \textit{participation privilege}, which we discuss next.
 
@@ -260,7 +270,7 @@ The proposition author, in the following called \textit{propositioner}, is the r
 A propositioner has the right to change the text of a proposition, either by editing directly, or by moderating the proposition change requests.
 Access to these activities is limited to the propositioner in order to guarantee consistency of the proposition, and to incentivize discussion about aspects relevant to users not in the role of the propositioner.
 Not allowing other users to edit the proposition also prevents malicious or strategic editing as well as discussions about text changes through change requests.
-By having to seek approval for modification, a discourse about the aspects important to the proposition modification requester is strengthened.
+By having to seek approval for modification, a discourse about the aspects important to the proposition change requester is strengthened.
 Moreover does the proposition editing restriction encourage alternative propositions, strengthening the discourse through (hopefully) constructive alternatives.
 
 As we have seen in \ref{ssec:AltProposition}, users can also create alternative propositions to existing ones, thus becoming alternative proposition authors.
@@ -275,8 +285,8 @@ By creating a proposition (or an alternative proposition), a user becomes a prop
 As the name suggests, a discussion participant is a user that engages in a discussion about some artifact by creating a discussion entry.
 Users become discussion participants as soon as they contributes to the discussion by writing a discussion post or responding to one. A discussion participant receives notifications about the discussion, and becomes a proposition follower as well (unless explicitly chosen otherwise)
 
-\subsubsection{Proposition modification requester}
-The proposition modification requester is a \hyperref[ssec:Roles_DiscussionParticipant]{discussion participant} that raises a constructive proposition text edit request. 
+\subsubsection{Proposition change requester}
+The proposition change requester is a \hyperref[ssec:Roles_DiscussionParticipant]{discussion participant} that raises a constructive proposition text edit request. 
 As noted in \ref{ssec:Proposition_Change_Requests}, a proposition text edit request proposes the addition, deletion or textual editing of a passage of proposition text, with (potential) new wording.
 
 \subsubsection{Moderator}
@@ -362,11 +372,11 @@ Once a proposition group gains enough support ($X\%$ of the primary context foll
 \label{ssec:Lifecycle_Discussion}
 
 When moving into the discussion phase, more interaction between the supporters and the proposition authors is enabled while all interaction from the initiation phase is maintained.
-Users may now issue proposition modification requests to the texts.
+Users may now issue proposition change requests to the texts.
 Moreover, as previously described in~\ref{ssec:Proposition_Change_Requests}, users can express support for the proposition under the condition that a given modificiation request gets accepted or rejected.
 As another means of community involvement in the proposition constitution, users can discuss a proposition.
 In discussion entries, special links can be used to reference other artifacts on the platform.
-Referencable artifacts are either other discussion entries, (passages of) propositions or (passages of) modification requests.
+Referencable artifacts are either other discussion entries, (passages of) propositions or (passages of) change requests.
 Other than in the intiation phase, support is not aggregated per proposition group.
 Once a single proposition gains enough support ($Y\%$ of the primary context follower population, with $Y$ again depending on the configuration of the platform), it is moved into the voting phase.
 
@@ -376,8 +386,8 @@ The voting phase is very different from the two previous phases, as entering it 
 Discussions are still enabled as we do not want to restrict freedom of expression.
 With the beginning of the voting phase legitimated users are able to either delegate their vote or place it on their own.
 The voting phase ends after a set amount of days that should be specified by the platform admins.
-All user intents that are voiced after the voting phase ends are not considered valid.
-A detailed description of the voting mechanism is given in the following section.
+All vote and delegation intents that are voiced after the voting phase ends are not considered valid.
+A detailed description of, amongst others, the voting mechanism is given in the following section.
 
 \subsubsection{User Intent Emission}
 \label{sec:User_Intent_Emission}
@@ -402,7 +412,7 @@ That means that user intents may be casted using a distributed ledger, a publicl
 We require one central trusted authority, which (1) distributes \textit{priviledges of participation} amongst authorized users of the platform and (2) provides means of identifying a given user intent as valid.
 It thereby contributes to the verifiability of user intents by guaranteeing that valid user intents can only be formulated by authorized individuals, i.e. participants in the platform.
 The argument for introducing a centralized service into the system is that in any democratic environment some authority has to decide who is part of that environment and therefore has the right to participate by casting user intents.
-Surely, one could imagine a system where the right to vote is granted based on consensus as proposed by the Democracy\.Earth Foundation~\parencite{DemocracyEarth2018}.
+Surely, one could imagine a system where the right to vote is granted based on consensus as proposed by the Democracy.Earth Foundation~\parencite{DemocracyEarth2018}.
 However, we do not agree that this system can work on any scale and we are not aware of a way to mathematically prove this assumption.
 
 It is clear that no individual should be able to obtain the privilege of participation multiple times, which can be broken down to the requirements that (R1) no natural person should be able to obtain more than one user accounts and (R2) that no user account should be able to obtain the privilege of participation twice.
@@ -417,51 +427,20 @@ In the following we will discuss the interaction of the individual types of user
 
 \paragraph{Delegation intents}
 All the delegation intents of individual users in the same delegation scope implicitly form a delegation graph.
-They can be used for all stages of the \hyperref[sec:Model_Propositions]{proposition lifecycle}, i.e. for proposition group initiation support, conditional support in the discussion phase and the voting phase, effectively giving citizen scientists the ability to harvest data about the evolution of the delegation graph from proposition creation to the close of votings.
-In order to avoid that changes to more general delegation graphs change the outcome of past votes, delegation intents must be scoped to specific propositions (or proposition groups in the case of support intents in initiation phase).
+They can be used for all stages of the \hyperref[sec:Model_Propositions]{proposition lifecycle}, i.e. for the support of proposition groups in the initiation phase, support of single propositions in the discussion phase and for voting the voting phase, effectively giving citizen scientists the ability to harvest data about the evolution of the delegation graph from proposition creation to the close of votings.
+In order to avoid that changes to more general delegation graphs change the outcome of past votes, delegation intents must be scoped to specific proposition groups.
 Note that this does not mean that there can not be context or global scoped delegation graphs in the platform.
 Rather, context and global scope delegation graphs could indeed be maintained within the platform.
-However, if no delegation intent is issued explicitly by a user, the system would then need to periodically chose the most specific delegation relationship applicable for each user and proposition from these higher level delegation graphs before automatically posting a delegation intent for each combination to the public space.
+However, if no delegation intent is issued explicitly by a user, the system would then need to periodically chose the most specific delegation relationship applicable for each user and proposition group from these higher level delegation graphs before automatically posting a delegation intent for each combination to the public space.
 Although users should be able to change their delegation intents on a given proposition for the entire span of its voting phase, an additional mechanism should ensure that previous delegation intents are invalidated upon issuing a new one.
 
 \paragraph{Vote intents}
 As one can easily validate a vote intent against the central trusted authority as well as obtain the power of a vote intent by parsing the delegation graph from the delegation intents in the public space, each individual, even those not involved directly in the platform, has the ability to count and verify votes.
 Since users should be able to change their vote intents on a given proposition for the entire span of its voting phase, an additional mechanism should ensure that previous vote intents are invalidated upon issuing a new one.
-When building the delegation graph, delegation intents targeted towards a given combination of user and proposition should be invalidated by vote intents targeted towards the same combination, thereby avoiding to count ones vote power twice.
+When building the delegation graph, delegation intents targeted towards a given combination of user and proposition group should be invalidated by vote intents targeted towards the same combination, thereby avoiding to count ones vote power twice.
 
 \paragraph{Support intents}
-Support intents work just as vote intents, with the following semantical exceptions:
-\begin{itemize}
-  \item Support intents in the initiation phase are directed towards proposition groups. 
-  \item Conditional support intents in the initiation and discussion phase are directed towards proposition change requests.
-\end{itemize}
-
-
-
-
-
-
-\subsubsection{Vote Counting}
-\label{ssec:Vote_Counting}
-As we just discussed, our platform design empowers anyone to determine support scores and voting results by parsing delegation, support and vote intents from the public space.
-As counting support scores and counting votes have merely semantical differences, for sake of brevity we chose to only describe the vote counting process here:
-
-\begin{enumerate}
-  \item For a given proposition $p$, collect all user intents from the public space
-  \item Build the delegation graph $\mathcal{D}$ from the delegation intents
-  \item Invert all edges in $\mathcal{D}$ to obtain $\mathcal{D}^I$\footnote{Replace all directed edges $(u,v)$ by edges $(v,u)$, $u,v \in N, (u,v) \in E$, with $D=(N,E)$}
-  \item All vote intents are collected in a list $V$
-  \item If $V$ is not exhausted, assign the next vote intent in $V$ to $v$, else terminate
-  \item Check $v$ against the central trusted authority for validity 
-  \item If $v$ is not valid, return to number 5
-  \item Initialize the voting power $p_v$ of $v$ to 1
-  \item If $\mathcal{D}^I$ does not contain $v$, advance to number 13
-  \item Remove all incoming edges of $v$ in $\mathcal{D}^I$
-  \item Find all nodes $S$ in $\mathcal{D}^I$ that are reachable from $v$
-  \item Set $p_v$ to $|S|+1$
-  \item In the voting protocol, add $p_v$ to the vote count for the option that $v$ voted for
-  \item Return to number 5
-\end{enumerate}
+Support intents work just as vote intents, with exception that support intents in the initiation phase are directed towards single propositions. 
 
 
 \subsubsection{Context Taxonomy Evolution}
@@ -498,7 +477,7 @@ Another argument for this non-integrative approach is that, depending on the act
 \label{sec:Model_ResearchersAccess}
 
 As we have argued in \autoref{sec:Criteria} sensitive data of users needs to be protected while still allowing citizen scientists to access information relevant to their specific project.
-However, most of the data artifacts we discussed in \autoref{ssec:data_fragments} are not sensitive and could easily be anonymized by replacing references to users with generic hashes in propositions, proposition modification requests and discussion entries.
+However, most of the data artifacts we discussed in \autoref{ssec:data_fragments} are not sensitive and could easily be anonymized by replacing references to users with generic hashes in propositions, proposition change requests and discussion entries.
 User accounts could also be opened up to citizen scientists through removing sensitive information such as full name, age and residency from them and additionally providing some binary properties that indicate presence of information in the original data.
 We can therefore see that by providing all the non-sensitive information through a well documented interface, we satisfy the requirements of \textbf{(\tracknshrink{CS}1)}.
 
@@ -506,7 +485,7 @@ It could be argued that this approach is too restrictive and unnecessary, since 
 
 The most sensitive information in a \tracknshrink{LD} platform, the user intents, are at the same time probably the most interesting and valuable for citizen scientists.
 Note that our design of user intents and their emission in the public space as described in \autoref{ssec:User_Intents} and \autoref{sec:User_Intent_Emission} already satisfy the requirements of \textbf{(\tracknshrink{CS}2)}.
-They fully preserve privacy, as (1) the original creator of a user intention can not be deduced by the user intent itself and (2) by forcing delegation intents to be reduced to proposition scope, it is possible to generate anonymized user aliases per proposition such that deducing information about single users through structural analysis of multiple delegation graphs is not possible.
+They fully preserve privacy, as (1) the original creator of a user intention can not be deduced by the user intent itself and (2) by forcing delegation intents to be reduced to proposition group scope, it is possible to generate anonymized user aliases per proposition such that deducing information about single users through structural analysis of multiple delegation graphs is not possible.
 
 The easiest way to solve \textbf{(\tracknshrink{CS}3)} would be to give the user the choice to completely disregard privacy by loosening up all information to citizen scientist access.
 However we do not think that a lot of users would choose this option.

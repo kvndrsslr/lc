@@ -187,7 +187,8 @@ However, there are still a number of options available for the architecture of b
 \subsection{Client-side Architecture}
 \label{ssec:ClientSideArchitecture}
 It is a very common pattern in contemporary software development to build a variety of thick, stateful clients that all interface with the same stateless server(s) over an API that is commonly implemented using industry standard web technology such as REST.
-Hence, we should not refer to \textit{the} client, because there might be any suitable number of clients, e.g. single page applications rendered in the browser, server-rendered web applications, native mobile clients, native desktop clients, etc.
+Clients could be implemented as single page applications rendered in the browser, server-rendered web applications, native mobile clients or native desktop clients.
+We argue that native deskop clients would be a good choice for our use case, since they would need to manage a variety of cryptographic secrets which is hard to do in a proper fashion when developing for the browser.
 
 While it can be argued that users will only ever need to interfere with a client and hence the vision a user story depicts can be easily translated to requirements on client user interfaces, there are other important techniques for user experience (UX) design that need to accompany user stories in order to develop a modern client.
 However, we do not consider UX design to be relevant for this work and will therefore only concern ourselves with some formal responsibilites of the client and otherwise lay our focus on the engineering of the server side of the platform.
@@ -221,6 +222,13 @@ Moreover, using the microservices architecture, each of the microservices could 
 
 \section{An Exemplary Application Design}
 \label{sec:ApplicationDesign}
+A complete application design encompasses amonst others chososing programming languages, technologies, frameworks as well as developing APIs and business processes.
+
+Since we are just aiming to provide a minimal exemplary application design, we will skip the very technical parts of choosing programming language, specific technologies, frameworks, etc. and instead focus on a more abstract perspective, only involving APIs and their interaction as business processes.
+
+We choose to depict this examplary application design in the light of the microservices architecture for the server-side and a native desktop client on the for the client-side.
+Therefore, we will now derive a list of microservices needed and detail their interaction with the desktop client.
+
 
 
 %
@@ -261,47 +269,86 @@ Moreover, using the microservices architecture, each of the microservices could 
 %
 
 
-\section{Public Declaration of Intent Protocol}
+\section{Public Declaration of User Intent Protocol}
 \label{sec:PublicDeclarationOfIntentProtocol}
 The public declaration of intent protocol describes how to secretly post or withdraw a vote, support or delegation intent to a public space.
 %This protocol needs to be implemented by a client that optimally should be external to the platform for security reasons.
 The protocol describes three processes, namely
 \begin{enumerate}
-  \item Public Declaration of Intent Key (PIK) Generation
-  \item Assembly of User Intent Messages
-  \item Assembly of User Intent Withdrawal Messages
+  \item Obtaining Participation Privilege
+  \item Assembling User Intent Messages
+  \item Time Stamping User Intent Messages
 \end{enumerate}
 
 Each of these processes will be discussed in detail below.
 
-\subsection{Public Declaration of Intent Key (PIK) Generation}
-
-As has been stated in \autoref{sec:User_Intent_Emission}, a blind signature scheme should be utilized in order to preserve secrecy of user intents even against the central trusted authority which manages participation privileges.
-
-\subsection{Assembly of User Intent Messages}
-
-
-\subsection{Assembly of User Intent Withdrawal Messages}
-
-
-
-
-%For a given user and a proposition, the vote casting mechanism works as follows:
-%\begin{enumerate}
-%\item The user creates a fresh RSA key pair.
+\subsection{Obtaining Participation Privilege}
+The participation privilege (see \autoref{ssec:Participation_Privileges}) is the cornerstone of posting anonymized, secure user intents to a public space.
+Users first need to obtain a participation privilege, which acts as an alias, from a central trusted authority (CTA).
+A new participation privileges needs to be obtained for each proposition, proposition group and change request, in order to prevent adversaries from deducing sensitive information about certain users through structural analysis.
+As has been stated in \autoref{sec:User_Intent_Emission}, when obtaining a participation privilege, a blind signature scheme should be utilized in order to preserve secrecy of user intents even against the CTA which manages participation privileges.
+It can be infered from this statement that technically, participation privileges are made up of two components.
+The first component is a user-defined tokens, which serves as the alias for the user.
+The second component is the CTA's signature on the token, which effectively makes it a valid participation privilege.
+Note that blind signature schemes are mostly based on the RSA cryptosystem.
+ 
+The steps to obtain a participation privilege for a given proposition, proposition group or change request $x$ therefore are:
+\begin{enumerate}
+\item The user creates a fresh RSA key pair $\langle k_s, k_p\rangle$
+\item 
 %The length of the key should be as large as possible to protect against attacks for the foreseeable future.
-%\item The user authenticates at the vote registry.
-%\item If the user is authorized to vote, the vote registry blind signs the public key the user has generated in the first step.
-%\item The user can now announce vote or delegate intents to the public.
-%To this end, the user assembles the appropriate message and signs it with his private key he generated in the first step.
-%Then, he adds his public key from the first step and the unblinded signature from the third step to the message.
-%The whole message is then posted to a public space that abides by the criteria outlined earlier.
-%\end{enumerate}
+\item The user authenticates at the CTA.
+\item If the CTA determines that the user is authorized to participate and he has not, the vote registry blind signs the public key the user has generated in the first step.
+\item The user can now announce vote or delegate intents to the public.
+To this end, the user assembles the appropriate message and signs it with his private key he generated in the first step.
+Then, he adds his public key from the first step and the unblinded signature from the third step to the message.
+The whole message is then posted to a public space that abides by the criteria outlined earlier.
+\end{enumerate}
 
-%\paragraph*{Remarks}
-% \begin{itemize}
-% \item 
-% \end{itemize}
+
+\subsection{Assembling User Intent Messages}
+
+
+\subsection{Time Stamping User Intent Messages}
+
+
+% OBTAIN PP:
+% PP_1 := (IDPUBKEY) (TYPE) (SCOPE) 
+% SIG_1 := RSA_ENCRYPT(BLINDPRIVKEY, HASH(PP_1))
+% SIG_2 := RSA_ENCRYPT(CTAPRIVKEY(SCOPE), SIG_1)
+% SIG := RSA_DECRYPT(BLINDPUBKEY, SIG_2)
+% PP := (PP_1) (SIG)
+%
+% ASSEMBLE MSG:
+% HDID := RSA_ENCRYPT(REVPRIVKEY(PP, SEQ), HASH(DID))
+% HUIC := RSA_ENCRYPT(REVPRIVKEY(PP, SEQ), HASH(UIC))
+% MSG_1 := (PP) (SEQ) [(HDID)] (HUIC) (TS)
+% POO := RSA_ENCRYPT(IDPRIVKEY, HASH(MSG_1))
+% MSG := (MSG_1) (POO)
+%
+% ASSEMBLE REVEAL MSG:
+% RMSG_1 := (PP) (SEQ) (REVPUBKEY(PP, SEQ)) [(RDID)] (RUIC) (TS)
+% POO := RSA_ENCRYPT(IDPRIVKEY, HASH(RMSG_1))
+% RMSG := (RMSG) (POO) 
+%
+% TIMESTAMP MSG: 
+% H := HASH(MSG)
+% TSP := RSA_ENCRYPT(CTAPRIVKEY(SCOPE), HASH((H)(CTATS)))
+% MSG := (MSG) (TSP)
+%
+% CHECK POO:
+% RSA_DECRYPT(IDPUBKEY, POO) == HASH(MSG_1)
+%
+% CHECK TSP: (CTATS == TS)
+% RSA_DECRYPT(CTAPUBKEY(SCOPE), TSP) == HASH(HASH(MSG), TS) && TS IN PERIOD(SCOPE)
+%
+% CHECK TSP OF REVEAL:
+% RSA_DECRYPT(CTAPUBKEY(SCOPE), TSP) == HASH(HASH(MSG), TS) && TS > PERIOD(SCOPE)
+%
+% CHECK REVEAL VALIDITY:
+% RSA_DECRYPT(REVPUBKEY(PP, SEQ), HDID) == HASH(RDID) &&
+% RSA_DECRYPT(REVPUBKEY(PP, SEQ), HUIC) == HASH(RUIC)
+
 
 
 \section{Vote Tallying Protocol}
@@ -309,10 +356,24 @@ As has been stated in \autoref{sec:User_Intent_Emission}, a blind signature sche
 The vote tallying protocoll describes the steps necessary to carry out vote tallying in the public space for some proposition after its voting phase has ended.
 It can be implemented as part of a vote(-delegation) client, as a public service and directly within the platform.
 The idea is that everyone is able to carry out the vote tallying process purely relying on public, signed data.
-The result of the vote tallying is the delegation graph of all valid voting keys.
-This graph can then be used to determine the end result of the vote based on the used voting method bound to the proposition.
+As counting support scores and counting votes have merely semantical differences, for sake of brevity we chose to only describe the vote counting process here:
 
-
+\begin{enumerate}
+  \item For a given proposition group $p$, collect all user intents from the public space
+  \item Build the delegation graph $\mathcal{D}$ from the delegation intents
+  \item Invert all edges in $\mathcal{D}$ to obtain $\mathcal{D}^I$\footnote{Replace all directed edges $(u,v)$ by edges $(v,u)$, $u,v \in N, (u,v) \in E$, with $D=(N,E)$}
+  \item All vote intents are collected in a list $V$
+  \item If $V$ is not exhausted, assign the next vote intent in $V$ to $v$, else terminate
+  \item Check $v$ against the central trusted authority for validity 
+  \item If $v$ is not valid, return to number 5
+  \item Initialize the voting power $p_v$ of $v$ to 1
+  \item If $\mathcal{D}^I$ does not contain $v$, advance to number 13
+  \item Remove all incoming edges of $v$ in $\mathcal{D}^I$
+  \item Find all nodes $S$ in $\mathcal{D}^I$ that are reachable from $v$
+  \item Set $p_v$ to $|S|+1$
+  \item In the voting protocol, add $p_v$ to the vote count for the voting option that $v$ voted for
+  \item Return to number 5
+\end{enumerate}
 
 
 %\section{Demo Application}
