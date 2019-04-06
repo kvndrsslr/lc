@@ -388,8 +388,8 @@ The voting phase ends after a set amount of days that should be specified by the
 All vote and delegation intents that are voiced after the voting phase ends are not considered valid.
 A detailed description of, amongst others, the voting mechanism is given in the following section.
 
-\subsubsection{User Intent Emission}
-\label{sec:User_Intent_Emission}
+\subsubsection{User Intent Dissemination}
+\label{sec:User_Intent_Dissemination}
 
 
 %Traditionally, in a parliamentarian democracy, the right to initiate and vote on propositions is exclusive for members of the parliament.
@@ -402,7 +402,7 @@ A detailed description of, amongst others, the voting mechanism is given in the 
 In order for the voting, delegation and supporting mechanisms to fulfill \textbf{(\tracknshrink{LD}2-4)}, they need to be secret, verifiable and decentralized.
 Ideally, it shouldn't be possible for any actor in the system to gather any information about a specific users intents, while at the same time being verifiable for any actor that user intents are valid and got counted correctly. 
 
-In line with the principles of security-by-design, in the following we will describe a design for user intent emission that allows manipulation-resistant secret emission of user intents and which largely preserves privacy.
+In line with the principles of security-by-design, in the following we will describe a design for user intent dissemination that allows manipulation-resistant secret dissemination of user intents and which largely preserves privacy.
 While not being ideal, due to our lack of expertise in zero-knowledge-proof designed systems, the mechanisms described in the following fulfills these criteria well enough for the scope of this work.
 
 The main feature of our system design is that user intents are casted publicly, i.e. they are distributed over the Internet in a way that (1) everyone can access them and (2) no non-critical number of malicious users is able to delete, invalidate or otherwise tamper with user intents.
@@ -483,7 +483,7 @@ We can therefore see that by providing all the non-sensitive information through
 It could be argued that this approach is too restrictive and unnecessary, since all the data visible on the platform could also be crawled by citizen scientists, but as these probably want to republish some of the data together with their findings and users could withdraw information from the platform in the meantime, citizen scientists should adhere to fair play in this regards in order to not get involved in legal issues.
 
 The most sensitive information in a \tracknshrink{LD} platform, the user intents, are at the same time probably the most interesting and valuable for citizen scientists.
-Note that our design of user intents and their emission in the public space as described in \autoref{ssec:User_Intents} and \autoref{sec:User_Intent_Emission} already satisfy the requirements of \textbf{(\tracknshrink{CS}2)}.
+Note that our design of user intents and their dissemination in the public space as described in \autoref{ssec:User_Intents} and \autoref{sec:User_Intent_Dissemination} already satisfy the requirements of \textbf{(\tracknshrink{CS}2)}.
 They fully preserve privacy, as (1) the original creator of a user intention can not be deduced by the user intent itself and (2) by forcing delegation intents to be reduced to proposition group scope, it is possible to generate anonymized user aliases per proposition such that deducing information about single users through structural analysis of multiple delegation graphs is not possible.
 
 The easiest way to solve \textbf{(\tracknshrink{CS}3)} would be to give the user the choice to completely disregard privacy by loosening up all information to citizen scientist access.

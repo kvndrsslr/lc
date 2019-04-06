@@ -1,12 +1,17 @@
 \chapter{Conclusion / Discussion}
 \label{ch:Conclusion}
 
-This reported aimed at bringing together two democratizing and revolutionizing concepts for a more active participation of members in the society within institutions of the society. For the institution of political process, this was addressed by liquid democracy, and for the institution of science, the concept of citizen science was used. These concepts exhibited significant synergies, which were addressed in the design for a \tracknshrink{CS}-enabled \tracknshrink{LD} platform. 
+This reported aimed at bringing together two democratizing and revolutionizing concepts for a more active participation of members in the society within institutions of the society.
+For the institution of political process, this was addressed by liquid democracy, and for the institution of science, the concept of citizen science was used.
+These concepts exhibited significant synergies, which were addressed in the design for a \tracknshrink{CS}-enabled \tracknshrink{LD} platform. 
 
-Based on theoretical analysis of the concepts both the conceptual design, as well as its engineering process was addressed. While an implementation of the platform fell outside the scope of this report, the specification of the platform was done to a degree that future work can seamlessly take up on the concepts developed here. 
+Based on theoretical analysis of the concepts both the conceptual design, as well as its engineering process was addressed.
+While an implementation of the platform fell outside the scope of this report, the specification of the platform was done to a degree that future work can seamlessly take up on the concepts developed here. 
 
-Synergies between the concept of \tracknshrink{CS} and \tracknshrink{LD} exist in particular in for a society challenged and blessed with interconnectivity, requiring a shift of power structures within an exclusive sphere within the society to the empowerment of citizens. For this, heteroneity showed to be paramount. 
-Mutual contributions between both concepts exist in particular for citizens that are empowered to analyse a wide field of topics and to formulate and test hypothesis. With this gained insight, \tracknshrink{CS} can shape a \tracknshrink{LD} platform, where the participation of citizens is not limited to the production of their own data, but also extends the political discourse.
+Synergies between the concept of \tracknshrink{CS} and \tracknshrink{LD} exist in particular in a society challenged and blessed with interconnectivity, requiring a shift of power structures within an exclusive sphere within the society to the empowerment of citizens.
+For this, heteroneity showed to be paramount. 
+Mutual contributions between both concepts exist in particular for citizens that are empowered to analyse a wide field of topics and to formulate and test hypothesis.
+With this gained insight, \tracknshrink{CS} can shape a \tracknshrink{LD} platform, where the participation of citizens is not limited to the production of their own data, but also extends the political discourse.
 
 Going beyond crowd sourcing, the analysis, comprehension and feedback of the core data of the political processes is a fundamental element of participation and involvement in the political process in a mature democracy. 
 Through self-referentiality of data, citizen  can act on the matter they analyze, by actively participating in the discourse with an agenda and watch it unfold
@@ -21,16 +26,23 @@ privacy.
 
 For \tracknshrink{CS} we derived the core functionalities as complete access to non-sensitive platform data, default restrictive access to sensitive platform data with guaranteed privacy protection and an opt-in completely transparent access to sensitive platform data without guaranteed privacy protection.
 
-To present related work, the report discussed the large amount of projects regarded, while only presenting two in-depth projects. Others projects were in an inactive state that made their discussion obsolete. It discussed the existing projects of \textit{Liquid Feedback} and \textit{DemocracyOS}. While these projects presented many aspects suitable for our approach, we chose to specify a novel platform due to coding reasons and the lack of the involvement of \tracknshrink{CS}. We found that no FOSS platform that implemented the idea of vote delegation in any way existed, and that current projects do not provide sufficient support to engage developers. We decided against developing a full platform ourselves, and instead to specify a conceptual framework, since developing a platform ourself was too big of a project.
+To present related work, the report discussed the large amount of projects regarded, while only presenting two in-depth projects. Others projects were in an inactive state that made their discussion obsolete.
+It discussed the existing projects of \textit{Liquid Feedback} and \textit{DemocracyOS}.
+While these projects presented many aspects suitable for our approach, we chose to specify a novel platform due to coding reasons and the lack of the involvement of \tracknshrink{CS}.
+We found that no FOSS platform that implemented the idea of vote delegation in any way existed, and that current projects do not provide sufficient support to engage developers.
+We decided against developing a full platform ourselves, and instead to specify a conceptual framework, since developing a platform ourself was too big of a project.
 
-The concept design described the components of the platform, differentiated by the artifacts, user roles and processes within the processes. It detailed a large range of artifacts including propositions, discussion entries, proposition change requests, alternative propositions and proposition groups, context taxonomy, delegation graphs, user accounts, user intents, participation privileges, notifications and moderation requests. 
+The concept design described the components of the platform, differentiated by the artifacts, user roles and processes within the processes.
+It detailed a large range of artifacts including propositions, discussion entries, proposition change requests, alternative propositions and proposition groups, context taxonomy, delegation graphs, user accounts, user intents, participation privileges, notifications and moderation requests. 
 Furthermore, a rich array of (mostly functional) user roles was discussed, such as proposition followers, proposition authors, discussion participants, proposition change requesters, moderators, supporters, voting right holders, delegators, delegates and admininistrators. 
-While not including as many processes as it did artifacts and user roles, it presented the core processes necessary for a \tracknshrink{LD} components of such a system, including the life cycle of propositions, user intent emissions, the context taxonomy evolution and transparent data access.
+While not including as many processes as it did artifacts and user roles, it presented the core processes necessary for a \tracknshrink{LD} components of such a system, including the life cycle of propositions, user intent dissemination, the context taxonomy evolution and transparent data access.
 
-Addressing the implementation for the envisioned platform, we sketched an engineering processes for reaching this goals, by explicitly documenting the software requirements we derived earlier from a variety of angles, through the scrum methodology. We listed a plethora of user stories suitable to establish a rich platform for \tracknshrink{CS}-enabled \tracknshrink{LD}.
+Addressing the implementation for the envisioned platform, we sketched an engineering processes for reaching this goals, by explicitly documenting the software requirements we derived earlier from a variety of angles, through the scrum methodology.
+We listed a plethora of user stories suitable to establish a rich platform for \tracknshrink{CS}-enabled \tracknshrink{LD}.
 
 We then continue by laying the foundation for a more technical view of the
-platform by discussing possibilities of its architectural design, in particular the client-server model allowing a variety of thick, stateful clients interfacing with the same stateless server(s) over an API such as REST, and microservice-based servers, as most of the individual artifacts that are to be managed by the platform are independent of one another. The choice of microservices allowed independent CS-enabling interface implementation, allowing for versatility of \tracknshrink{CS} applications. 
+platform by discussing possibilities of its architectural design, in particular the client-server model allowing a variety of thick, stateful clients interfacing with the same stateless server(s) over an API such as REST, and microservice-based servers, as most of the individual artifacts that are to be managed by the platform are independent of one another.
+The choice of microservices allowed independent CS-enabling interface implementation, allowing for versatility of \tracknshrink{CS} applications. 
 
 
 before we go into detail on the available
@@ -67,10 +79,14 @@ Verweis auf 2.3
 \section{Future work}
 \label{sec:FutureWork}
 
-The scope of this report was the specification and design of a \tracknshrink{CS}-enabled \tracknshrink{LD} platform. It thus cuts short of the implementation, and future work will be focused on establishing said platform. 
+The scope of this report was the specification and design of a \tracknshrink{CS}-enabled \tracknshrink{LD} platform.
+It thus cuts short of the implementation, and future work will be focused on establishing said platform. 
 
-Implementation of the platform should involve a diverse range of actors, and should be oriented at their needs, preferences and practices. The model of political processes within the platform needs to respect how actors do and want to interact with one another and societal institutions, as well as paying attention to scientific and political processes. In-depth research and actor involvement should be addressed before and during development, and an agile approach should be employed for this. 
+Implementation of the platform should involve a diverse range of actors, and should be oriented at their needs, preferences and practices.
+The model of political processes within the platform needs to respect how actors do and want to interact with one another and societal institutions, as well as paying attention to scientific and political processes.
+In-depth research and actor involvement should be addressed before and during development, and an agile approach should be employed for this. 
 
 Further research should also be done into voting systems and their implementation into the platform, as well as into modern cryptological practices for ensuring the desired properties of the modeled processes.
 
-Due to the diversity of the necessary processes (in particular actor involvement) and concepts, future work needs a capable and interdisciplinary team with strong technical and social skills, in order to bring into practice the ideas sketched in this report. Due to the importance of the questions addressed and its innovativeness we strongly believe there is a large potential for such a project, and believe that it can have a transformative influence on how science and  politics, in particular through the involvement of the actors a democratic system is based upon, are viewed and lived in the public discourse.
+Due to the diversity of the necessary processes (in particular actor involvement) and concepts, future work needs a capable and interdisciplinary team with strong technical and social skills, in order to bring into practice the ideas sketched in this report.
+Due to the importance of the questions addressed and its innovativeness we strongly believe there is a large potential for such a project, and believe that it can have a transformative influence on how science and  politics, in particular through the involvement of the actors a democratic system is based upon, are viewed and lived in the public discourse.

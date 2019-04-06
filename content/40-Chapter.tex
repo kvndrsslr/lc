@@ -227,7 +227,67 @@ A complete application design encompasses amonst others chososing programming la
 Since we are just aiming to provide a minimal exemplary application design, we will skip the very technical parts of choosing programming language, specific technologies, frameworks, etc. and instead focus on a more abstract perspective, only involving APIs and their interaction as business processes.
 
 We choose to depict this examplary application design in the light of the microservices architecture for the server-side and a native desktop client on the for the client-side.
-Therefore, we will now derive a list of microservices needed and detail their interaction with the desktop client.
+Therefore, we will now derive a list of microservices needed and detail their interaction with each other and the desktop client.
+
+
+\subsection{Microservices}
+\label{ssec:ApplicationDesign_MS}
+Compiling a list of microservices is usually done by analyzing the application domain, splitting it into small subdomains and determining breaking points for microservices in order to minimize their dependencies with one another.
+The list of artifacts we have discussed in \autoref{ssec:data_fragments} should give us a good overview of our subdomains and in turn make it easy to aggregate some of them to come up with a final list of microservices.
+\begin{enumerate}
+  \item Propositions
+  \item Discussion Entries
+  \item Proposition Change Requests
+  \item Alternative Propositions and Proposition Groups
+  \item Context Taxonomy
+  \item Delegation Graphs
+  \item User Accounts
+  \item User Intents
+  \item Participation Privileges
+  \item Notifications
+  \item Moderation Requests
+\end{enumerate}
+
+We can strip away user intents and participation privileges, since these, as argued in \autoref{sec:User_Intent_Dissemination}, are not managed by the platform itself.
+As a consequence, we can also remove delegation graphs from this list, as they are composed from user intents on-demand and do not need to be materialized in the platform itself.
+
+Propositions, alternative propositions, proposition groups and proposition change requests arguably are very interrelated and describe the same domain of propositions.
+They can therefore be managed by the same microservice.
+
+We observe that moderation requests can be seen as a special form of notification triggered by the user and directed towards all moderators.
+
+Our preliminary list of subdomains therefore is:
+\begin{enumerate}
+  \item Proposition Domain
+  \item Discussion Domain
+  \item Context Domain
+  \item User Domain
+  \item Notification Domain
+\end{enumerate}
+
+A domain not recorded in this list, as it is more process-oriented, is authentication.
+This domain is not included in and should not be mixed with the user domain, as authentication could be done by external authentication providers.
+Authorization however could be managed within the user domain.
+
+Furthermore, the central trusted authority (CAT), as introduced in \autoref{sec:User_Intent_Dissemination}, should receive its own microservice for security as well as reusability reasons, although it would theoretically be possible to fit it into the user domain.
+
+The final list of microservices therefore becomes:
+\begin{enumerate}
+  \item Proposition Microservice
+  \item Discussion Microservice
+  \item Context Microservice
+  \item User Microservice
+  \item Notification Microservice
+  \item Authentication Microservice
+  \item CAT Microservice
+\end{enumerate}
+
+The utility of microservices shines with this design: the horizontal partitioning of the application domain allows to scale up availability and responsiveness of the platform by spawning multiple instances of the same microservice.
+These instances could furthermore be allowed to scale up with the amount of data they need to manage by also partitioning them vertically.
+For example, we could partition proposition microservices by the primary context of proposition groups, such that for each subtree in the context taxonomy belonging to one big supercontext we spawn one instance of the proposition microservice.
+
+\subsection{Client }
+\label{sec:ApplicationDesign}
 
 \todo{@KD: structure, fill}
 
@@ -273,44 +333,55 @@ Therefore, we will now derive a list of microservices needed and detail their in
 \section{Public Declaration of User Intent Protocol}
 \label{sec:PublicDeclarationOfIntentProtocol}
 The public declaration of intent protocol describes how to secretly post or withdraw a vote, support or delegation intent to a public space.
-%This protocol needs to be implemented by a client that optimally should be external to the platform for security reasons.
-The protocol describes three processes, namely
-\begin{enumerate}
-  \item Obtaining Participation Privilege
-  \item Assembling User Intent Messages
-  \item Time Stamping User Intent Messages
-\end{enumerate}
+Since the protocol makes heavy usage of the RSA cryptosystem, we will first give an overview of its capabilities and properties, although we will not strive to make this very technical\footnote{a thorough technical definition and description of the RSA cryptosystem can be found at \url{https://en.wikipedia.org/wiki/RSA_(cryptosystem)}}.
 
-Each of these processes will be discussed in detail below.
+\subsection{The RSA Cryptosystem}
+A cryptosystem is a system of cryptographic algorithms which are commonly used for encryption.
+It typically consists of a key generation algorithm, an encryption algorithm and a decryption algorithm.
+The RSA cryptosystem is an asymmetric cyptosystem which means that the key generation algorithm generates a pair of keys, denoted private and public key, which can interchangeably be used for encryption and decryption respectively.
 
-\subsection{Obtaining Participation Privilege}
+RSA relies on the hardness of prime factorization and the discrete logarithm problem for its cryptographic properties.
+The most important property of RSA is the length of the generated keys, which on one hand determines its safety, as the problem gets harder with increasing key length, and on the other hand sets an upper limit on the size of the messages one may encrypt or decrypt with an RSA key pair of a given length.
+
+In practice, RSA is mostly used in order to exchange a key for a symmetric cryptosystem, such as AES, that can encrypt messages of arbitrary sizes.
+If Alice wants to communicate with Bob through a safe channel, she can therefore generate a secret symmetrical key, encrypt it with Bob's public key and send it to Bob.
+As only Bob has knowledge of his private key, no man-in-the-middle attacker could obtain knowledge of the secret key.
+Once Bob has decrypted the secret it becomes a shared the secret and both Alice and Bob can send each other arbitray messages encrypted with the shared secret and likewise decrypt it using the same shared secret.
+
+Another common usage of RSA are electronic signatures, which we will use in this work.
+If Alice wants to sign an arbitrarily sized message such that Bob can be sure the message is indeed from Alice and was not modified by a man-in-the-middle attacker, Alice uses a cryptographic hashing algorithm to obtain a fixed length hash of her message.
+She then generated her signature by encrypting this hash with her private key.
+Bob, who has knowledge of her public key and the hashing function used, can then decrypt the signature to obtain the hash of Alice's original message.
+If this hash is equal to the hash of the message he has received, Alice was indeed the sender and the message has not been tampered with.
+
+Blind signatures, as briefly discussed in \autoref{sec:User_Intent_Dissemination}, can be realized leveraging an interesting multiplicative property of RSA which allows to use a random blinding factor for obfuscation of the original message before transmitting it to an authority for signature, therefore not leaking any information about the original message to the authority.
+After obtaining the signature from the authority, the blinding factor can be used to obtain a valid signature for the original message.
+
+\subsection{Protocol Specification}
+The protocol is divided into a number of steps necessary to obtain a participation privilege, and cast a user intent to the public space. For each of the steps, we will motivate it, define it using a list of technical instructions and give an informal proof of its correctness.
+
+\subsubsection{Obtaining Participation Privilege}
 The participation privilege (see \autoref{ssec:Participation_Privileges}) is the cornerstone of posting anonymized, secure user intents to a public space.
 Users first need to obtain a participation privilege, which acts as an alias, from a central trusted authority (CTA).
-A new participation privileges needs to be obtained for each proposition, proposition group and change request, in order to prevent adversaries from deducing sensitive information about certain users through structural analysis.
-As has been stated in \autoref{sec:User_Intent_Emission}, when obtaining a participation privilege, a blind signature scheme should be utilized in order to preserve secrecy of user intents even against the CTA which manages participation privileges.
-It can be infered from this statement that technically, participation privileges are made up of two components.
-The first component is a user-defined tokens, which serves as the alias for the user.
+A new participation privileges needs to be obtained for each type of user intent and each scope in order to prevent adversaries from deducing sensitive information about certain users through structural analysis.
+Therefore, the CTA has to (1) keep a list of users that have obtained their partipation privilege for each combination of user intent type and scope.
+As has been stated in \autoref{sec:User_Intent_Dissemination}, when obtaining a participation privilege, a blind signature scheme should be utilized.
+To this end, we will use the already introduced RSA blind signature scheme.
+As the validity of a user intent depends on the combination of its type and scope, the CTA needs to generate a unique RSA key pair of each combination.
+The public keys from these pairs need to be published such that anyone can get the public key for a given combination of user intent type and scope.
+
+Participation privileges are made up of two components.
+The first component is a user-generated token which serves as an alias of the user.
 The second component is the CTA's signature on the token, which effectively makes it a valid participation privilege.
-Note that blind signature schemes are mostly based on the RSA cryptosystem.
+As already became clear, a token should contain a unique id as well as data describing the type and scope of user intents it is directed at.
+We use RSA public keys as unique ids, as for reasonable key sizes\footnote{The recommended RSA key size is 2048 bit, while 1024 bit is also a common and reasonable choice for some applications. RSA keys should however not be less than 1024bit long in order to be practically secure.} they can be assumed to be practically unique, given that the generation algorithm is provided a good amount of entropy.
+
+%Furthermore, using RSA public keys as unique ids allows us to construct proofs of ownership for user intents, but we will get to that later.
+
  
-The steps to obtain a participation privilege for a given proposition, proposition group or change request $x$ therefore are:
-\begin{enumerate}
-\item The user creates a fresh RSA key pair $\langle k_s, k_p\rangle$
-\item 
-%The length of the key should be as large as possible to protect against attacks for the foreseeable future.
-\item The user authenticates at the CTA.
-\item If the CTA determines that the user is authorized to participate and he has not, the vote registry blind signs the public key the user has generated in the first step.
-\item The user can now announce vote or delegate intents to the public.
-To this end, the user assembles the appropriate message and signs it with his private key he generated in the first step.
-Then, he adds his public key from the first step and the unblinded signature from the third step to the message.
-The whole message is then posted to a public space that abides by the criteria outlined earlier.
-\end{enumerate}
-
-
-\subsection{Assembling User Intent Messages}
-
-
-\subsection{Time Stamping User Intent Messages}
+Let $t$ be the type of user intent for which the participation privilege should be issued and let $s$ be the scope for which the participation privilege should be issued.
+The public and private keys of the CTA can be obtained from the functions $ \kappa_\textit{priv}(t,s)$ and $ \kappa_\textit{pub}(t,s)$.
+The steps to obtain a participation privilege for a given proposition group or proposition are:
 
 
 % OBTAIN PP:
@@ -320,35 +391,102 @@ The whole message is then posted to a public space that abides by the criteria o
 % SIG := RSA_DECRYPT(BLINDPUBKEY, SIG_2)
 % PP := (PP_1) (SIG)
 %
+
+\begin{enumerate}
+\item The user creates a fresh RSA key pair $id \defeq \langle id_{\textit{priv}}, id_{\textit{pub}} \rangle$
+\item The user assembles its token as $\theta \defeq \{id_{\textit{pub}}, t, s\} $
+\item Using a cryptographic hash function $H$, the user calculates the tokens hash: $\eta \defeq H(\{id_{\textit{pub}}, t, s\})$
+\item The user generates a blinding factor  $b$ and calculates $\beta \defeq \texttt{blind}(\eta, b)$
+\item The user submits $(s, t, \beta)$ to the CTA together with its authentication information
+\item If the CTA determines that the user is not authorized to participate or has already obtained his participation privilege for $(s,t)$, it denies the signature and the protocol \textbf{stops}
+\item Otherwise, the CTA signs the blinded token with its private key for the given combination of user intent type and scope, yielding $\sigma\defeq \texttt{RSA\_Encrypt}(\beta,  \kappa_\textit{priv}(t,s))$
+\item The user unblinds the CTA's signature as $\omega \defeq \texttt{unblind}(\sigma, b)$
+\item The user assembles its participation privilege as $pp \defeq \{id_{\textit{pub}}, t, s, \omega\}$
+\end{enumerate}
+
+\paragraph{Checking Participation Privileges}
+Anyone can easily verify the validity of a participation privilege by checking if $\texttt{RSA\_Decrypt}(\omega,  \kappa_\textit{priv}(t,s)) = H(\{id_{\textit{pub}}, t, s\})$ holds.
+
+\subsubsection{Assembling User Intent Messages}
+Now that we have seen how to obtain a participation privilege from the CTA, we will look into assembling the different types of user intents.
+
+First, we will have to define a mechanism to assure legality of a user intent, i.e. that it was indeed authored by the legal owner of the participation privilege and furthermore, that it was authored within a given participation period, e.g. the voting period.
+To this end, we introduce the notion of a \emph{proof of legality (POL)}, which combines two cryptographic signatues in order verify authorship and punctuality, respectively.
+The authorship can easily be proven using the private RSA key corresponding to the public RSA key in the participation privilege in order to generate a signature of the whole user intent message.
+We argue that punctuality should only be handled on a daily granularity level, i.e. all participation periods (as the ones defined in \autoref{ssec:Model_Propositions_Life}) should always start and end at 12 a.m. for a fixed time zone.
+Therefore, it is feasible to let the CTA generate a new pair of RSA keys for each day, such that they might be used in a blind signature scheme which will be our proof of punctuality.
+
+As noted in \autoref{sec:User_Intent_Dissemination}, user should be able to issue multiple user intents of the same type and scope in order to be able to change their mind at any time within a given participation period.
+We therefore need a mechanism of detecting the most recent user intent for a given participation privilege, effectively invalidating the previous ones.
+
+To this end, we introduce the notion of a \emph{sequence id}, which is an integer counter that should be initialized as one and be incremented by the user for each subsequent, overriding user intent he formulates using the same participation privilege.
+For a given participation privilege, only the legal user intent with the highest sequence id is considered valid.
+User intents with sequence ids of less than one must be considered invalid.
+If there exist multiple user intents with the same sequence id for a given participation privilege, they all  must be considered invalid. 
+Note that only legal user intents are considered for validity checking, i.e. it is impossible to invalidate a legal user intent by formulating an illegal user intent with the same participation privilege and sequence id as the first one.
+
+One problem that we did not discuss in \autoref{sec:User_Intent_Dissemination} is how to keep user intents secret until the corresponding participation period ends.
+The motivation for keeping user intents secret before the end of the corresponding participation period is to prevent, for example, tactical voting in the voting period.
+We tackle this problem by introducing a two step protocol for assembly and dissemination of user intent messages.
+In the first step, we assemble a hidden user intent message, which means that the actual choices of the user are encrypted.
+In a second step, we then release the key for decryption using the same sequence id as in the first message.
+Note that the \emph{secret user intent messages} in the first step must be assembled within the given participation period, e.g. secret voting intents must be assembled and signed within the voting period, while the corresponding \emph{revealing user intent messages} need to be assembled within a set amount of days \emph{after} the period has ended.
+
+In the following we will give a formal method for the assembly of an arbitrary user intent message, i.e. with an arbitrary intention content.
+Thereafter, we will detail how the intention contents of the different user intent types are structured.
+Let $d$ be the true current date and $d'$ be an arbitrary date which is expected to be the current date, but could be forged.
+The function $\Delta(d)$ calculates the number of days since January 1 1970 12 a.m. UTC.
+Let $\delta_\textit{priv}(\Delta(d)), \delta_\textit{pub}(\Delta(d))$ denote the private and public keys the CTA generated for $\Delta(d)$.
+Finally, let $seq$ be a sequence id, $\iota$ be the intention content of the message and $H$ be a cryptographic hash function.
+The steps used to assemble the secret message are as follows:
 % ASSEMBLE MSG:
-% HDID := RSA_ENCRYPT(REVPRIVKEY(PP, SEQ), HASH(DID))
-% HUIC := RSA_ENCRYPT(REVPRIVKEY(PP, SEQ), HASH(UIC))
-% MSG_1 := (PP) (SEQ) [(HDID)] (HUIC) (TS)
-% POO := RSA_ENCRYPT(IDPRIVKEY, HASH(MSG_1))
-% MSG := (MSG_1) (POO)
-%
-% ASSEMBLE REVEAL MSG:
-% RMSG_1 := (PP) (SEQ) (REVPUBKEY(PP, SEQ)) [(RDID)] (RUIC) (TS)
-% POO := RSA_ENCRYPT(IDPRIVKEY, HASH(RMSG_1))
-% RMSG := (RMSG) (POO) 
-%
-% TIMESTAMP MSG: 
-% H := HASH(MSG)
-% TSP := RSA_ENCRYPT(CTAPRIVKEY(SCOPE), HASH((H)(CTATS)))
-% MSG := (MSG) (TSP)
-%
-% CHECK POO:
+% HDID := RSA_ENCRYPT(REVKEY(PP, SEQ), HASH(DID))
+% HUIC := RSA_ENCRYPT(REVKEY(PP, SEQ), HASH(UIC))
+% MSG_1 := (PP) (SEQ) (TS) [(HDID)] (HUIC) 
+% POA := BLIND(b, RSA_ENCRYPT(IDPRIVKEY, HASH(MSG_1)))
+% POV_1 := RSA_ENCRYPT(CTAPRIVKEY(TIME), POA_1)
+% POV := UNBLIND(b, POV_1)
+% MSG := (MSG_1) (POV)
+
+
+\begin{enumerate}
+\item The user creates a fresh RSA key pair $\rho \defeq \langle \rho_{\textit{priv}}, \rho_{\textit{pub}} \rangle$
+\item The user generates a signature for the intention content as $\tau \defeq \texttt{RSA\_Encrypt}(H(\iota), \rho_\textit{priv})$
+\item The user assembles the message contents as $m \defeq \{pp, seq, \Delta(d'), \tau \}$ 
+\item Using a cryptographic hash function $H$, the user calculates the messages hash: $\eta \defeq H(m)$
+\item The user creates the proof of authorship as $\alpha \defeq \texttt{RSA\_Encrypt}(H(m), id_\textit{priv})$
+\item The user generates a blinding factor $b$ and calculates $\beta \defeq \texttt{blind}(\alpha, b)$
+\item The user submits $\beta$ to the CTA
+\item The CTA signs $\beta$ using its private key for $d$, yielding $\sigma\defeq \texttt{RSA\_Encrypt}(\beta,  \delta_\textit{priv}(\Delta(d)))$
+\item The user now generates the proof of legality as $\lambda \defeq \texttt{unblind}(\sigma, b)$
+\item The user now assembles the final message as $msg \defeq \{pp, seq, \Delta(d'), \tau, \lambda \}$
+\end{enumerate}
+
+The steps used to assemble the reveal message are as follows:
+
+\begin{enumerate}
+\item The user assembles the message contents as $m \defeq \{pp, seq, \Delta(d'), \iota, \rho_{\textit{pub}}  \}$ 
+\item Using a cryptographic hash function $H$, the user calculates the messages hash: $\eta \defeq H(m)$
+\item The user creates the proof of authorship as $\alpha \defeq \texttt{RSA\_Encrypt}(H(m), id_\textit{priv})$
+\item The user generates a blinding factor $b$ and calculates $\beta \defeq \texttt{blind}(\alpha, b)$
+\item The user submits $\beta$ to the CTA
+\item The CTA signs $\beta$ using its private key for $d$, yielding $\sigma\defeq \texttt{RSA\_Encrypt}(\beta,  \delta_\textit{priv}(\Delta(d)))$
+\item The user now generates the proof of legality as $\lambda \defeq \texttt{unblind}(\sigma, b)$
+\item The user now assembles the final message as $msg \defeq \{pp, seq, \Delta(d'), \iota, \rho_{\textit{pub}}, \lambda \}$
+\end{enumerate}
+
+\paragraph{Checking Proof of Validity}
 % RSA_DECRYPT(IDPUBKEY, POO) == HASH(MSG_1)
 %
-% CHECK TSP: (CTATS == TS)
-% RSA_DECRYPT(CTAPUBKEY(SCOPE), TSP) == HASH(HASH(MSG), TS) && TS IN PERIOD(SCOPE)
+% RSA_DECRYPT(CTAPUBKEY(SCOPE), POP) == HASH(HASH(MSG), TS) && TS IN PERIOD(SCOPE)
 %
-% CHECK TSP OF REVEAL:
-% RSA_DECRYPT(CTAPUBKEY(SCOPE), TSP) == HASH(HASH(MSG), TS) && TS > PERIOD(SCOPE)
+% RSA_DECRYPT(CTAPUBKEY(SCOPE), POP) == HASH(HASH(MSG), TS) && TS > PERIOD(SCOPE)
 %
+
+\paragraph{Checking Validity of Reveal Message}
 % CHECK REVEAL VALIDITY:
-% RSA_DECRYPT(REVPUBKEY(PP, SEQ), HDID) == HASH(RDID) &&
-% RSA_DECRYPT(REVPUBKEY(PP, SEQ), HUIC) == HASH(RUIC)
+% RSA_DECRYPT(REVKEY(PP, SEQ), HDID) == HASH(RDID) &&
+% RSA_DECRYPT(REVKEY(PP, SEQ), HUIC) == HASH(RUIC)
 
 \todo{@KD: digest notes to text}
 
@@ -360,7 +498,7 @@ The idea is that everyone is able to carry out the vote tallying process purely 
 As counting support scores and counting votes have merely semantical differences, for sake of brevity we chose to only describe the vote counting process here:
 
 \begin{enumerate}
-  \item For a given proposition group $p$, collect all user intents from the public space
+  \item For a given proposition group $p$, collect all \textit{valid} user intents from the public space
   \item Build the delegation graph $\mathcal{D}$ from the delegation intents
   \item Invert all edges in $\mathcal{D}$ to obtain $\mathcal{D}^I$\footnote{Replace all directed edges $(u,v)$ by edges $(v,u)$, $u,v \in N, (u,v) \in E$, with $D=(N,E)$}
   \item All vote intents are collected in a list $V$
